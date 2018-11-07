@@ -26,9 +26,19 @@
 		  		<img class="am-header-icon-custom" src="~/Images/icon/返回.png" alt=""/>
 		  	</a>
 	  </div>
-	   <h3 class="am-header-title" style="color: black;padding-top: 15px;font-size: 18px;">
-          我的购物车
+	     <h3 class="am-header-title" 
+	   	style="width:150px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
+          	我的购物车
       </h3>
+      <div class="am-input-group">	
+	      <span class="am-input-group-btn" >
+	      	<button class="am-btn" type="button" onclick="GoHome()" 
+	        	style="background-color: white;border-color:white;margin-left: 45px;">
+	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
+	        </button>
+	        
+	      </span>
+	    </div>
 	</header>
   	<hr style="margin-top: 0px;margin-bottom: 5px;"/>
   	<div id="myCar">
@@ -132,7 +142,8 @@
 					  {
 					  	this.enableShopCar(_self.myCarList[x].ShopCarId);
 					  }
-					}	
+					}
+					_self.sumPrice=0;
 		       }).catch(() => {		          
 		        });
 			},
@@ -244,5 +255,10 @@
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+	 
+	 function GoHome()
+	 {
+	 	window.location.href = "/WxHome/Index?openid="+openid+"&&code=null&&state=null";
+	 }
 	
 </script>

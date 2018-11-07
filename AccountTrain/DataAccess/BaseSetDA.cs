@@ -194,7 +194,32 @@ namespace DataAccess
         #endregion
 
         #region 字典信息
+        public List<DictionaryItemEntity> GetDicListByCondition(string dk, string ik, string iv)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_DictionaryItems
+                                            where status=1");
+                if (!string.IsNullOrEmpty(dk))
+                {
+                    string sql = string.Format(" and DictionaryKey='{0}'", dk);
+                    query = query + sql;
+                }
+                if (!string.IsNullOrEmpty(ik))
+                {
+                    string sql = string.Format(" and ItemKey='{0}'", ik);
+                    query = query + sql;
+                }
+                if (!string.IsNullOrEmpty(iv))
+                {
+                    string sql = string.Format(" and ItemValue='{0}'", iv);
+                    query = query + sql;
+                }
 
+                return conn.Query<DictionaryItemEntity>(query).ToList();
+
+            }
+        }
 
         /// <summary>
         /// 获取所有字典键值
@@ -204,7 +229,7 @@ namespace DataAccess
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
-                string query = string.Format(@"select * from Train_DictionaryItems where status=1 and DictionaryLevel=0");
+                string query = string.Format(@"select * from Train_DictionaryItems where status=1");
                 return conn.Query<DictionaryItemEntity>(query).ToList();
             }
         }
@@ -250,6 +275,11 @@ namespace DataAccess
         {
             if (string.IsNullOrEmpty(dicItem.ItemId))
             {
+                var lResult = GetDicItemsByDicKey(dicItem.DictionaryKey);
+                if (lResult != null)
+                {
+                    dicItem.DictionaryLevel = lResult.FirstOrDefault().DictionaryLevel + 1;
+                }
                 using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
                 {
                     string query = string.Format(@"INSERT INTO Train_DictionaryItems
@@ -288,13 +318,12 @@ namespace DataAccess
                 using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
                 {
                     string query = string.Format(@" UPDATE Train_DictionaryItems
-                                                    SET ItemKey ='{0}'
-                                                      ,ItemValue ='{1}'
-                                                      ,Remark = '{2}'
-                                                      ,OrderNum = {3}
+                                                    SET ItemValue ='{0}'
+                                                      ,Remark = '{1}'
+                                                      ,OrderNum = {2}
                                                       ,UpdateTime = getdate()
-                                                      ,UpdateUser = '{4}'
-                                                    WHERE ItemId='{5}'",
+                                                      ,UpdateUser = '{3}'
+                                                    WHERE ItemId='{4}'",
                                                dicItem.ItemKey, dicItem.ItemValue, dicItem.Remark, dicItem.OrderNum, loginName, dicItem.ItemId);
                     return conn.Execute(query);
                 }
@@ -306,6 +335,15 @@ namespace DataAccess
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
             {
                 string query = string.Format(@"update Train_DictionaryItems set status={0}  where ItemId='{1}'", status, ItemId);
+                return conn.Execute(query);
+            }
+        }
+
+        public int DeleteItem(string ItemId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"delete from Train_DictionaryItems  where ItemId='{0}'",  ItemId);
                 return conn.Execute(query);
             }
         }
@@ -358,7 +396,9 @@ namespace DataAccess
                                                    ,CreateTime
                                                    ,CreateUser
                                                    ,UpdateTime
-                                                   ,UpdateUser)
+                                                   ,UpdateUser
+                                                   ,StartTime
+                                                   ,EndTime)
                                              VALUES
                                                    ('{0}'
                                                    ,'{1}'
@@ -370,8 +410,8 @@ namespace DataAccess
                                                    ,GETDATE()
                                                    ,'{7}'
                                                    ,GETDATE()
-                                                   ,'{8}')",
-                        Guid.NewGuid().ToString(), entity.ClassId, entity.FloorPrice, entity.BargainTop, entity.BargainFloor, entity.Remark, 1, loginName, loginName);
+                                                   ,'{8}','{9}','{10}')",
+                        Guid.NewGuid().ToString(), entity.ClassId, entity.FloorPrice, entity.BargainTop, entity.BargainFloor, entity.Remark, 1, loginName, loginName, entity.StartTime, entity.EndTime);
                     return conn.Execute(query);
                 }
             }
@@ -387,7 +427,9 @@ namespace DataAccess
                                                       ,Remark = '{4}'
                                                       ,UpdateTime =GETDATE()
                                                       ,UpdateUser = '{5}'
-                                                 WHERE BargainConfigId='{6}'", entity.ClassId, entity.FloorPrice, entity.BargainTop, entity.BargainFloor, entity.Remark, loginName, entity.BargainConfigId);
+                                                      ,StartTime='{6}'
+                                                      ,EndTime='{7}'
+                                                 WHERE BargainConfigId='{8}'", entity.ClassId, entity.FloorPrice, entity.BargainTop, entity.BargainFloor, entity.Remark, loginName,entity.StartTime, entity.EndTime, entity.BargainConfigId);
                     return conn.Execute(query);
                 }
             }

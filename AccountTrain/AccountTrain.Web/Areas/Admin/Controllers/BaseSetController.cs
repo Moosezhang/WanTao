@@ -164,17 +164,17 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
             return View();
         }
 
-        //public ActionResult GetDicItemsListByCondition(string KeyName)
-        //{
-        //    try
-        //    {
-        //        return Json(new BaseSetBC().GetDicItemsListByCondition(KeyName), JsonRequestBehavior.AllowGet);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Json(new List<VMDicItems>(), JsonRequestBehavior.AllowGet);
-        //    }
-        //}
+        public ActionResult GetDicListByCondition(string dk, string ik, string iv)
+        {
+            try
+            {
+                return Json(new BaseSetBC().GetDicListByCondition(dk, ik, iv), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<DictionaryItemEntity>(), JsonRequestBehavior.AllowGet);
+            }
+        }
 
 
         /// <summary>
@@ -202,6 +202,7 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
         {
             try
             {
+                var result = new BaseSetBC().GetDicItemsByDicKey(key);
                 return Json(new BaseSetBC().GetDicItemsByDicKey(key), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -227,7 +228,10 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
         {
             try
             {
-                var result = new BaseSetBC().SaveDicItem(dicItem, CurrentUserInfo.Account);
+                BaseSetBC bc= new BaseSetBC();
+                //根据DictionaryKey获取level
+               
+                var result = bc.SaveDicItem(dicItem, CurrentUserInfo.Account);
                 if (result == 0)
                     return Json(string.Empty);
                 return Json("保存成功");

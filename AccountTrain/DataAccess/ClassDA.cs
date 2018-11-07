@@ -27,6 +27,26 @@ namespace DataAccess
             }
         }
 
+        public List<ClassEntity> GetClassByType(string type)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_Class
+                                            where status=1 and ClassType = '{0}' order by createtime desc", type);
+                return conn.Query<ClassEntity>(query).ToList();
+            }
+        }
+
+        public List<ClassEntity> GetNewestClass()
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select top 6 * from Train_Class
+                                            where status=1 and ClassType in ('1','2')  order by createtime desc");
+                return conn.Query<ClassEntity>(query).ToList();
+            }
+        }
+
         public List<ClassEntity> GetClassByCondition(string name, string classType, string startDate, string endDate)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
@@ -212,7 +232,8 @@ namespace DataAccess
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
                 string query = string.Format(@"select * from Train_Chapter
-                                            where ClassId='{0}' and status=1", key);
+                                            where ClassId='{0}' and status=1
+                                            order by ChapterNum", key);
                 return conn.Query<ChapterEntity>(query).ToList();
             }
         }

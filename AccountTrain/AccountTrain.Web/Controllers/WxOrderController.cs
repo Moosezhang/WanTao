@@ -52,7 +52,7 @@ namespace AccountTrain.Web.Controllers
                             OrderGoodsEntity good = new OrderGoodsEntity() {
                                 ClassId = entity.ClassId,
                                 ClassName=entity.ClassName,
-                                Price=entity.ClassPrice
+                                Price = param.source != "1" ? param.price : entity.ClassPrice
                             };
                             goods.Add(good);
                         }
@@ -112,6 +112,7 @@ namespace AccountTrain.Web.Controllers
                     foreach (var item in goods)
                     {
                         var entity = new ClassBC().GetClassByKey(item.ClassId);
+                        entity.ClassPrice = item.Price;
                         entitys.Add(entity);  
                     }
                    
@@ -131,12 +132,6 @@ namespace AccountTrain.Web.Controllers
                 return Json(new List<ClassEntity>(), JsonRequestBehavior.AllowGet);
             }
         }
-
-
-        //public ActionResult PayOrder()
-        //{
- 
-        //}
 
 
         /// <summary>
@@ -220,6 +215,18 @@ namespace AccountTrain.Web.Controllers
             return View();
         }
 
+
+        public ActionResult UpdateOrderStatus(string orderNo,int status)
+        {
+            try
+            {
+                return Json(new OrderBC().UpdateOrderStatus(orderNo, status), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new VMGBClass(), JsonRequestBehavior.AllowGet);
+            }
+        }
         #region 团购
         public ActionResult GroupBuy(string openid, string classId)
         {
@@ -244,6 +251,8 @@ namespace AccountTrain.Web.Controllers
                 return Json(new VMGBClass(), JsonRequestBehavior.AllowGet);
             }
         }
+
+
         #endregion
 
         #region 砍价

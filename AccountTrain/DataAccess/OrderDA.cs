@@ -74,9 +74,24 @@ namespace DataAccess
             {
                 string query = string.Format(@"select t.* from Train_OrderGoods t
                                                inner join train_Order t1 on t.OrderId=t1.OrderId
-                                               where t1.Openid='{0}' adn t1.orderNo='{1}'", OpenId, orderNo);
+                                               where t1.Openid='{0}' and t1.orderNo='{1}'", OpenId, orderNo);
 
                 return conn.Query<OrderGoodsEntity>(query).ToList();
+
+            }
+        }
+
+        public OrderEntity GetOrderByOpenIdandClassId(string OpenId, string ClassId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select t.*
+                                                from Train_Order t
+                                                inner join Train_OrderGoods t1 on t.OrderId=t1.OrderId
+                                                where t.Openid='{0}' and t1.ClassId='{1}'
+                                                ", OpenId, ClassId);
+
+                return conn.Query<OrderEntity>(query).FirstOrDefault();
 
             }
         }
@@ -123,6 +138,11 @@ namespace DataAccess
                     cm.ExecuteNonQuery();
                 }
 
+
+                int status = 1;
+                if (order.PayPrice == 0)
+                    status = 2;
+
                 string OrderSql = string.Format(@"INSERT INTO Train_Order
                                                (OrderId
                                                ,OrderNo
@@ -147,7 +167,7 @@ namespace DataAccess
                                                ,GETDATE()
                                                ,'{7}'
                                                ,'{8}')",
-                OrderId, order.OrderNo, order.Openid, order.PayPrice, order.OrderSource, 1, loginName, loginName, order.Nickname);
+                OrderId, order.OrderNo, order.Openid, order.PayPrice, order.OrderSource, status, loginName, loginName, order.Nickname);
                 cm.CommandText = OrderSql;
                 cm.ExecuteNonQuery();
 
@@ -169,8 +189,15 @@ namespace DataAccess
             return strReturn;
         }
 
-
-        #region 获取团购页面数据
+        public int UpdateOrderStatus(string orderNo, int status)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"update Train_Order set status={0}  where OrderNo='{1}'", status, orderNo);
+                return conn.Execute(query);
+            }
+        }
+        #region 团购数据
         public VMGBClass GetGbClass(string classid)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
@@ -185,6 +212,7 @@ namespace DataAccess
 
             }
         }
+
         #endregion
 
 

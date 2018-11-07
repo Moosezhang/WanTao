@@ -43,7 +43,11 @@ namespace BusinessComponent
             OrderDA da = new OrderDA();
             return da.GetOrderGoodsListByOpenIdandOrderNo(OpenId, orderNo);
         }
-
+        public OrderEntity GetOrderByOpenIdandClassId(string OpenId, string ClassId)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetOrderByOpenIdandClassId(OpenId, ClassId);
+        }
 
         public VMGBClass GetGbClass(string classid)
         {
@@ -57,6 +61,14 @@ namespace BusinessComponent
             OrderDA da = new OrderDA();
             return da.SaveOrder(order, orderGoods, loginName);
         }
+
+
+        public int UpdateOrderStatus(string orderNo, int status)
+        {
+            OrderDA da = new OrderDA();
+            return da.UpdateOrderStatus(orderNo, status);
+        }
+
         #region 砍价
         public int AddBargain(BargainEntity bargain, string loginName)
         {

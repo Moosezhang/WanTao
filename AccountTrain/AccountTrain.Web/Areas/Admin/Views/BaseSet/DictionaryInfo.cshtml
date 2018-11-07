@@ -6,55 +6,40 @@
         您当前所在的位置：字典管理
 </div>
 <div id="Role">
-	<el-container>
-	 <el-aside  style="margin-left: 10px;">	
-	 	<template>
-	 		<p style="margin-top: 30px;">字典分类列表</p>
-	 		<el-table border stripe
-        		  v-bind:data="KeyList"
-                  highlight-current-row
-                  v-on:row-click="handleCurrentChange"
-                  v-bind:default-sort="{prop: 'OrderNum', order: 'descending'}"
-                  style="margin-top: 30px;">
-	          	<el-table-column prop="ItemKey"
-	                             label="字典分类KEY">
-	            </el-table-column>
-	            <el-table-column prop="ItemValue"
-	                             label="字典分类">
-	            </el-table-column>
-	        </el-table>	
-	 	</template>
-	  	 
-	  </el-aside>	
+	
+	<el-row style="margin-top:10px;margin-left:10px">
+        <el-col span="24">
+            <div>
+                <el-input v-model="txtdk" id="txtdk" placeholder="请输入字典分类" clearable style="width:200px;"></el-input>
+                <el-input v-model="txtik" id="txtik" placeholder="请输入字典值" clearable style="width:200px;"></el-input>
+                <el-input v-model="txtiv" id="txtiv" placeholder="请输入字典名称" clearable style="width:200px;"></el-input>
+                
+                <el-button size="mini" style="margin-left:10px" type="primary"
+                           v-on:click="QueryData()">查询</el-button>
+                <el-button size="mini" type="warning"
+                           v-on:click="handleAdd()">新增</el-button>
+            </div>
+        </el-col>
+    </el-row>	 	
 		
-	  <el-main width="500px" style="margin-top:10px;margin-left:20px">
-	  	    <template>
-	  	    	<el-col span="24">
-		            <div>
-		                <el-button size="mini" type="warning"
-		                v-on:click="handleAdd()">新增字典</el-button>
-		            </div>
-		        </el-col>
+	 <div style="margin-top:5px;margin-left:10px">
+	  	    <template>	  	    	
 	            <el-table border stripe
-	            		  v-bind:data="ItemsList"
-	                      v-bind:default-sort="{prop: 'ItemKey', order: 'descending'}"
-	                      style="width: 100%;margin-top: 50px;">
+	            		  v-bind:data="ItemsList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+	                      v-bind:default-sort="{prop: 'DictionaryLevel', order: 'descending'}"
+	                      style="width: 100%;">
 	                <el-table-column prop="ItemId"
 	                                 label="字典分类"
-	                                 width="130"
 	                                 v-if="false">
-	                </el-table-column>   
+	                </el-table-column>  
 	                <el-table-column prop="DictionaryKey"
-	                                 label="字典分类"
-	                                 width="130">
+	                                 label="字典分类">
 	                </el-table-column>               
 	                 <el-table-column prop="ItemKey"
-	                                 label="字典值"
-	                                 width="130">
+	                                 label="字典值">
 	                </el-table-column>  
 	                 <el-table-column prop="ItemValue"
-	                                 label="字典名称"
-	                                 width="130">
+	                                 label="字典名称">
 	                </el-table-column>  
 	                <el-table-column fixed="right"
 	                                 label="操作"
@@ -68,21 +53,28 @@
 	                                   v-on:click="handleDisable(scope.row.ItemId,0)">禁用</el-button>
 	                    </template>
 	                </el-table-column>
-	            </el-table>	             
+	            </el-table>
+	             <el-pagination 
+        				v-on:size-change="handleSizeChange"
+						v-on:current-change="handleCurrentChange"
+					    :current-page="currentPage"
+					    :page-sizes="[10, 20, 50, 100]"
+					    :page-size="pagesize"
+					    layout="total, prev, pager, next"
+					    :total="ItemsList.length">
+            </el-pagination>
 	        </template>   
-	  </el-main style="margin-top:10px;">
+	 </div>
 	  
-	  
-	</el-container>
 	
 	<el-dialog title="字典信息" v-bind:visible.sync="dialogUserFormVisible" v-model="dialogUserFormVisible" 	style="height:500px;">
         <el-form model="form" style="margin-top:-20px;height:auto" label-width="80px">
             <el-row>
-            	<el-col span="12">
-                    <el-form-item label="字典分类">
-                        <el-input v-model="form.DictionaryKey" style="width:220px;" clearable></el-input>
+            	<el-col span="12" style="display: none;">
+                    <el-form-item label="Id">
+                        <el-input v-model="form.ItemId" style="width:220px;" clearable></el-input>
                     </el-form-item>
-                </el-col>
+               </el-col>            	
             	<el-col span="12">
                     <el-form-item label="字典值">
                         <el-input v-model="form.ItemKey" style="width:220px;" clearable></el-input>
@@ -97,7 +89,18 @@
                     <el-form-item label="排序">
                         <el-input v-model="form.OrderNum" style="width:220px;" clearable></el-input>
                     </el-form-item>
-                </el-col>     
+                </el-col> 
+                <el-col span="12">
+	                <el-form-item label="字典分类">
+	                    <el-select v-model="form.DictionaryKey" placeholder="请选择课程类型" style="width:180px;">
+	                        <el-option v-for="item in DicData"
+	                                   v-bind:key="item.ItemKey"
+	                                   v-bind:label="item.ItemValue"
+	                                   v-bind:value="item.ItemKey">
+	                        </el-option>
+	                    </el-select>
+	                </el-form-item>
+                </el-col> 
             </el-row> 
         </el-form>
         <div slot="footer" class="dialog-footer" style="margin-top:-30px;">
@@ -112,42 +115,53 @@
 	 	data:{
 	 		KeyList:[],
 	 		ItemsList:[],
-	 		
-	       currentRow: null,
-	       dialogUserFormVisible: false,
-           form: {},
-           checkId:null,
+	 		DicData:[],
+	       	currentRow: null,
+	       	dialogUserFormVisible: false,
+           	form: {},
+           	checkId:null,
+           	txtdk:"",
+           	txtik:"",
+           	txtiv:"",
+           	currentPage:1,
+        	pagesize:8,
 	 	},
+	 	beforeCreate:function (){
+        	var _self = this;
+            $.ajax({
+                type: "get",
+                dataType: "json",
+                contentType: "application/json",
+                url: "/BaseSet/GetAllDicKey",
+                success: function (result) {
+                    _self.DicData = result;
+                }
+            });
+        },
 	 	created:function (){
 	 		this.QueryData();
 	 	},
 	 	methods:{
 	 		QueryData: function () {
                     var _self = this;
+                    var dk=this.dk;
+                    var ik=this.ik;
+                    var iv=this.iv;
                     $.ajax({
 	                    type: "get",
 	                    dataType: "json",
 	                    contentType: "application/json",
-	                    url: "/BaseSet/GetAllDicKey",
+	                    url: "/BaseSet/GetDicListByCondition",
+	                    data:{
+	                    	dk:dk,
+	                    	ik:ik,
+	                    	iv:iv
+	                    },
 	                    success: function (result) {
-	                        _self.KeyList = result;
+	                        _self.ItemsList = result;
 	                    }
                 	});
-               },
-            handleCurrentChange:function(val){
-            	this.checkId=val.ItemKey;
-            	var _self = this;
-                $.ajax({
-                    type: "get",
-                    dataType: "json",
-                    contentType: "application/json",
-                    url: "/BaseSet/GetDicItemsByDicKey",
-                    data:{key:val.ItemKey},
-                    success: function (result) {
-                    	_self.ItemsList=result;
-                    }
-            	});
-            },
+              },            
 	 		handleAdd:function(){
  				var _self = this;
             	_self.form={};
@@ -219,6 +233,12 @@
                         }
                     });
                 },
+                handleSizeChange: function (size) {
+			        this.pagesize = size;
+			    },
+			    handleCurrentChange: function(currentPage){
+			        this.currentPage = currentPage;
+			    },
             }
 	 })
 	 

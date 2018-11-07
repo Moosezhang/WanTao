@@ -204,7 +204,10 @@ v-bind:data="BargainData.slice((BargaincurrentPage-1)*Bargainpagesize,Bargaincur
                             id: Id
                         },
                         success: function (result) {
+                        	result.StartTime = _self.ChangeDateFormat(result.StartTime);
+                        	result.EndTime = _self.ChangeDateFormat(result.EndTime);
                             _self.Bargainform = result;
+                            
                         }
                     });
                     this.dialogBargainFormVisible = true;
@@ -230,6 +233,8 @@ v-bind:data="BargainData.slice((BargaincurrentPage-1)*Bargainpagesize,Bargaincur
                 },
                 SaveBargain: function (Bargain) {
                     var _self = this;
+                    Bargain.StartTime= _self.GetNeedDateFormat(Bargain.StartTime);
+                    Bargain.EndTime= _self.GetNeedDateFormat(Bargain.EndTime);
                     $.ajax({
                         type: "post",
                         dataType: "json",

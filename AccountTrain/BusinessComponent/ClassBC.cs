@@ -35,6 +35,24 @@ namespace BusinessComponent
             return result;
         }
 
+        public List<ClassEntity> GetClassByType(string type)
+        {
+            ClassDA da = new ClassDA();
+
+            var result = da.GetClassByType(type);
+
+            return result;
+        }
+
+        public List<ClassEntity> GetNewestClass()
+        {
+            ClassDA da = new ClassDA();
+
+            var result = da.GetNewestClass();
+
+            return result;
+        }
+
         public ClassEntity GetClassByKey(string id)
         {
             ClassDA da = new ClassDA();

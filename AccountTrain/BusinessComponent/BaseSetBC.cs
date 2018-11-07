@@ -55,11 +55,11 @@ namespace BusinessComponent
         #endregion
 
         #region 字典信息
-        //public List<VMDicItems> GetDicItemsListByCondition(string KeyName)
-        //{
-        //    BaseSetDA da = new BaseSetDA();
-        //    return da.GetDicItemsListByCondition(KeyName);
-        //}
+        public List<DictionaryItemEntity> GetDicListByCondition(string dk, string ik, string iv)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.GetDicListByCondition(dk, ik, iv);
+        }
 
 
         /// <summary>
@@ -105,6 +105,12 @@ namespace BusinessComponent
         {
             BaseSetDA da = new BaseSetDA();
             return da.EnableItems(ItemId, status);
+        }
+
+        public int DeleteItem(string ItemId)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.DeleteItem(ItemId);
         }
         #endregion
 

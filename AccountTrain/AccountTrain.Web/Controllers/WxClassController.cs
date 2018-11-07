@@ -59,6 +59,12 @@ namespace AccountTrain.Web.Controllers
                 Response.Redirect(CommonHelper.GetRedirect("WxClass%ClassDetail"));
             }
 
+            var result = new OrderBC().GetOrderByOpenIdandClassId(openid, classId);
+            if (result != null)
+                ViewBag.OrderStatus = result.Status;
+            else
+                ViewBag.OrderStatus = 1;
+
             ViewBag.Openid = openid;
             ViewBag.ClassId = classId;
             return View();
@@ -70,6 +76,30 @@ namespace AccountTrain.Web.Controllers
             try
             {
                 return Json(new ClassBC().GetClassByCondition(name, classType, startDate, endDate), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<ClassEntity>(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetClassByType(string type)
+        {
+            try
+            {
+                return Json(new ClassBC().GetClassByType(type), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<ClassEntity>(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetNewestClass()
+        {
+            try
+            {
+                return Json(new ClassBC().GetNewestClass(), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -150,6 +180,12 @@ namespace AccountTrain.Web.Controllers
             {
                 Response.Redirect(CommonHelper.GetRedirect("WxClass%2fExpertViewDetail"));
             }
+
+            var result = new OrderBC().GetOrderByOpenIdandClassId(openid, classId);
+            if (result != null)
+                ViewBag.OrderStatus = result.Status;
+            else
+                ViewBag.OrderStatus = 1;
 
             ViewBag.Openid = openid;
             ViewBag.ClassId = classId;

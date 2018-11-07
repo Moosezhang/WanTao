@@ -80,8 +80,13 @@ ul,li{ list-style:none}
 	            <div style="margin-left: 100px;">
 	              	<h4 style="color: white;">已砍<span style="color: yellow;font-size: 30px;">{{data.PrePrice-data.NowPrice}}</span>元，还差<span style="color: yellow;font-size: 30px;">{{data.ClassPrice-data.FloorPrice}}</span>元</h4>
 	            </div>
-	            <div style="margin-left: 100px;">
-	              	<h5 style="color: white;">还剩23:45:02结束，快来砍价！</h5>
+	            <div style="margin-left: 70px;">
+	              	<h5 style="color: white;">还剩
+	              		<span style="color: red;" id="_d">00</span>  
+			         	<span style="color: red;" id="_h">00</span>  
+			         	<span style="color: red;" id="_m">00</span>  
+			        	<span style="color: red;" id="_s">00</span> 
+			        	结束，快来砍价！</h5>
 	            </div>
 	            <div v-if="isOwner" class="button">邀请好友砍价</div>
 	            <div v-if="!isOwner" class="button">邀请好友砍价</div>
@@ -111,7 +116,8 @@ ul,li{ list-style:none}
 			data:{},
 			logList:[],
 			ownerOpenid:"",
-			isOwner:false
+			isOwner:false,
+			endTime:""
 		},
 		created: function () {
                 var _self = this;
@@ -126,10 +132,12 @@ ul,li{ list-style:none}
                     success: function (result) {
                         _self.data = result;
                         _self.ownerOpenid=result.ownerOpenid;
+                        _self.endTime=_self.ChangeDateFormat(result.EndTime);
                         if(result.ownerOpenid==openid)
                         {
                         	_self.isOwner=true;
                         }
+                        countTime();
                     }
                 });
                 $.ajax({
@@ -144,7 +152,14 @@ ul,li{ list-style:none}
                         _self.logList = result;
                     }
                 });
-           }
+         },
+         methods:{
+         	ChangeDateFormat:function(timeSpan) {
+				    var timeSpan = timeSpan.replace('Date','').replace('(','').replace(')','').replace(/\//g,'');
+				    var d = new Date(parseInt(timeSpan));
+				    return d;
+			},
+         }
 	});
 	
 	 function guid() {
@@ -153,5 +168,33 @@ ul,li{ list-style:none}
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+	 
+	 function countTime() {  
+              //获取当前时间  
+              var date = new Date();  
+             var now = date.getTime();  
+             //设置截止时间  
+             var str=bargainVue.endTime;
+             var endDate = new Date(str); 
+             var end = endDate.getTime();               
+             //时间差  
+             var leftTime = end-now; 
+             //定义变量 d,h,m,s保存倒计时的时间  
+             var d,h,m,s;  
+             if (leftTime>=0) {  
+                 d = Math.floor(leftTime/1000/60/60/24);  
+                 h = Math.floor(leftTime/1000/60/60%24);  
+                 m = Math.floor(leftTime/1000/60%60);  
+                 s = Math.floor(leftTime/1000%60);                     
+             }  
+             //将倒计时赋值到div中  
+             document.getElementById("_d").innerHTML = d+"天";  
+             document.getElementById("_h").innerHTML = h+"时";  
+             document.getElementById("_m").innerHTML = m+"分";  
+             document.getElementById("_s").innerHTML = s+"秒";  
+             //递归每秒调用countTime方法，显示动态时间效果  
+             setTimeout(countTime,1000);  
+   
+         }  
 	
 </script>

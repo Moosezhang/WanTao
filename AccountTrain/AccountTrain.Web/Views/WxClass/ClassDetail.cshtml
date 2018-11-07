@@ -15,6 +15,18 @@
 ul li{
 list-style-type:none;
 }
+
+.zoomImage{
+    width:100%;
+    height:0;
+    padding-bottom: 75%;
+    overflow:hidden;
+    background-position: center center;
+    background-repeat: no-repeat;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    background-size:cover;
+}
 </style>
 
 <head>
@@ -28,31 +40,34 @@ list-style-type:none;
 		  		<img class="am-header-icon-custom" src="~/Images/icon/返回.png" alt=""/>
 		  	</a>
 	  </div>
-	   <h3 class="am-header-title" style="float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
+	   <h3 class="am-header-title" 
+	   	style="width:145px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
           课程详情
       </h3>
-  		<div class="am-input-group" style="padding-top: 5px;">	
+  		<div class="am-input-group" >	
 	      <span class="am-input-group-btn" >
-	      	<button class="am-btn" type="button" onclick="GoHome()" 
-	        	style="background-color: white;border-color:white;float: right;">
-	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
-	        </button>
+	      	
 	        <button class="am-btn" type="button" onclick="GoCar()" 
-	        	style="background-color: white;border-color:white;float: right;">
+	        	style="background-color: white;border-color:white;">
 	        	<div><img class="am-header-icon-custom" src="~/Images/icon/购物车.png" style="height: 20px;" alt=""/></div>
 	        </button>
-	        
+	        <button class="am-btn" type="button" onclick="GoHome()" 
+	        	style="background-color: white;border-color:white;">
+	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
+	        </button>
 	      </span>
 	    </div>
 	</header>
   	<hr style="margin-top: 0px;margin-bottom: 5px;"/>
   	<div>
   		<form class="am-form">
-	        <fieldset>	
-            	<video id="myVideo" v-bind:src="currVideoUrl"  width="100%" height="180" controls>				  	
-					您的浏览器不支持 video 标签。
-				</video>
-               
+	        <fieldset>
+	        	<div  id="myVideo">
+	            	<video v-if="status==2"  v-bind:src="currVideoUrl"  width="100%" height="160" controls>				  	
+						您的浏览器不支持 video 标签。
+					</video>
+					<div v-if="status!=2" class="zoomImage" v-bind:style="{backgroundImage:'url(' + imgUrl + ')'}"></div>
+                </div>
 	            <div id="detail" model="form">
 	            	<div data-am-widget="tabs" class="am-tabs am-tabs-d2" style="margin: 0px;background-color: #4f463c;color: white">
 						  <ul class="am-tabs-nav am-cf" >
@@ -66,27 +81,27 @@ list-style-type:none;
 						      </div>
 						      <div data-tab-panel-1 class="am-tab-panel " style="min-height:500px ;overflow-y: auto;">
 						        <ul v-for="item in capData" style="margin-bottom: -1px;">
-								    <li><img class="am-header-icon-custom" style="height: 50px;" src="~/Images/icon/line_b.png" alt=""/><span style="margin-left: 10px;">{{item.ChapterTitle}}</span></li>
+								    <li><img class="am-header-icon-custom" style="height: 50px;" src="~/Images/icon/line_b.png" alt=""/><span style="margin-left: 10px;" v-on:click="changeVideo(item)">{{item.ChapterTitle}}</span></li>
 								</ul>
 						      </div>
 						  </div>
 					</div>
 					<header class="am-topbar  am-topbar-fixed-bottom" style="height: 40px;background-color: #332c25;">
-						<div class="div-inline" v-if="form.IsGroupBuy=='1'" v-on:click="GoGroupBuy()" style="margin-left: 10px;margin-top: 7px;width: 19%;border-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #ff8a00;"  >
+						<div class="div-inline" v-if="form.IsGroupBuy=='1' && status!=2" v-on:click="GoGroupBuy()" style="margin-left: 10px;margin-top: 7px;width: 19%;border-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #ff8a00;"  >
 							我要团购
 						</div>	
-						<div class="div-inline" v-if="form.IsBargain=='1'" v-on:click="GoBargain(form.ClassPrice)" style="margin-left: 10px;margin-top: 7px;width: 19%;border-radius:55px;color: #332c25;font-size: 15px;height: 35px;background-color: #f9d001;"  >
+						<div class="div-inline" v-if="form.IsBargain=='1' && status!=2" v-on:click="GoBargain(form.ClassPrice)" style="margin-left: 10px;margin-top: 7px;width: 19%;border-radius:55px;color: #332c25;font-size: 15px;height: 35px;background-color: #f9d001;"  >
 							我要砍价
 						</div>	
-						<div class="div-inline" v-on:click="GoBuy(form.ClassPrice)" style="float:right;margin-top: 7px;width: 22%;border-top-right-radius:55px;border-bottom-right-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #4395ff;"  >
+						<div class="div-inline" v-if="status!=2" v-on:click="GoBuy(form.ClassPrice)" style="float:right;margin-top: 7px;width: 22%;border-top-right-radius:55px;border-bottom-right-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #4395ff;"  >
 							立即购买
 						</div>
-						<div class="div-inline" v-on:click="AddCar()" style="float:right;margin-top: 7px;width: 22%;border-top-left-radius:55px;border-bottom-left-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #70aefe;"  >
+						<div class="div-inline" v-if="status!=2" v-on:click="AddCar()" style="float:right;margin-top: 7px;width: 22%;border-top-left-radius:55px;border-bottom-left-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #70aefe;"  >
 							加入购物车
 						</div>	
 									
 					</header>
-					<div v-if="form.IsHelp=='1'" role="alert" class="el-notification right" style="top: 116px;z-index: 2000;width: 60px;border-radius:100px;background-color: #ff8a00;height: 60px;" v-on:click="GoHelp()">
+					<div v-if="form.IsHelp=='1' && status!=2" role="alert" class="el-notification right" style="top: 230px;z-index: 2000;width: 60px;border-radius:100px;background-color: #ff8a00;height: 60px;" v-on:click="GoHelp()">
 						<div class="el-notification__group" style="margin-left: 5px;margin-top: 5px;">
 							<div class="el-notification__title" style="font-size: 1px;color: white;width: 30px;height: 12px;" >助力</div>
 						</div>
@@ -108,11 +123,12 @@ list-style-type:none;
 <script>
 	var openid = '@ViewBag.Openid';
 	var classid='@ViewBag.ClassId';
+	var status='@ViewBag.OrderStatus';
 	var videoVue=new Vue({
 		el:"#myVideo",
 		data:{
-			currVideoUrl:"",
-			orderNo:"",
+			currVideoUrl:"",			
+			imgUrl:'',
 		}
 	});
 	var detailVue=new Vue({
@@ -120,7 +136,8 @@ list-style-type:none;
 		data:{
 			capData:[],	
 			form:{},
-			bargainId:""
+			bargainId:"",
+			orderNo:"",
 		},
 		created: function () {
                 this.Query();
@@ -138,9 +155,8 @@ list-style-type:none;
                         classid:classid
                     },
                     success: function (result) { 
-                        //_self.data = result; 
                         _self.form=result; 
-                        //var content = b64_to_utf8(result.ClassContent);
+                        videoVue.imgUrl=result.ClassImages;
                         $('#contentData').html("<div class='default-content'>" + result.ClassContent + "</div>");
                     },
                     error: function (json) {
@@ -156,13 +172,25 @@ list-style-type:none;
                         classid:classid
                     },
                     success: function (result) { 
-                        _self.capData = result; 
-                        videoVue.currVideoUrl=result[0].VideoUrl;
+                        _self.capData = result;
+                       if(result.length!=0)
+                       {
+                       		videoVue.currVideoUrl=result[0].VideoUrl;
+                       }
+                        
+                        
                     },
                     error: function (json) {
                         _self.$message.error('查询失败');
                     }
                 });  
+			},
+			changeVideo:function(item){
+				if(status==2)
+				{
+					videoVue.currVideoUrl=item.VideoUrl;
+				}
+				
 			},
 			GoGroupBuy:function()
 			{
@@ -205,16 +233,17 @@ list-style-type:none;
 				$.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/WxOrdere/AddOrder?pGuid=" + guid(),
+                    url: "/WxOrder/AddOrder?pGuid=" + guid(),
                     data:param,
                     success: function (result) {
                     	_self.orderNo=result;
+                    	window.location.href = "/WxOrder/Index?openid=" + openid+"&&orderNo="+_self.orderNo;
                     },
                     error: function (json) {
                         
                     }
                 });
-				window.location.href = "/WxOrder/Index?openid=" + openid+"&&orderNo="+_self.orderNo;
+				
 			},
 			AddCar:function()
 			{

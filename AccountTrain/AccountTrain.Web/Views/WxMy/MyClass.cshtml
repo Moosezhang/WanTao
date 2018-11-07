@@ -40,13 +40,14 @@
 		  	<img class="am-header-icon-custom" src="~/Images/icon/返回.png" alt=""/>
 		  </a>
 	  </div>
-	   <h3 class="am-header-title" style="float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
-          我的课程
+	   <h3 class="am-header-title" 
+	   	style="width:150px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
+          	我的课程
       </h3>
-      <div class="am-input-group" style="padding-top: 5px;">	
+      <div class="am-input-group">	
 	      <span class="am-input-group-btn" >
 	      	<button class="am-btn" type="button" onclick="GoHome()" 
-	        	style="background-color: white;border-color:white;float: right;">
+	        	style="background-color: white;border-color:white;margin-left: 45px;">
 	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
 	        </button>
 	        
@@ -89,10 +90,10 @@
 									<div style="font-size: 5px;"><b>{{item.ClassTeacher}}</b></div>
 								</td>
 								<td>
-									<div v-if="item.OrderStatus==0">
+									<div v-if="item.OrderStatus==1">
 										<button class="am-btn-this am-btn-default" type="button" v-on:click="GoPay(item.ClassId,item.ClassPrice)" style="border-radius:60px;color: red;background-color: #FAFAFA;border-color: red;margin-right: 10px;float: right;">去付款</button>
 									</div>
-									<div v-if="item.OrderStatus==1">
+									<div v-if="item.OrderStatus==2">
 										<button class="am-btn-this am-btn-default" type="button" v-on:click="GoStudy(item.ClassId)" style="border-radius:60px;color: #4395ff;background-color: #FAFAFA;border-color: #4395ff;margin-right: 10px;float: right;">去学习</button>
 									</div>
 								</td>
@@ -168,7 +169,7 @@
 				window.location.href = "/WxOrder/Index?openid=" + openid+"&&orderNo="+_self.orderNo;
 			},
 			GoStudy:function(classId){				
-				window.location.href = "ClassDetail?openid=" + openid+"&&classId="+id;
+				window.location.href = "/WxClass/ClassDetail?openid=" + openid+"&&classId="+classId;
 			}
          }
 	});

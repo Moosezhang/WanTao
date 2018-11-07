@@ -197,7 +197,24 @@ v-bind:data="GroupBuyData.slice((GroupBuycurrentPage-1)*GroupBuypagesize,GroupBu
                     _self.GroupBuyform = {};
                     this.dialogGroupBuyFormVisible = true;
                 },
-               
+               	handleGroupBuyEdit: function (Id) {
+                    var _self = this;
+                    $.ajax({
+                        type: "get",
+                        dataType: "json",
+                        contentType: "application/json",
+                        url: "/BaseSet/GetGroupBuyConfigByKey?pGuid=" + guid(),
+                        data: {
+                            id: Id
+                        },
+                        success: function (result) {
+                        	result.StartTime = _self.ChangeDateFormat(result.StartTime);
+                        	result.EndTime = _self.ChangeDateFormat(result.EndTime);
+                            _self.GroupBuyform = result;
+                        }
+                    });
+                    this.dialogGroupBuyFormVisible = true;
+                },
                 QueryGroupBuyData: function () {
                     var _self = this;
                     var className = this.GroupBuyName;

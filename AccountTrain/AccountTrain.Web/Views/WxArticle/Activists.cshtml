@@ -19,9 +19,19 @@
 		  	<img class="am-header-icon-custom" src="~/Images/icon/返回.png" alt=""/>
 		  </a>
 	  </div>
-	  <h3 class="am-header-title" style="color: black;padding-top: 15px;font-size: 18px;">
-          线下活动
+	  <h3 class="am-header-title" 
+	   	style="width:150px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
+          	线下活动
       </h3>
+      <div class="am-input-group">	
+	      <span class="am-input-group-btn" >
+	      	<button class="am-btn" type="button" onclick="GoHome()" 
+	        	style="background-color: white;border-color:white;margin-left: 45px;">
+	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
+	        </button>
+	        
+	      </span>
+	    </div>
 	</header>
   	<hr style="margin-top: 0px;"/>
   	<div id="activity">
@@ -35,7 +45,7 @@
 			        	<img :src="item.ImageUrl"/>
 			        </div>
 			
-					<table class=" am-u-sm-8 am-list-main" style="height: 70px;position:relative;">
+					<table class=" am-u-sm-8 am-list-main" style="height: 70px;position:relative;" v-on:click="GoDetail(item)">
 						<tr>
 							<td style="height: 30px;">
 								<div class="am-list-item-hd" style="color: black;height:60%; min-height: 60%;overflow:auto;">
@@ -51,13 +61,7 @@
 							
 						</tr>
 					</table>	
-			        <!--<div class=" am-u-sm-8 am-list-main" style="height: 60px;position:relative;" v-on:click="GoDetail(item)">
-			            <div class="am-list-item-hd" style="color: black;height:60%; min-height: 60%;overflow:auto;">
-			            	{{item.ArticleTitle}}
-			            </div>
-		            	<div style="color: #999999;float: left;margin-left: 120px;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>
-						<div style="color: #999999;float: right;margin-right: 15px;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
-			        </div>-->
+			       
 			      </li>  
 			    </ul>
 		  </div>
@@ -136,4 +140,9 @@
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
 	
+	
+	function GoHome()
+	 {
+	 	window.location.href = "/WxHome/Index?openid="+openid+"&&code=null&&state=null";
+	 }
 </script>
