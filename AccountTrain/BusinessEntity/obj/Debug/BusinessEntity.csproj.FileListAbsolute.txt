@@ -1,0 +1,10 @@
+E:\MyPlace\MyProject\Activity\Code\Activity\BusinessEntity\bin\Debug\BusinessEntity.dll
+E:\MyPlace\MyProject\Activity\Code\Activity\BusinessEntity\bin\Debug\BusinessEntity.pdb
+E:\MyPlace\MyProject\Activity\Code\Activity\BusinessEntity\obj\Debug\BusinessEntity.dll
+E:\MyPlace\MyProject\Activity\Code\Activity\BusinessEntity\obj\Debug\BusinessEntity.pdb
+E:\MyPlace\MyProject\Activity\Code\Activity\BusinessEntity\obj\Debug\BusinessEntity.csprojResolveAssemblyReference.cache
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\bin\Debug\BusinessEntity.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\bin\Debug\BusinessEntity.pdb
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\obj\Debug\BusinessEntity.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\obj\Debug\BusinessEntity.pdb
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\obj\Debug\BusinessEntity.csprojResolveAssemblyReference.cache

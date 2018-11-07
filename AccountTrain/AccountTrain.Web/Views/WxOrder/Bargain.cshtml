@@ -1,0 +1,157 @@
+﻿
+@{
+     ViewBag.Title = "砍价";
+}
+
+
+<style>
+ .content {
+ 	  height:200px;
+ 	  width:335px;
+ 	  margin-top: 70px;
+ 	  margin-left: 20px;
+ 	  background-color: #ECF5FF;
+ 	  border-radius: 10px;
+ 	  position: relative;
+ 	  padding: 5px;
+ }
+ 
+ .button{
+ 	width:130px;
+ 	height:45px;
+ 	margin-left: 130px;
+ 	border-radius: 10px;
+ 	background-color: yellow;
+ 	color: black;
+ 	font-size: 15px;
+ 	text-align:center;
+ 	line-height: 40px;
+ }
+ 
+ .logList{
+ 	background-color: #66A8CC;
+ 	margin-top: 50px;
+ 	position: relative;
+ 	padding: 5px;
+ 	margin-left: 20px;
+ 	width:335px;
+ 	border:1px solid white;
+ 	height: 210px;
+ 	overflow:auto;
+ }
+ 
+ul,li{ list-style:none}
+</style>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>砍价</title>
+</head>
+<body>
+  	
+    <form class="am-form" style="background-image: url(/Images/icon/bargainImage.jpg);background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;height: 900px;">
+        <fieldset style="height: 100%;">
+            <div id="bargain" model="data" style="height: 100%;">
+            	<div class="content">            		
+               		<h4 v-if="isOwner" style="text-indent:65px;color: red;">邀请你的好友帮忙砍一刀</h4>
+               		<h4 v-if="!isOwner" style="text-indent:65px;color: red;">您的好友邀请你帮他砍一刀</h4>
+               		<h5 style="text-indent:20px;">我在万韬财税发现一个课程,帮我砍到最低价吧</h5>
+               		<div style="height: 55%;background-color: white;border-radius: 10px;position: relative;margin: 20px;">
+               			<div class="am-u-sm-4 am-list-thumb" style="height: 100%;width: 20%;padding-right: 0px;">
+				        	<img style="height: 100%;width: 170%;" :src="data.ClassImages"/>
+				        </div>
+						<table class=" am-u-sm-8 am-list-main" style="height: 100%;position:relative;">
+							<tr style="height: 80%;">
+								<td colspan="2" style="height: 100%;">
+									{{data.ClassName}}								
+								</td>								
+							</tr>
+							<tr>
+								<td>
+									<span style="color: red;">¥{{data.ClassPrice}}</span>
+								</td>
+								<td>
+									11人已购买
+								</td>
+							</tr>
+						</table>
+               		</div>               		
+               	</div> 
+	            <div style="margin-left: 100px;">
+	              	<h4 style="color: white;">已砍<span style="color: yellow;font-size: 30px;">{{data.PrePrice-data.NowPrice}}</span>元，还差<span style="color: yellow;font-size: 30px;">{{data.ClassPrice-data.FloorPrice}}</span>元</h4>
+	            </div>
+	            <div style="margin-left: 100px;">
+	              	<h5 style="color: white;">还剩23:45:02结束，快来砍价！</h5>
+	            </div>
+	            <div v-if="isOwner" class="button">邀请好友砍价</div>
+	            <div v-if="!isOwner" class="button">邀请好友砍价</div>
+	            <div v-if="!isOwner" class="button">我也要发起砍价</div>
+	            <div class="logList">
+	            	<ul style="" v-for="item in logList">
+	            		<li>
+	            			<div style="color: white;font-size: 20px;float: left;width: 40%;">{{item.OpenId}}</div>
+	            			<div style="color: white;font-size: 20px;">砍了{{item.BargainPrice}}</div>	
+	            		</li>
+	            	</ul>
+	            </div>
+            </div>
+        </fieldset>
+    </form>
+   
+</div>
+</body>
+
+
+<script>
+	var openid = '@ViewBag.Openid';
+	var bargainid='@ViewBag.Bargainid';
+	var bargainVue=new Vue({
+		el:"#bargain",
+		data:{
+			data:{},
+			logList:[],
+			ownerOpenid:"",
+			isOwner:false
+		},
+		created: function () {
+                var _self = this;
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/WxOrder/GetBargainClass",
+                    data:{
+                    	bargainId:bargainid
+                    },
+                    success: function (result) {
+                        _self.data = result;
+                        _self.ownerOpenid=result.ownerOpenid;
+                        if(result.ownerOpenid==openid)
+                        {
+                        	_self.isOwner=true;
+                        }
+                    }
+                });
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/WxOrder/GetBargainLogs",
+                    data:{
+                    	bargainId:bargainid
+                    },
+                    success: function (result) {
+                        _self.logList = result;
+                    }
+                });
+           }
+	});
+	
+	 function guid() {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    }
+	
+</script>

@@ -1,0 +1,144 @@
+﻿body {
+    margin: 0px;
+    padding: 0px;
+}
+
+ul {
+    list-style: none;
+}
+
+#menuEL li {
+    width: 12.5%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.el-submenu__title {
+    text-align: center;
+    font-size: 16px !important;
+    font-weight: bolder;
+}
+
+#menuEL a {
+    text-decoration-line: none;
+    color: #ffffff;
+    display: block;
+}
+
+.el-menu-item a {
+    text-decoration-line: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.divcss5 {
+    margin: 0 auto;
+    border: 1px solid #D0D0D0;
+    width: 1024px;
+    min-height: 768px;
+}
+
+.copyright {
+    margin: 30px auto;
+    font-size: 12px;
+    text-align: center;
+    color: #007ebc;
+    display: block;
+    position: static;
+}
+
+.logo_block {
+    height: 68px;
+    font-size: 22px;
+    float: left;
+    line-height: 72px;
+    color: rgb(255, 255, 255);
+    font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif, Tahoma, Geneva !important;
+    margin: 0px 0px 0px 10px;
+}
+
+.nav_add {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+    .nav_add ul {
+        margin: 0 auto;
+        padding: 0;
+        vertical-align: middle;
+        overflow: hidden;
+    }
+
+        .nav_add ul li {
+            height: 68px;
+            line-height: 68px;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+            .nav_add ul li > a {
+                color: #FFF;
+                outline: none !important;
+                cursor: pointer;
+                text-decoration: none;
+                background-color: transparent;
+            }
+
+            .nav_add ul li > i {
+                line-height: 18px;
+                vertical-align: middle;
+                width: 24px;
+                height: 24px;
+                display: block;
+                float: left;
+                margin-top: 20px;
+                margin-right: 5px;
+                /* background-color: #CCC; */
+            }
+
+.ic_admin {
+    background-image: url(/Images/icon/add/ic_admin.png);
+}
+
+.ic_changepw {
+    background-image: url(/Images/icon/add/ic_changepw.png);
+}
+
+.ic_logout {
+    background-image: url(/Images/icon/add/ic_logout.png);
+}
+
+.area {
+    width: 940px;
+    margin: 0 auto;
+}
+
+.wz {
+    line-height: 35px;
+    text-indent:10px;
+}
+
+.notice_left {
+    width: 70%;
+    float: left;
+}
+
+.notice_right {
+    width: 28%;
+    float: left;
+    padding-left: 15px;
+}
+
+.tableClass td {
+    height: 35px !important;
+    padding: 0px !important;
+}
+
+.tableClass a {
+    text-decoration: none !important;
+}

@@ -1,0 +1,231 @@
+﻿@{
+    ViewBag.Title = "Role";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="wz">
+        您当前所在的位置：字典管理
+</div>
+<div id="Role">
+	<el-container>
+	 <el-aside  style="margin-left: 10px;">	
+	 	<template>
+	 		<p style="margin-top: 30px;">字典分类列表</p>
+	 		<el-table border stripe
+        		  v-bind:data="KeyList"
+                  highlight-current-row
+                  v-on:row-click="handleCurrentChange"
+                  v-bind:default-sort="{prop: 'OrderNum', order: 'descending'}"
+                  style="margin-top: 30px;">
+	          	<el-table-column prop="ItemKey"
+	                             label="字典分类KEY">
+	            </el-table-column>
+	            <el-table-column prop="ItemValue"
+	                             label="字典分类">
+	            </el-table-column>
+	        </el-table>	
+	 	</template>
+	  	 
+	  </el-aside>	
+		
+	  <el-main width="500px" style="margin-top:10px;margin-left:20px">
+	  	    <template>
+	  	    	<el-col span="24">
+		            <div>
+		                <el-button size="mini" type="warning"
+		                v-on:click="handleAdd()">新增字典</el-button>
+		            </div>
+		        </el-col>
+	            <el-table border stripe
+	            		  v-bind:data="ItemsList"
+	                      v-bind:default-sort="{prop: 'ItemKey', order: 'descending'}"
+	                      style="width: 100%;margin-top: 50px;">
+	                <el-table-column prop="ItemId"
+	                                 label="字典分类"
+	                                 width="130"
+	                                 v-if="false">
+	                </el-table-column>   
+	                <el-table-column prop="DictionaryKey"
+	                                 label="字典分类"
+	                                 width="130">
+	                </el-table-column>               
+	                 <el-table-column prop="ItemKey"
+	                                 label="字典值"
+	                                 width="130">
+	                </el-table-column>  
+	                 <el-table-column prop="ItemValue"
+	                                 label="字典名称"
+	                                 width="130">
+	                </el-table-column>  
+	                <el-table-column fixed="right"
+	                                 label="操作"
+	                                 width="auto" header-align="center" align="center">
+	                    <template slot-scope="scope">                    	
+	                        
+	                        <el-button size="mini"
+	                                   v-on:click="handleEdit(scope.row.ItemId)">编辑</el-button>
+	                        <el-button v-if="scope.row.Status==1" size="mini"
+	                                   type="danger"
+	                                   v-on:click="handleDisable(scope.row.ItemId,0)">禁用</el-button>
+	                    </template>
+	                </el-table-column>
+	            </el-table>	             
+	        </template>   
+	  </el-main style="margin-top:10px;">
+	  
+	  
+	</el-container>
+	
+	<el-dialog title="字典信息" v-bind:visible.sync="dialogUserFormVisible" v-model="dialogUserFormVisible" 	style="height:500px;">
+        <el-form model="form" style="margin-top:-20px;height:auto" label-width="80px">
+            <el-row>
+            	<el-col span="12">
+                    <el-form-item label="字典分类">
+                        <el-input v-model="form.DictionaryKey" style="width:220px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>
+            	<el-col span="12">
+                    <el-form-item label="字典值">
+                        <el-input v-model="form.ItemKey" style="width:220px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col span="12">
+                    <el-form-item label="字典名称">
+                        <el-input v-model="form.ItemValue" style="width:220px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>    
+                <el-col span="12">
+                    <el-form-item label="排序">
+                        <el-input v-model="form.OrderNum" style="width:220px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>     
+            </el-row> 
+        </el-form>
+        <div slot="footer" class="dialog-footer" style="margin-top:-30px;">
+            <el-button size="small" v-on:click="dialogUserFormVisible = false">取 消</el-button>
+            <el-button type="primary" size="small" v-on:click="SaveDic(form)">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+<script>
+	 var RoleVue=new Vue({
+	 	el:"#Role",
+	 	data:{
+	 		KeyList:[],
+	 		ItemsList:[],
+	 		
+	       currentRow: null,
+	       dialogUserFormVisible: false,
+           form: {},
+           checkId:null,
+	 	},
+	 	created:function (){
+	 		this.QueryData();
+	 	},
+	 	methods:{
+	 		QueryData: function () {
+                    var _self = this;
+                    $.ajax({
+	                    type: "get",
+	                    dataType: "json",
+	                    contentType: "application/json",
+	                    url: "/BaseSet/GetAllDicKey",
+	                    success: function (result) {
+	                        _self.KeyList = result;
+	                    }
+                	});
+               },
+            handleCurrentChange:function(val){
+            	this.checkId=val.ItemKey;
+            	var _self = this;
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/BaseSet/GetDicItemsByDicKey",
+                    data:{key:val.ItemKey},
+                    success: function (result) {
+                    	_self.ItemsList=result;
+                    }
+            	});
+            },
+	 		handleAdd:function(){
+ 				var _self = this;
+            	_self.form={};
+            	this.dialogUserFormVisible = true;
+	 		},
+            handleEdit: function (ItemId) {
+                var _self = this;
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/BaseSet/GetDicItemByKey?pGuid=" + guid(),
+                    data: {
+                        itemId: ItemId
+                    },
+                    success: function (result) {
+                        _self.form = result;
+                    }
+                });
+                this.dialogUserFormVisible = true;
+            },
+            SaveDic: function (role) {
+                    var _self = this;
+                    $.ajax({
+                        type: "post",
+                        dataType: "json",
+                        url: "/BaseSet/SaveDicItem",
+                        data:role,
+                        success: function (result) {
+                            if (result) {
+                                _self.dialogUserFormVisible = false;
+                                _self.QueryData();
+                                _self.$message({
+                                    type: 'success',
+                                    message: '保存成功!'
+                                });
+                            } else {
+                                _self.$message.error('保存角色信息失败');
+                            }
+                        },
+                        error: function (json) {
+                            _self.$message.error('保存角色信息失败');
+                        }
+                    });
+                },
+                handleDisable: function (roleId, status) {
+                    var _self = this;
+                    $.ajax({
+                        type: "get",
+                        dataType: "json",
+                        url: "/BaseSet/EnableItems",
+                        data: {
+                            ItemId: roleId,
+                            status: status
+                        },
+                        success: function (result) {
+                            if (result) {
+                                _self.$message({
+                                    type: 'success',
+                                    message: '保存成功!'
+                                });
+                                _self.QueryData();
+                            } else {
+                                _self.$message({
+                                    type: 'info',
+                                    message: '保存失败!'
+                                });
+                            }
+                        }
+                    });
+                },
+            }
+	 })
+	 
+	 function guid() {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    }
+</script>

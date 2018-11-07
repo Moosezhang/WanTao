@@ -1,0 +1,261 @@
+﻿@{
+    ViewBag.Title = "推广管理";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="wz">
+        您当前所在的位置：公益金规则
+</div>
+<div id="tabs" style="margin: 10px;">
+    <el-tabs v-model="activeName" type="border-card">
+
+       <el-tab-pane label="公益金规则" name="PublicFunds">           
+			<el-row style="margin-top:10px;margin-left:10px">
+		        <el-col span="24">
+		            <div>
+		                <el-input v-model="PublicFundsName" id="PublicFundsName" placeholder="请输入课程名称" clearable 						style="width:200px;"></el-input>
+		                <el-button size="mini" style="margin-left:10px" type="primary"
+		                           v-on:click="QueryPublicFundsData()">查询</el-button>
+		                <el-button size="mini" type="warning"
+		                           v-on:click="handlePublicFundsAdd()">新增</el-button>
+		            </div>
+		        </el-col>
+		    </el-row>
+
+		    <div style="margin-top:5px">
+		        <template>
+		            <el-table border stripe
+v-bind:data="PublicFundsData.slice((PublicFundscurrentPage-1)*PublicFundspagesize,PublicFundscurrentPage*PublicFundspagesize)"
+		                      v-bind:default-sort="{prop: 'CreateTime', order: 'descending'}"
+		                      style="width: 100%">
+		                <el-table-column prop="ClassName"
+		                                 label="课程名称">
+		                </el-table-column>
+		
+		                <el-table-column prop="FundsPrice"
+		                                 label="公益金">
+		                </el-table-column>		               
+		                <el-table-column fixed="right"
+		                                 label="操作"
+		                                 width="auto" header-align="center" align="center">
+		                    <template slot-scope="scope">
+		
+		                        <el-button size="mini"
+		                                   v-on:click="handlePublicFundsEdit(scope.row.PublicFundsId)">编辑</el-button>
+		                        <el-button v-if="scope.row.Status==1" size="mini"
+		                                   type="danger"
+		                                   v-on:click="handlePublicFundsDisable(scope.row.PublicFundsId,0)">禁用</el-button>
+		                    </template>
+		                </el-table-column>
+		            </el-table> 
+		            <el-pagination 
+		            				v-on:size-change="handlePublicFundsSizeChange"
+									v-on:current-change="handlePublicFundsCurrentChange"
+								    :current-page="PublicFundscurrentPage"
+								    :page-sizes="[10, 20, 50, 100]"
+								    :page-size="PublicFundspagesize"
+								    layout="total, prev, pager, next"
+								    :total="PublicFundsData.length">
+		            </el-pagination>
+		        </template>
+		
+		    </div>
+
+		    <el-dialog title="公益金规则" v-bind:visible.sync="dialogPublicFundsFormVisible" v-model="dialogPublicFundsFormVisible" 			style="height:500px;">
+		        <el-form model="PublicFundsform" style="margin-top:-20px;height:auto" label-width="80px">
+		            <el-row>
+		                <el-col span="12" style="display: none;">
+		                    <el-form-item label="Id">
+		                        <el-input v-model="PublicFundsform.PublicFundsId" style="width:220px;" clearable></el-input>
+		                    </el-form-item>
+		                </el-col>
+		                <el-col span="12">
+		                    <el-form-item label="公益金 ">
+		                        <el-input v-model="PublicFundsform.FundsPrice" style="width:220px;" clearable></el-input>
+		                    </el-form-item>
+		                </el-col>		                
+		                <el-col span="12">
+		                    <el-form-item label="所属课程">
+		                        <el-select v-model="PublicFundsform.ClassId" placeholder="请选择课程" style="width:220px;">
+		                            <el-option v-for="item in ClassData"
+		                                       v-bind:key="item.ClassId"
+		                                       v-bind:label="item.ClassName"
+		                                       v-bind:value="item.ClassId">
+		                            </el-option>
+		                        </el-select>
+		                    </el-form-item>
+		                </el-col>
+		            </el-row>
+		        </el-form>
+		        <div slot="footer" class="dialog-footer" style="margin-top:-30px;">
+		            <el-button size="small" v-on:click="dialogPublicFundsFormVisible = false">取 消</el-button>
+		            <el-button type="primary" size="small" v-on:click="SavePublicFunds(PublicFundsform)">确 定</el-button>
+		        </div>
+		    </el-dialog>
+
+
+        </el-tab-pane>
+    </el-tabs>
+</div>
+
+<script>
+	var tabVue=new Vue({
+		el:"#tabs",
+		data: {
+				activeName:'PublicFunds',
+				ClassData: [],
+				
+        		
+        		PublicFundsData: [],                
+                PublicFundsName: "",
+                dialogPublicFundsFormVisible: false,
+                PublicFundsform: {},
+                PublicFundscurrentPage:1,
+        		PublicFundspagesize:8,
+            },
+            beforeCreate: function () {
+                var _self = this;
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/Class/GetAllClass",
+                    success: function (result) {
+                        _self.ClassData = result;
+                    }
+                });
+            },
+            created: function () {
+                this.QueryPublicFundsData();
+            },
+            methods: {
+            	 dateFormat: function (row, column) {
+                    var date = row[column.property];
+                    if (date == undefined) {
+                        return "";
+                    }
+                    return new Date(parseInt(date.substr(6, 13))).toLocaleDateString();
+                    //return moment(date).format("YYYY-MM-DD HH:mm:ss");
+                    //return new Date(parseInt(date.substr(6, 13))).toLocaleDateString();
+                },
+                ChangeDateFormat:function(timeSpan) {
+				    var timeSpan = timeSpan.replace('Date','').replace('(','').replace(')','').replace(/\//g,'');
+				    var d = new Date(parseInt(timeSpan));
+				    return d;
+				},
+				GetNeedDateFormat:function(datetime){
+					var d = new Date(datetime);  
+					return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + 					':' + d.getMinutes() + ':' + d.getSeconds(); 
+				},
+            	
+              
+            
+                handlePublicFundsAdd: function () {
+                    var _self = this;
+                    _self.PublicFundsform = {};
+                    this.dialogPublicFundsFormVisible = true;
+                },
+                handlePublicFundsEdit: function (Id) {
+                    var _self = this;
+                    $.ajax({
+                        type: "get",
+                        dataType: "json",
+                        contentType: "application/json",
+                        url: "/BaseSet/GetPublicFundsByKey?pGuid=" + guid(),
+                        data: {
+                            id: Id
+                        },
+                        success: function (result) {
+                            _self.PublicFundsform = result;
+                        }
+                    });
+                    this.dialogPublicFundsFormVisible = true;
+                },
+                QueryPublicFundsData: function () {
+                    var _self = this;
+                    var className = this.PublicFundsName;
+                    $.ajax({
+                        type: "get",
+                        dataType: "json",
+                        contentType: "application/json",
+                        url: "/BaseSet/GetPublicFundsByCondition?pGuid=" + guid(),
+                        data: {
+                            className: className
+                        },
+                        success: function (result) {
+                            _self.PublicFundsData = result;
+                        },
+                        error: function (json) {
+                            _self.$message.error('查询团购配置失败');
+                        }
+                    });
+                },
+                SavePublicFunds: function (PublicFunds) {
+                    var _self = this;
+                    $.ajax({
+                        type: "post",
+                        dataType: "json",
+                        url: "/BaseSet/SavePublicFunds",
+                        data: PublicFunds,
+                        success: function (result) {
+                            if (result) {
+                                _self.dialogPublicFundsFormVisible = false;
+                                _self.QueryPublicFundsData();
+                                _self.$message({
+                                    type: 'success',
+                                    message: '保存成功!'
+                                });
+                            } else {
+                                _self.$message.error('保存团购配置息失败');
+                            }
+                        },
+                        error: function (json) {
+                            _self.$message.error('保存团购配置失败');
+                        }
+                    });
+                },
+                handlePublicFundsDisable: function (Id, status) {
+                    var _self = this;
+                    $.ajax({
+                        type: "get",
+                        dataType: "json",
+                        url: "/BaseSet/EnablePublicFunds",
+                        data: {
+                            Id: Id,
+                            status: status
+                        },
+                        success: function (result) {
+                            if (result) {
+                                _self.$message({
+                                    type: 'success',
+                                    message: '保存成功!'
+                                });
+                                _self.QueryPublicFundsData();
+                            } else {
+                                _self.$message({
+                                    type: 'info',
+                                    message: '保存失败!'
+                                });
+                            }
+                        }
+                    });
+                },                
+                handlePublicFundsSizeChange: function (size) {
+			        this.PublicFundspagesize = size;
+			    },
+			    handlePublicFundsCurrentChange: function(currentPage){
+			        this.PublicFundscurrentPage = currentPage;
+			    },
+            
+            
+            
+            }
+
+        });
+    function guid() {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    }
+</script>

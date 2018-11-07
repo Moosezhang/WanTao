@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7CA1BEBF-C9A0-46BA-91B7-20861107CEF4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BusinessEntity</RootNamespace>
+    <AssemblyName>BusinessEntity</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ArticleEntity.cs" />
+    <Compile Include="BargainLogEntity.cs" />
+    <Compile Include="BargainEntity.cs" />
+    <Compile Include="ChapterEntity.cs" />
+    <Compile Include="Model\VMClassCar.cs" />
+    <Compile Include="Model\VMBargainClass.cs" />
+    <Compile Include="Model\VMGBClass.cs" />
+    <Compile Include="Model\VMOrderClass.cs" />
+    <Compile Include="Model\VMWxArticle.cs" />
+    <Compile Include="Model\VMClassChapter.cs" />
+    <Compile Include="Model\VMImages.cs" />
+    <Compile Include="Model\VMWxUserPoints.cs" />
+    <Compile Include="ClickCountEntity.cs" />
+    <Compile Include="PointsLogEntity.cs" />
+    <Compile Include="PointsEntity.cs" />
+    <Compile Include="ShopCarEntity.cs" />
+    <Compile Include="WxUserEntity.cs" />
+    <Compile Include="IndexImageEntity.cs" />
+    <Compile Include="ClassEntity.cs" />
+    <Compile Include="GroupBuyConfigEntity.cs" />
+    <Compile Include="Model\VMBargainConfig.cs" />
+    <Compile Include="Model\VMGroupBuyConfig.cs" />
+    <Compile Include="Model\VMHelpConfig.cs" />
+    <Compile Include="Model\VMPublicFunds.cs" />
+    <Compile Include="PublicFundsEntity.cs" />
+    <Compile Include="HelpConfigEntity.cs" />
+    <Compile Include="Common\EnitityMappingAttribute.cs" />
+    <Compile Include="Common\Entity.cs" />
+    <Compile Include="Common\EntityOfTPrimaryKey.cs" />
+    <Compile Include="Common\IEntity.cs" />
+    <Compile Include="Common\IEntityOfTPrimaryKey.cs" />
+    <Compile Include="Common\SystemMenu.cs" />
+    <Compile Include="Common\SystemMenuInfo.cs" />
+    <Compile Include="BargainConfigEntity.cs" />
+    <Compile Include="DictionaryEntity.cs" />
+    <Compile Include="Model\VMDicItems.cs" />
+    <Compile Include="Model\VMUserInfo.cs" />
+    <Compile Include="OrderEntity.cs" />
+    <Compile Include="OrderGoodsEntity.cs" />
+    <Compile Include="JobEntity.cs" />
+    <Compile Include="DictionaryItemEntity.cs" />
+    <Compile Include="CompanyEntity.cs" />
+    <Compile Include="RoleMenuEntity.cs" />
+    <Compile Include="RoleUserEntity.cs" />
+    <Compile Include="RoleEntity.cs" />
+    <Compile Include="MenuEntity.cs" />
+    <Compile Include="UserEntity.cs" />
+    <Compile Include="Common\JsonResultObject.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

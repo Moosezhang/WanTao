@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Gma.QrCodeNet</id>
+    <version>0.4.1.2</version>
+    <title>Gma.QrCodeNet</title>
+    <authors>gmamaladze</authors>
+    <owners>gmamaladze</owners>
+    <licenseUrl>https://qrcodenet.codeplex.com/license</licenseUrl>
+    <projectUrl>https://qrcodenet.codeplex.com/</projectUrl>
+    <iconUrl>https://download-codeplex.sec.s-msft.com/Download?ProjectName=qrcodenet&amp;DownloadId=284288&amp;Build=21031</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The goal of the project is provding an easy to use, fully managed .Net library for handling QR code according to ISO/IEC 18004.</description>
+    <summary />
+    <releaseNotes>0.4.1.2</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>QR Encoding Qrcode Barcode</tags>
+  </metadata>
+</package>
