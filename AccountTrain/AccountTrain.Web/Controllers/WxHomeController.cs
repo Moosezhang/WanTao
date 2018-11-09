@@ -48,6 +48,25 @@ namespace AccountTrain.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// 首页全局查询界面
+        /// </summary>
+        /// <param name="openid"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public ActionResult IndexSearch(string openid,string condition)
+        {
+            if (string.IsNullOrEmpty(openid))
+            {
+                Response.Redirect(CommonHelper.GetRedirect("WxHome%2fIndex"));
+            }
+
+
+            ViewBag.Openid = openid;
+            ViewBag.Condition = condition;
+
+            return View();
+        }
 
         #region 联系我们
         public ActionResult CompanyInfo(string openid, string code, string state)

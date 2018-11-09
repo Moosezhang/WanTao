@@ -47,7 +47,7 @@ namespace DataAccess
             }
         }
 
-        public List<ClassEntity> GetClassByCondition(string name, string classType, string startDate, string endDate)
+        public List<ClassEntity> GetClassByCondition(string name, string classType, string startDate, string endDate,string classGroup,string order)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
@@ -66,6 +66,16 @@ namespace DataAccess
                 if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
                 {
                     string sql = string.Format(" and CreateTime between '{0}' and '{1}'", startDate, endDate);
+                    query = query + sql;
+                }
+                if (!string.IsNullOrEmpty(classGroup))
+                {
+                    string sql = string.Format(" and ClassGroup='{0}'", classGroup);
+                    query = query + sql;
+                }
+                if (!string.IsNullOrEmpty(order))
+                {
+                    string sql = string.Format(" order by {0} desc", order);
                     query = query + sql;
                 }
 
@@ -109,7 +119,7 @@ namespace DataAccess
                                                    ,CreateUser
                                                    ,UpdateTime
                                                    ,UpdateUser
-                                                   ,ClassAbstract)
+                                                   ,ClassAbstract,ClassGroup)
                                              VALUES
                                                     ('{0}'
                                                     ,'{1}'
@@ -128,9 +138,9 @@ namespace DataAccess
                                                     ,'{13}'
                                                     ,getdate()
                                                     ,'{14}'
-                                                    ,'{15}')",
+                                                    ,'{15}','{16}')",
                         Guid.NewGuid().ToString(), Class.ClassName, Class.ClassType, Class.ClassContent, Class.ClassImages, Class.ClassPrice,
-                        Class.ClassTeacher, Class.HotCount, Class.IsGroupBuy, Class.IsBargain, Class.IsHelp, Class.Remark, 1, loginName, loginName, Class.ClassAbstract);
+                        Class.ClassTeacher, Class.HotCount, Class.IsGroupBuy, Class.IsBargain, Class.IsHelp, Class.Remark, 1, loginName, loginName, Class.ClassAbstract,Class.ClassGroup);
                     return conn.Execute(query);
                 }
             }
@@ -152,10 +162,10 @@ namespace DataAccess
                                                        ,Remark = '{10}'                                                             
                                                        ,UpdateTime = getdate()
                                                        ,UpdateUser = '{11}'
-                                                       ,ClassAbstract = '{12}'
-                                                    WHERE ClassId='{13}'",
+                                                       ,ClassAbstract = '{12}',ClassGroup='{13}'
+                                                    WHERE ClassId='{14}'",
                                               Class.ClassName, Class.ClassType, Class.ClassContent, Class.ClassImages, Class.ClassPrice, Class.ClassTeacher, Class.HotCount, Class.IsGroupBuy,
-                                              Class.IsBargain, Class.IsHelp, Class.Remark, loginName, Class.ClassAbstract, Class.ClassId);
+                                              Class.IsBargain, Class.IsHelp, Class.Remark, loginName, Class.ClassAbstract,Class.ClassGroup, Class.ClassId);
                     return conn.Execute(query);
                 }
             }
@@ -189,6 +199,19 @@ namespace DataAccess
                 return conn.Query<VMOrderClass>(query).ToList();
             }
            
+        }
+        /// <summary>
+        /// 更新课程热度（即购买人数）
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <returns></returns>
+        public int UpdateClassHot(string classId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"update Train_Class set HotCount=HotCount+1 where ClassId='{0}'", classId);
+                return conn.Execute(query);
+            }
         }
 
       

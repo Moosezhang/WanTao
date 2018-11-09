@@ -10,7 +10,7 @@
 	<el-row style="margin-top:10px;margin-left:10px">
         <el-col span="24">
             <div>
-                <el-input v-model="txtdk" id="txtdk" placeholder="请输入字典分类" clearable style="width:200px;"></el-input>
+                <!--<el-input v-model="txtdk" id="txtdk" placeholder="请输入字典分类" clearable style="width:200px;"></el-input>-->
                 <el-input v-model="txtik" id="txtik" placeholder="请输入字典值" clearable style="width:200px;"></el-input>
                 <el-input v-model="txtiv" id="txtiv" placeholder="请输入字典名称" clearable style="width:200px;"></el-input>
                 
@@ -33,7 +33,8 @@
 	                                 v-if="false">
 	                </el-table-column>  
 	                <el-table-column prop="DictionaryKey"
-	                                 label="字典分类">
+	                                 label="字典分类"
+	                                 v-if="false">
 	                </el-table-column>               
 	                 <el-table-column prop="ItemKey"
 	                                 label="字典值">
@@ -94,9 +95,9 @@
 	                <el-form-item label="字典分类">
 	                    <el-select v-model="form.DictionaryKey" placeholder="请选择课程类型" style="width:180px;">
 	                        <el-option v-for="item in DicData"
-	                                   v-bind:key="item.ItemKey"
+	                                   v-bind:key="item.ItemId"
 	                                   v-bind:label="item.ItemValue"
-	                                   v-bind:value="item.ItemKey">
+	                                   v-bind:value="item.ItemId">
 	                        </el-option>
 	                    </el-select>
 	                </el-form-item>
@@ -126,25 +127,26 @@
            	currentPage:1,
         	pagesize:8,
 	 	},
-	 	beforeCreate:function (){
-        	var _self = this;
-            $.ajax({
-                type: "get",
-                dataType: "json",
-                contentType: "application/json",
-                url: "/BaseSet/GetAllDicKey",
-                success: function (result) {
-                    _self.DicData = result;
-                }
-            });
-        },
 	 	created:function (){
 	 		this.QueryData();
+	 		this.GetAllKey();
 	 	},
 	 	methods:{
+	 		GetAllKey:function (){
+		 		var _self = this;
+	            $.ajax({
+	                type: "get",
+	                dataType: "json",
+	                contentType: "application/json",
+	                url: "/BaseSet/GetAllDicKey",
+	                success: function (result) {
+	                    _self.DicData = result;
+	                }
+	            });
+	 		},
 	 		QueryData: function () {
                     var _self = this;
-                    var dk=this.dk;
+                    var dk="";
                     var ik=this.ik;
                     var iv=this.iv;
                     $.ajax({
@@ -194,10 +196,12 @@
                             if (result) {
                                 _self.dialogUserFormVisible = false;
                                 _self.QueryData();
+                                _self.GetAllKey();
                                 _self.$message({
                                     type: 'success',
                                     message: '保存成功!'
                                 });
+                                
                             } else {
                                 _self.$message.error('保存角色信息失败');
                             }

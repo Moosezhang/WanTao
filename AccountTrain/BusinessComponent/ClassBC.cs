@@ -19,16 +19,16 @@ namespace BusinessComponent
             return da.GetAllClass();
         }
 
-        public List<ClassEntity> GetClassByCondition(string name, string classType, string startDate, string endDate)
+        public List<ClassEntity> GetClassByCondition(string name, string classType, string startDate, string endDate, string classGroup, string order)
         {
             ClassDA da = new ClassDA();
 
-            var result = da.GetClassByCondition(name, classType, startDate, endDate);
+            var result = da.GetClassByCondition(name, classType, startDate, endDate, classGroup, order);
             if (result != null && result.Count > 0)
             {
                 foreach (var item in result)
                 {
-                    item.ClassType = new BaseSetBC().GetDicItemValueByKey(item.ClassType, "ClassKey").ItemValue;
+                    item.ClassType = new BaseSetBC().GetDicItemValueByKey(item.ClassType, DictionaryConstant.ClassKey).ItemValue;
                 }
             }
 
@@ -59,35 +59,35 @@ namespace BusinessComponent
 
             var result = da.GetClassByKey(id);
 
-            result.ClassImages = CommonHelper.LinkImageUrl(result.ClassImages);
+            //result.ClassImages = CommonHelper.LinkImageUrl(result.ClassImages);
 
             return result;
         }
 
-        public List<VMImages> GetClassImage(string id)
-        {
-            ClassDA da = new ClassDA();
+        //public List<VMImages> GetClassImage(string id)
+        //{
+        //    ClassDA da = new ClassDA();
 
-            List<VMImages> imgs = new List<VMImages>();
+        //    List<VMImages> imgs = new List<VMImages>();
 
-            var result = da.GetClassByKey(id);
-            result.ClassImages = CommonHelper.LinkImageUrl(result.ClassImages);
+        //    var result = da.GetClassByKey(id);
+        //    result.ClassImages = CommonHelper.LinkImageUrl(result.ClassImages);
 
-            int begin = result.ClassImages.IndexOf("/Images");
-            if (begin > 0)
-            {
-                VMImages img = new VMImages()
-                {
-                    imageId = result.ClassId,
-                    name = result.ClassName,
-                    url = result.ClassImages
-                };
-                imgs.Add(img);
-            }        
+        //    int begin = result.ClassImages.IndexOf("/Images");
+        //    if (begin > 0)
+        //    {
+        //        VMImages img = new VMImages()
+        //        {
+        //            imageId = result.ClassId,
+        //            name = result.ClassName,
+        //            url = result.ClassImages
+        //        };
+        //        imgs.Add(img);
+        //    }        
 
 
-            return imgs;
-        }
+        //    return imgs;
+        //}
 
 
         public int SaveClass(ClassEntity Class, string loginName)
@@ -107,6 +107,12 @@ namespace BusinessComponent
         {
             ClassDA da = new ClassDA();
             return da.GetMyClassByopenId(openid, title);
+        }
+
+        public int UpdateClassHot(string classId)
+        {
+            ClassDA da = new ClassDA();
+            return da.UpdateClassHot(classId);
         }
       
         #endregion

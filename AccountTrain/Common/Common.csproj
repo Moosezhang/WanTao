@@ -66,6 +66,7 @@
     <Compile Include="CommonHelper.cs" />
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="DateTimeHelper.cs" />
+    <Compile Include="DictionaryConstant.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="HttpSend.cs" />

@@ -135,26 +135,19 @@ namespace AccountTrain.Web.Controllers
 
 
         /// <summary>
-        /// 支付（充值）
+        /// 支付
         /// </summary>
         /// <param name="id"></param>
         /// <param name="openId"></param>
         /// <param name="mark"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public ActionResult CheckOut(string openId, int price)
+        public ActionResult CheckOut(string openId, int price,string orderNo)
         {
             try
             {
                 AppSetting setting = new AppSetting();
                 WxPayClient client = new WxPayClient();
-
-                string SerialNo = Guid.NewGuid().ToString();
-
-                string Number = DateTime.Now.ToString("yyMMddHHmmss");
-                Random example = new Random();
-                int Numradom = example.Next(10000, 99999);
-                Number = Number + Numradom.ToString();
 
                
 
@@ -182,7 +175,7 @@ namespace AccountTrain.Web.Controllers
                     req.GoodTag = "Recharge";
                     req.TradeType = "JSAPI";
                     req.OpenId = openId;
-                    req.OutTradeNo = Number;//---商户订单号----------------
+                    req.OutTradeNo = orderNo;//---商户订单号----------------
                     req.TotalFee = 1;//测试总金额
                     //req.TotalFee = price*100;//总金额
                     req.NotifyUrl = setting.NotifyUrl;//异步通知地址-------------------------
@@ -203,7 +196,7 @@ namespace AccountTrain.Web.Controllers
                     ViewBag.Paysign = (string)jsApiParam.GetValue("paySign");
                     ViewBag.TimeStamp = (string)jsApiParam.GetValue("timeStamp");
                     ViewBag.OpenId = openId;
-                    ViewBag.OrderId = Number;
+                    ViewBag.OrderNo = orderNo;
                 }
 
 
@@ -212,6 +205,89 @@ namespace AccountTrain.Web.Controllers
             {
                // Log.WriteLog("CheckOut Error:" + ex.Message);
             }
+            return View();
+        }
+
+        /// <summary>
+        /// 支付完成
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult rechargesucc(string openId,string orderNo)
+        {
+            OrderBC bc= new OrderBC();
+            var result=bc.GetOrderByOrderNo(orderNo);
+
+            //支付成功，1.更新订单状态；2.更新课程热度
+            UpdateOrderStatus(orderNo,2);//1
+
+            var goods = bc.GetOrderGoodsListByOrderId(result.OrderId);
+            if (goods != null && goods.Count > 0)
+            {
+                foreach (var item in goods)
+                {
+                    new ClassBC().UpdateClassHot(item.ClassId);//2
+                }
+            }
+            //根据订单来源，变更不同推广状态
+            switch (result.OrderSource)
+            {
+                case "1"://单独购买
+                    break;
+                case "2"://砍价
+                    foreach (var item in goods)
+                    {
+                        var barginEntity = bc.GetBargainByOpenIdAndClassId(item.ClassId, openId);
+                        bc.UpdateBargainStatus(barginEntity.BargainId, 2);
+                    }
+                    break;
+                case "3"://团购
+                    foreach (var item in goods)
+                    {
+                        var gbEntity = bc.GetGroupBuyByClassId(item.ClassId);
+                        if (gbEntity != null)//该商品已有团购，更新团购人数
+                        {
+                            bc.UpdateGroupBuyCount(gbEntity.GroupBuyId);
+                        }
+                        else//该商品没有团购，新增团购数据
+                        {
+                            GroupBuyEntity buy = new GroupBuyEntity()
+                            {
+                                ClassId=item.ClassId,
+                                NowCount=1,
+                            };
+                            bc.AddGroupBuy(buy,openId);
+                        }
+                        gbEntity = bc.GetGroupBuyByClassId(item.ClassId);
+                        //记录团购成员表
+                        GroupBuyMemberEntity member = new GroupBuyMemberEntity()
+                        {
+                            GroupBuyId = gbEntity.GroupBuyId,
+                            GroupPrice = item.Price,
+                            openId = openId
+                        };
+                        bc.AddGroupBuyMember(member, openId);
+
+                        var nowCountEntity = bc.GetGroupBuyByClassId(item.ClassId);
+                        var nowCount = nowCountEntity.NowCount;
+                        var needCount = bc.GetGroupBuyConfigByClassId(item.ClassId).NeedCount;
+
+                        if(nowCount==needCount)
+                        {
+                            bc.UpdateGroupBuyStatus(nowCountEntity.GroupBuyId,2);
+                        }
+                    }
+                    
+                    break;
+                case "4"://助力
+
+                    break;
+            }
+
+
+            ViewBag.OrderNo = orderNo;
+            ViewBag.OpenId = openId;
+            ViewBag.Price = result.PayPrice;
+
             return View();
         }
 
@@ -354,6 +430,50 @@ namespace AccountTrain.Web.Controllers
             catch (Exception ex)
             {
                 return Json(new List<BargainLogEntity>(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 帮他砍一刀
+        /// </summary>
+        /// <param name="openid"></param>
+        /// <param name="classid"></param>
+        /// <returns></returns>
+        public ActionResult BargainClass(string openid, string classid)
+        {
+            try
+            {
+                OrderBC bc = new OrderBC();
+                var result = "success";
+                
+                //获取砍价上下限                
+                var config = bc.GetBargainConfigByClassId(classid);
+                var top = config.BargainTop;
+                var floor = config.BargainFloor;
+                decimal cutPrce = CommonHelper.GetRandNum(floor*100,top*100)/100;
+                var floorPrice = config.FloorPrice;
+                //更新最新价格，插入砍价记录表
+                var bargainEntity = bc.GetBargainByOpenIdAndClassId(classid,openid);
+                var nowPrice = bargainEntity.NowPrice;
+                if (nowPrice - floorPrice < cutPrce)
+                {
+                    cutPrce = nowPrice - floorPrice;
+                }
+                nowPrice=nowPrice-cutPrce;
+                bc.UpdateBargainNowPrice(bargainEntity.BargainId, nowPrice);
+                BargainLogEntity log = new BargainLogEntity() 
+                {
+                    BargainId = bargainEntity.BargainId,
+                    OpenId = openid,
+                    BargainPrice = cutPrce,
+                };
+                bc.AddBargainLog(log,openid);
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json("false", JsonRequestBehavior.AllowGet);
             }
         }
         #endregion

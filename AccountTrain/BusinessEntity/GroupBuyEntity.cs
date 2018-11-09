@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 namespace BusinessEntitys
 {
     /// <summary>
-    /// 砍价规则表
+    /// 团购规则表
     /// </summary>
-    [EnitityMappingAttribute(TableName = "Train_BargainConfig")]
-    public class BargainConfigEntity : Entity
+    [EnitityMappingAttribute(TableName = "Train_GroupBuy")]
+    public class GroupBuyEntity : Entity
     {
         /// <summary>
         /// 砍价规则ID
         /// </summary>
-        [EnitityMappingAttribute(ColumnName = "BargainConfigId")]
-        public string BargainConfigId { get; set; }
+        [EnitityMappingAttribute(ColumnName = "GroupBuyId")]
+        public string GroupBuyId { get; set; }
 
         /// <summary>
         /// 课程ID
@@ -26,27 +26,10 @@ namespace BusinessEntitys
         public string ClassId { get; set; }
 
         /// <summary>
-        /// 底价
+        /// 现有人数
         /// </summary>
-        [EnitityMappingAttribute(ColumnName = "FloorPrice")]
-        public decimal FloorPrice { get; set; }
-
-        /// <summary>
-        /// 最多砍多少
-        /// </summary>
-        [EnitityMappingAttribute(ColumnName = "BargainTop")]
-        public int BargainTop { get; set; }
-        /// <summary>
-        /// 最少砍多少
-        /// </summary>
-        [EnitityMappingAttribute(ColumnName = "BargainFloor")]
-        public int BargainFloor { get; set; }
-
-        /// <summary>
-        /// 备注	
-        /// </summary>
-        [EnitityMappingAttribute(ColumnName = "Remark")]
-        public string Remark { get; set; }
+        [EnitityMappingAttribute(ColumnName = "NowCount")]
+        public int NowCount { get; set; }      
 
 
         /// <summary>
@@ -78,18 +61,6 @@ namespace BusinessEntitys
         /// </summary>
         [EnitityMappingAttribute(ColumnName = "UpdateUser")]
         public string UpdateUser { get; set; }
-
-        /// <summary>
-        /// 开始时间
-        /// </summary>
-        [EnitityMappingAttribute(ColumnName = "StartTime")]
-        public DateTime StartTime { get; set; }
-
-        /// <summary>
-        /// 结束时间
-        /// </summary>
-        [EnitityMappingAttribute(ColumnName = "EndTime")]
-        public DateTime EndTime { get; set; }
 
 
       

@@ -45,46 +45,36 @@
     <meta name="viewport" content="width=device-width" />
     <title>我的课程</title>
 </head>
-<body>  	
-  	<div id="myIndex">
-  		<div class="am-input-group" style="margin-top: 5px;">
-    	  <img class="am-header-icon-custom" style="width: 85px;margin-top: 3px;margin-left: 10px;" src="~/Images/icon/logo.png" alt=""/>
-	      <input type="text" v-model="txtTitle" class="am-form-field" 
-	      	style="border-top-left-radius:5px;border-bottom-left-radius:5px;float:right;width: 65%;" placeholder="输入关键词">
-		      <span class="am-input-group-btn" style="padding-right: 5px;">
-		        <button class="am-btn am-btn-default" type="button" v-on:click="QueryAll()" style="border-top-right-radius:5px;border-bottom-right-radius:5px;"><span class="am-icon-search"></span> </button>
-		      </span>
+<body>  
+	<header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
+	  <div class="am-header-left am-header-nav">
+		    <a href="javascript:window.history.back(); " class="">
+		  	<img class="am-header-icon-custom"  src="~/Images/icon/返回.png" alt=""/>
+		  </a>
+	  </div>
+	   <h3 class="am-header-title" 
+	   	style="width:150px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
+          查询
+      </h3>
+      <div class="am-input-group">	
+	      <span class="am-input-group-btn" >
+	      	<button class="am-btn" type="button" onclick="GoHome()" 
+	        	style="background-color: white;border-color:white;margin-left: 45px;">
+	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
+	        </button>
+	        
+	      </span>
 	    </div>
-	    <div class="block" style="margin-top: 5px;">
-		    <el-carousel height="160px">
-		      <el-carousel-item v-for="item in imagesList" :key="item">		      	
-		      	<div class="zoomImage" v-bind:style="{backgroundImage:'url(' + item.ImageUrl + ')'}"></div> 
-		      </el-carousel-item>
-		    </el-carousel>
-		</div>
-		<div style="height: 100px;margin-top: 15px;">
-			<div class="div-inline" v-on:click="GoClassList()"  style="float:left;width: 18%;margin-left: 10px;"  >
-				<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_class.png" alt=""/><div style="padding-top: 6px;">精品课程</div>
-			</div>	
-			<div class="div-inline" v-on:click="GoActivists()"  style="float:left;width: 18%;margin-left: 35px;"  >
-				<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_gif.png" alt=""/><div style="padding-top: 6px;">线下活动</div>
-			</div>	
-			<div class="div-inline" v-on:click="GoLaws()"  style="float:left;width: 18%;margin-left: 35px;"  >
-				<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_traffic.png" alt=""/><div style="padding-top: 6px;">法规快递</div>
-			</div>
-			<div class="div-inline" v-on:click="GoMy()"  style="float:right;width: 18%;"  >
-				<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_my.png" alt=""/><div style="padding-top: 6px;">个人中心</div> 
-			</div>	
-		</div>
+	</header>
+    	<hr style="margin-top: 0px;"/>
+  	<div id="myIndex">   	
     	
-    	<div style="width: 100%;height: 15px;background: #E0E0E0;"></div>
     	
     	<div data-am-widget="list_news" class="am-list-news am-list-news-default" style="margin-top:0px;">		
 		  	<div class="am-list-news-hd am-cf">
-		        
-		          <h2>精品推荐</h2>
-		            <span v-on:click="GoClassList()" class="am-list-news-more am-fr">查看全部 &raquo;</span>
-		        
+		        <a href="###" class="">
+		          <h2>课程</h2>		            
+		        </a>
           	</div>
 			  
 		  	<div class="am-list-news-bd">
@@ -111,7 +101,7 @@
 							<tr>
 								
 								<td>
-									<div style="font-size: 5px;color:#FFD306">{{item.ClassTeacher}}</div>
+									<div style="font-size: 5px;color:#0084C7">{{item.ClassTeacher}}</div>
 								</td>
 								
 							</tr>
@@ -120,37 +110,12 @@
 				    </ul>
 			</div>
 		</div>
-		
-		<div style="width: 100%;height: 15px;background: #E0E0E0;"></div>
-		
-		<div data-am-widget="list_news" class="am-list-news am-list-news-default" style="margin-top:0px;height: 350px;">		
-		  	<div class="am-list-news-hd am-cf">
-		        <h2>近期新课</h2>
-          	</div>
-			  
-		  	<div class="am-list-news-bd">
-				  	<ul class="am-list" v-for="item in newClassList">
-				      <li style="float: left;width: 50%;padding: 5px;" v-on:click="GoClassDetail(item)">
-				        <div style="width: 100%;height: 30%;">
-				        	<img style="height: 100px;" :src="item.ClassImages"/>
-				        </div>	
-				        <div>
-				        	{{item.ClassName}}
-				        </div>
-				        <div>
-				        	<div style="color: red;width: 50%;float: left;">¥{{item.ClassPrice}}</div>
-				        	<div style="font-size: 5px;color:#999999;float: right;">{{item.HotCount}} 人学习</div>
-				        </div>
-				      </li>  
-				    </ul>
-			</div>
-		</div>
-  	
-  		<div style="width: 100%;height: 15px;background: #E0E0E0;"></div>
   	
   		<div data-am-widget="list_news" class="am-list-news am-list-news-default" style="margin-top:0px;">		
 		  	<div class="am-list-news-hd am-cf">
-		        <h2>最新资讯</h2>	
+		        <a href="###" class="">
+		          <h2>文章</h2>		            
+		        </a>
           	</div>
 			
 			<div class="am-list-news-bd">
@@ -189,15 +154,13 @@
 
 <script>
 	var openid = '@ViewBag.Openid';
+	var condition='@ViewBag.Condition';
 	var myIndexVue=new Vue({
 		el:"#myIndex",
 		data:{
 			myClassList:[],
 			activityList:[],
-			newClassList:[],
 			txtTitle:"",
-			classCount:0,
-			imagesList:[]
 		},
 		created: function () {
                 this.Query()
@@ -205,14 +168,14 @@
          methods:{
          	Query:function () {  
 			    var _self = this;
-                var title = this.txtTitle;
+                var title = condition;
                 $.ajax({
                     type: "get",
                     dataType: "json",
                     contentType: "application/json",
-                    url: "/WxClass/GetClassByType?pGuid=" + guid(),
+                    url: "/WxClass/GetClassByCondition?pGuid=" + guid(),
                     data:{
-                    	type:"2",                  	
+                    	name:title,                  	
                     },
                     success: function (result) {                       
                         _self.myClassList = result;
@@ -225,21 +188,9 @@
                     type: "get",
                     dataType: "json",
                     contentType: "application/json",
-                    url: "/WxClass/GetNewestClass?pGuid=" + guid(),
-                    success: function (result) {                       
-                        _self.newClassList = result;
-                    },
-                    error: function (json) {
-                        _self.$message.error('查询失败');
-                    }
-                });
-                $.ajax({
-                    type: "get",
-                    dataType: "json",
-                    contentType: "application/json",
-                    url: "/WxArticle/GetAllArticlesByType?pGuid=" + guid(),
+                    url: "/WxArticle/GetArticlesByCondition?pGuid=" + guid(),
                     data: {
-                    	type:"2"
+                    	KeyName:title
                     },
                     success: function (result) {
                         $.each(result, function(index,value) {
@@ -258,35 +209,7 @@
                         _self.$message.error('查询失败');
                     }
                 });
-                $.ajax({
-                    type: "get",
-                    dataType: "json",
-                    contentType: "application/json",
-                    url: "/WxHome/GetAllIndexImages?pGuid=" + guid(),
-                    success: function (result) {                        
-                        _self.imagesList = result;
-                    },
-                    error: function (json) {
-                        _self.$message.error('查询失败');
-                    }
-                });
-			},
-			QueryAll:function (){
-				var title = this.txtTitle;
-				window.location.href = "/WxHome/IndexSearch?openid="+openid+"&&condition="+title;
-			},
-			GoClassList:function(){
-				window.location.href = "/WxClass/ClassList?openid="+openid+"&&code=null&&state=null";
-			},
-			GoActivists:function(){
-				window.location.href = "/WxArticle/Activists?openid="+openid+"&&code=null&&state=null";
-			},
-			GoLaws:function(){
-				window.location.href = "/WxArticle/Laws?openid="+openid+"&&code=null&&state=null";
-			},
-			GoMy:function(){
-				window.location.href = "/WxMy/Index?openid="+openid+"&&code=null&&state=null";
-			},
+			},			
 			GoClassDetail:function(item){
 				var type="1";
 				var id=item.ClassId;
@@ -337,4 +260,9 @@
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
 	
+	
+	function GoHome()
+	 {
+	 	window.location.href = "/WxHome/Index?openid="+openid+"&&code=null&&state=null";
+	 }
 </script>

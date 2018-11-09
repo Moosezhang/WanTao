@@ -42,6 +42,16 @@
                 </el-form-item>
             </el-col>
             <el-col span="6">
+                <el-form-item label="课程类别">
+                    <el-cascader
+				    expand-trigger="click"
+				    :options="nodeList"
+				    v-model="selectedOptions"
+				    :show-all-levels="false">
+				  	</el-cascader>
+                </el-form-item>
+            </el-col>
+            <el-col span="6">
                 <el-form-item label="课程价格">
                     <el-input v-model="form.ClassPrice" style="width:180px;" clearable></el-input>
                 </el-form-item>
@@ -102,16 +112,8 @@
         </el-row>       
         <el-row>
              <el-col >
-                <el-form-item label="上传图片">
-                    <el-upload class="upload-demo"
-				               :action="uploadActionUrl"
-				               :on-remove="handleRemove"
-				               :file-list="fileList2"
-				               show-file-list="true"
-				               list-type="picture">
-				        <el-button size="small" type="primary">点击上传</el-button>
-				        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-				    </el-upload>
+                <el-form-item label="课程图片">
+                    <el-input v-model="form.ClassImages" style="width:180px;" clearable></el-input>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -129,10 +131,12 @@
 		el:"#detail",
 		data:{
 			form: {},
-            uploadActionUrl:"/Class/ClassUpload",
-            fileList2: [],
+//          uploadActionUrl:"/Class/ClassUpload",
+//          fileList2: [],
             DicData:[],
-            editor: null
+            editor: null,
+            nodeList:[],
+            selectedOptions:[]
 		},
         beforeCreate:function (){
         	var _self = this;
@@ -142,18 +146,20 @@
                 contentType: "application/json",
                 url: "/BaseSet/GetDicItemsByDicKey",
                 data:{
-                	key:"ClassKey"
+                	key:"7C5BE2E8-2D74-4047-B6EB-CBC1F8A1D701"
                 },
                 success: function (result) {
                     _self.DicData = result;
                 }
             });
+            
         },
         created: function () {
         	var _self = this;
             if(ClassId!=null)
             {
             	_self.LoadData();
+            	_self.GetNodes();	
             }
             else
             {
@@ -173,40 +179,36 @@
 	                },
 	                success: function (result) { 
 	                    _self.form = result;
+	                    if(result.ClassGroup!=null){
+	                    	 _self.selectedOptions=result.ClassGroup.split('-'); 
+	                    }
+	                   
 	                    _self.editor = UE.getEditor('editor');
 	                    _self.editor.addListener("ready", function () {
 	                    _self.editor.setContent(_self.form.ClassContent); // 确保UE加载完成后，放入内容。
 	                    });
+	                    
 	                }
 	            });
-	            $.ajax({
-	                type: "get",
-	                dataType: "json",
-	                contentType: "application/json",
-	                url: "/Class/GetClassImage?pGuid=" + guid(),
-	                data: {
-	                    id: ClassId
-	                },
-	                success: function (result) { 
-	                    _self.fileList2 = result;
-	                }
-	            });
+	            
         	},
-        	handleRemove:function(file, fileList){
-                $.ajax({
-                        type: "get",
-                        dataType: "json",
-                        contentType: "application/json",
-                        url: "/Class/ClassRemove",
-                        success: function (result) {
-                            //self.fileList2 = result;
-                        }
-                    });
-           },
+//      	handleRemove:function(file, fileList){
+//              $.ajax({
+//                      type: "get",
+//                      dataType: "json",
+//                      contentType: "application/json",
+//                      url: "/Class/ClassRemove",
+//                      success: function (result) {
+//                          //self.fileList2 = result;
+//                      }
+//                  });
+//         },
            SaveClass: function (classInfo) {
                 var _self = this;
                 var content = this.editor.getContent();
-                classInfo.ClassContent= content;
+                classInfo.ClassContent= content;                
+                classInfo.ClassGroup=_self.selectedOptions.join('-');
+                
                 $.ajax({
                     type: "post",
                     dataType: "json",
@@ -228,6 +230,23 @@
                     }
                 });
             },
+            GetNodes:function(){
+				var _self=this;
+				$.ajax({
+                    type: "post",
+                    dataType: "json",
+                    url: "/WxClass/GetDicInfoList?pGuid=" + guid(),
+                    data:{
+                    	key:"33e9c5ee-3358-4ff8-86cc-6807b98273ce"
+                    },
+                    success: function (result) {
+                    	_self.nodeList=result
+                    },
+                    error: function (json) {
+                        
+                    }
+                });
+			},
         }
 	})
 	

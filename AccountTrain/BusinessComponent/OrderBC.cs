@@ -1,5 +1,6 @@
 ﻿using BusinessEntity.Model;
 using BusinessEntitys;
+using Common;
 using DataAccess;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace BusinessComponent
             {
                 foreach (var item in result)
                 {
-                    item.OrderSource = new BaseSetBC().GetDicItemValueByKey(item.OrderSource,"OSKey").ItemValue;
+                    item.OrderSource = new BaseSetBC().GetDicItemValueByKey(item.OrderSource,DictionaryConstant.OSKey).ItemValue;
                 }
             }
             return result;
@@ -49,11 +50,57 @@ namespace BusinessComponent
             return da.GetOrderByOpenIdandClassId(OpenId, ClassId);
         }
 
+        public OrderEntity GetOrderByOrderNo(string orderNo)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetOrderByOrderNo(orderNo);
+        }
+
+        #region 团购
+
         public VMGBClass GetGbClass(string classid)
         {
             OrderDA da = new OrderDA();
             return da.GetGbClass(classid);
         }
+
+        public GroupBuyEntity GetGroupBuyByClassId(string classid)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetGroupBuyByClassId(classid);
+        }
+
+        public GroupBuyConfigEntity GetGroupBuyConfigByClassId(string classid)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetGroupBuyConfigByClassId(classid);
+        }
+
+        public int AddGroupBuy(GroupBuyEntity entity, string loginName)
+        {
+            OrderDA da = new OrderDA();
+            return da.AddGroupBuy(entity, loginName);
+        }
+
+        public int AddGroupBuyMember(GroupBuyMemberEntity entity, string loginName)
+        {
+            OrderDA da = new OrderDA();
+            return da.AddGroupBuyMember(entity, loginName);
+        }
+
+        public int UpdateGroupBuyStatus(string GroupBuyId, int Status)
+        {
+            OrderDA da = new OrderDA();
+            return da.UpdateGroupBuyStatus(GroupBuyId, Status);
+        }
+
+        public int UpdateGroupBuyCount(string GroupBuyId)
+        {
+            OrderDA da = new OrderDA();
+            return da.UpdateGroupBuyCount(GroupBuyId);
+        }
+        #endregion
+        
 
 
         public string SaveOrder(OrderEntity order, List<OrderGoodsEntity> orderGoods, string loginName) 
@@ -70,6 +117,18 @@ namespace BusinessComponent
         }
 
         #region 砍价
+        public BargainEntity GetBargainByOpenIdAndClassId(string classid, string openid)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetBargainByOpenIdAndClassId(classid, openid);
+        }
+
+        public BargainConfigEntity GetBargainConfigByClassId(string classid)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetBargainConfigByClassId(classid);
+        }
+
         public int AddBargain(BargainEntity bargain, string loginName)
         {
             OrderDA da = new OrderDA();
@@ -82,7 +141,7 @@ namespace BusinessComponent
             return da.AddBargainLog(bargain,loginName);
         }
 
-        public int UpdateBargainNowPrice(string BargainId, string nowPrice)
+        public int UpdateBargainNowPrice(string BargainId, decimal nowPrice)
         {
             OrderDA da = new OrderDA();
             return da.UpdateBargainNowPrice(BargainId,nowPrice);
@@ -100,6 +159,12 @@ namespace BusinessComponent
             return da.GetBargainLogs(BargainId);
         }
 
+
+        public int UpdateBargainStatus(string BargainId, int Status) 
+        {
+            OrderDA da = new OrderDA();
+            return da.UpdateBargainStatus(BargainId,Status);
+        }
         #endregion
 
 

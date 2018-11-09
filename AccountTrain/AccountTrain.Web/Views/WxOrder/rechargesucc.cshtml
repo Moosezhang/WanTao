@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "充值成功";
+}
+
+<header data-am-widget="header" class="am-header am-header-default">
+    <h1 class="am-header-title">充值完成</h1>
+</header>
+<div class="content marb60">
+    <div class="am-g am-text-center am-padding-vertical">
+        <h1>
+            <span class="am-icon-check am-icon-btn am-icon-btn-lg am-warning am-icon-md"></span>
+        </h1>
+        支付成功<br>
+        支付单号：<span id="lblBillNo"></span><br>
+        金额：￥<span id="lblBillMoney"></span>
+        <p>
+            <a class="am-btn am-btn-primary am-radius" style="cursor:pointer" id="btnBack">返回</a>
+        </p>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            //announcements
+            var openid = '@ViewBag.OpenId';
+            var billNo = '@ViewBag.OrderNo';
+            var billMoney = '@ViewBag.Price';
+            //functions
+            function load() {
+                $('#lblBillNo').text(billNo);
+                var s = parseFloat(billMoney).toFixed(2);
+                $('#lblBillMoney').text(s);
+            }
+            function goBack() {
+                window.location.href = "/WxMy/MyClass?openid=" + openid+"&&code=null&&state=null";
+            }
+            //handler
+            $('#btnBack').click(function () {
+                goBack();
+            })
+            //init
+            load();
+        })
+    </script>
+</div>
+

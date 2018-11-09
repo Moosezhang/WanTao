@@ -275,10 +275,10 @@ namespace DataAccess
         {
             if (string.IsNullOrEmpty(dicItem.ItemId))
             {
-                var lResult = GetDicItemsByDicKey(dicItem.DictionaryKey);
+                var lResult = GetDicItemByKey(dicItem.DictionaryKey);
                 if (lResult != null)
                 {
-                    dicItem.DictionaryLevel = lResult.FirstOrDefault().DictionaryLevel + 1;
+                    dicItem.DictionaryLevel = lResult.DictionaryLevel + 1;
                 }
                 using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
                 {

@@ -520,7 +520,9 @@
     <Content Include="Scripts\vue.min.js" />
     <Content Include="Scripts\zh_CN.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -705,6 +707,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\BaseSet\GroupBuyConfig.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\WxHome\IndexSearch.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\WxOrder\rechargesucc.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

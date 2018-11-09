@@ -96,6 +96,20 @@ namespace DataAccess
             }
         }
 
+        public OrderEntity GetOrderByOrderNo(string orderNo)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select t.*
+                                                from Train_Order t
+                                                where t.orderNo='{0}'
+                                                ", orderNo);
+
+                return conn.Query<OrderEntity>(query).FirstOrDefault();
+
+            }
+        }
+
         public string SaveOrder(OrderEntity order,List<OrderGoodsEntity> orderGoods, string loginName)
         {
             string strReturn = "";
@@ -108,6 +122,11 @@ namespace DataAccess
             try
             {
                 string OrderId = Guid.NewGuid().ToString();
+                int status = 1;
+                if (order.PayPrice == 0)
+                {
+                    status = 2;                    
+                }
                 //新增订单明细
                 foreach (var item in orderGoods)
                 {
@@ -136,12 +155,15 @@ namespace DataAccess
                     Guid.NewGuid().ToString(), OrderId, item.ClassId, item.ClassName, item.Price, 1, loginName, loginName);
                     cm.CommandText = sql;
                     cm.ExecuteNonQuery();
+                    if (status == 2)//价格为0，直接状态变为已支付，并且更新课程中，热度字段
+                    {
+                        new ClassDA().UpdateClassHot(item.ClassId);
+                    }                        
                 }
 
 
-                int status = 1;
-                if (order.PayPrice == 0)
-                    status = 2;
+                
+                    
 
                 string OrderSql = string.Format(@"INSERT INTO Train_Order
                                                (OrderId
@@ -197,6 +219,8 @@ namespace DataAccess
                 return conn.Execute(query);
             }
         }
+
+     
         #region 团购数据
         public VMGBClass GetGbClass(string classid)
         {
@@ -205,18 +229,145 @@ namespace DataAccess
                 string query = string.Format(@"select t.*,t1.GroupPrice,t1.NeedCount,t1.StartTime,t1.EndTime,isnull(t2.NowCount,0) as NowCount
                                             from Train_Class t
                                             inner join Train_GroupBuyConfig t1 on t.ClassId=t1.ClassId
-                                            left join Train_GroupBuy t2 on t.ClassId=t2.ClassId
-                                            where t.ClassId='{0}'", classid);
+                                            left join Train_GroupBuy t2 on t.ClassId=t2.ClassId and t2.status=1
+                                            where t.ClassId='{0}' ", classid);
 
                 return conn.Query<VMGBClass>(query).FirstOrDefault();
 
             }
         }
 
+        /// <summary>
+        /// 根据classId获取团购数据
+        /// </summary>
+        /// <param name="classid"></param>
+        /// <returns></returns>
+        public GroupBuyEntity GetGroupBuyByClassId(string classid)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_GroupBuy
+                                            where status=1 and ClassId='{0}'", classid);
+
+                return conn.Query<GroupBuyEntity>(query).FirstOrDefault();
+
+            }
+        }
+
+        public GroupBuyConfigEntity GetGroupBuyConfigByClassId(string classid)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_GroupBuyConfig
+                                            where status=1 and ClassId='{0}'", classid);
+
+                return conn.Query<GroupBuyConfigEntity>(query).FirstOrDefault();
+
+            }
+        }
+
+
+        public int AddGroupBuy(GroupBuyEntity entity, string loginName)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"INSERT INTO Train_GroupBuy
+                                               (GroupBuyId
+                                               ,ClassId
+                                               ,NowCount
+                                               ,Status
+                                               ,CreateTime
+                                               ,CreateUser
+                                               ,UpdateTime
+                                               ,UpdateUser)
+                                         VALUES
+                                               ('{0}'
+                                               ,'{1}'
+                                               ,'{2}'
+                                               ,'{3}'
+                                               ,getdate()
+                                               ,'{4}'
+                                               ,getdate()
+                                               ,'{5}')",
+                    Guid.NewGuid().ToString(), entity.ClassId, entity.NowCount, 1, loginName, loginName);
+                return conn.Execute(query);
+            }
+        }
+
+        public int AddGroupBuyMember(GroupBuyMemberEntity entity, string loginName)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"INSERT INTO Train_GroupBuyMember
+                                               (MemberId
+                                               ,GroupBuyId
+                                               ,GroupPrice
+                                               ,openId
+                                               ,Status
+                                               ,CreateTime
+                                               ,CreateUser
+                                               ,UpdateTime
+                                               ,UpdateUser)
+                                         VALUES
+                                               ('{0}'
+                                               ,'{1}'
+                                               ,'{2}'
+                                               ,'{3}'
+                                               ,'{4}'
+                                               ,getdate()
+                                               ,'{5}'
+                                               ,getdate()
+                                               ,'{6}')",
+                    Guid.NewGuid().ToString(), entity.GroupBuyId, entity.GroupPrice, entity.openId, 1, loginName, loginName);
+                return conn.Execute(query);
+            }
+        }
+
+        public int UpdateGroupBuyStatus(string GroupBuyId, int Status)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"update Train_GroupBuy set status={0}  where GroupBuyId='{1}'", Status, GroupBuyId);
+                return conn.Execute(query);
+            }
+        }
+
+        public int UpdateGroupBuyCount(string GroupBuyId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"update Train_GroupBuy set NowCount=NowCount+1 where GroupBuyId='{0}'", GroupBuyId);
+                return conn.Execute(query);
+            }
+        }
         #endregion
 
 
         #region 新增砍价数据
+        public BargainEntity GetBargainByOpenIdAndClassId(string openid,string classid)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_Bargain
+                                            where status=1 and ClassId='{0}' and OpenId='{1}'", classid, openid);
+
+                return conn.Query<BargainEntity>(query).FirstOrDefault();
+
+            }
+        }
+
+        public BargainConfigEntity GetBargainConfigByClassId(string classid)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_BargainConfig
+                                            where status=1 and ClassId='{0}'", classid);
+
+                return conn.Query<BargainConfigEntity>(query).FirstOrDefault();
+
+            }
+        }
+
         public int AddBargain(BargainEntity bargain, string loginName)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
@@ -277,12 +428,12 @@ namespace DataAccess
             }
         }
 
-        public int UpdateBargainNowPrice(string BargainId, string nowPrice)
+        public int UpdateBargainNowPrice(string BargainId, decimal nowPrice)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
             {
                 string query = string.Format(@" UPDATE Train_Bargain
-                                                    SET NowPrice= '{0}'                                                         
+                                                    SET NowPrice= {0}                                                         
                                                        ,UpdateTime = getdate()
                                                     WHERE ClassId='{1}'",
                                           nowPrice, BargainId);
@@ -317,7 +468,14 @@ namespace DataAccess
             }
         }
 
-
+        public int UpdateBargainStatus(string BargainId, int Status)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"update Train_Bargain set status={0}  where BargainId='{1}'", Status, BargainId);
+                return conn.Execute(query);
+            }
+        }
            
         #endregion
 

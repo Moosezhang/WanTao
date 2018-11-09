@@ -130,16 +130,8 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
 		            </el-row>
 		            <el-row>
 		                 <el-col span="12">
-		                    <el-form-item label="上传图片">
-		                        <el-upload class="upload-demo"
-							               :action="uploadActionUrl"
-							               :on-remove="handleRemove"
-							               :file-list="fileList2"
-							               show-file-list="true"
-							               list-type="picture">
-							        <el-button size="small" type="primary">点击上传</el-button>
-							        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-							    </el-upload>
+		                    <el-form-item label="助力图片">
+		                        <el-input v-model="Helpform.ImageUrl" style="width:220px;" clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		            </el-row>
@@ -163,8 +155,8 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
 				ClassData: [],
 				
                 
-        		uploadActionUrl:"/BaseSet/HelpUpload",
-                fileList2: [],
+//      		uploadActionUrl:"/BaseSet/HelpUpload",
+//              fileList2: [],
         		HelpData: [],                
                 HelpName: "",
                 dialogHelpFormVisible: false,
@@ -209,17 +201,17 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
 					return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + 					':' + d.getMinutes() + ':' + d.getSeconds(); 
 				},
             	
-                handleRemove:function(file, fileList){
-	                $.ajax({
-	                        type: "get",
-	                        dataType: "json",
-	                        contentType: "application/json",
-	                        url: "/BaseSet/HelpRemove",
-	                        success: function (result) {
-	                            //self.fileList2 = result;
-	                        }
-	                    });
-                },
+//              handleRemove:function(file, fileList){
+//	                $.ajax({
+//	                        type: "get",
+//	                        dataType: "json",
+//	                        contentType: "application/json",
+//	                        url: "/BaseSet/HelpRemove",
+//	                        success: function (result) {
+//	                            //self.fileList2 = result;
+//	                        }
+//	                    });
+//              },
             
             	handleHelpAdd: function () {
                     var _self = this;
@@ -242,18 +234,7 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
                             _self.Helpform = result;
                         }
                     });
-                    $.ajax({
-                        type: "get",
-                        dataType: "json",
-                        contentType: "application/json",
-                        url: "/BaseSet/GetHelpImage?pGuid=" + guid(),
-                        data: {
-                            id: Id
-                        },
-                        success: function (result) { 
-                            _self.fileList2 = result;
-                        }
-                    });
+                    
                     this.dialogHelpFormVisible = true;
                 },
                 QueryHelpData: function () {

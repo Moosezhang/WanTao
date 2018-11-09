@@ -133,6 +133,10 @@ namespace Common
         {
             return ConfigurationManager.AppSettings["imgMapPath"] + url;
         }
-
+        public static int GetRandNum(int min, int max)
+        {
+            Random r = new Random(Guid.NewGuid().GetHashCode());
+            return r.Next(min, max);
+        }
     }
 }

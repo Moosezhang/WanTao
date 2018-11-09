@@ -32,6 +32,8 @@ namespace BusinessEntitys
         [EnitityMappingAttribute(ColumnName = "ClassAbstract")]
         public string ClassAbstract { get; set; }
 
+        [EnitityMappingAttribute(ColumnName = "ClassGroup")]
+        public string ClassGroup { get; set; }
 
         /// <summary>
         /// 课程类型

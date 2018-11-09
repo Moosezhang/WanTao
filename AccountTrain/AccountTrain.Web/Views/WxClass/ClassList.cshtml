@@ -35,34 +35,34 @@
   	<hr style="margin-top: 0px;"/>
   	<div id="myClass">
   		<div class="am-u-lg-6" style="float: none;padding-right: 0px;padding-left: 0px;">
-	    	<div class="am-btn-group" style="width: 100%;" >
-	    	  
-			  <div class="am-dropdown" style="width: 33%;" data-am-dropdown >
-			    <button class="am-btn am-btn-secondary am-dropdown-toggle" style="width:100%;color: #999999;background-color: white;border-color: #999999;" data-am-dropdown-toggle> 
-			    	全部<span style="float: right;" class="am-icon-angle-down"></span>
-			    </button>
-			    <ul class="am-dropdown-content">
-			      <li><a href="#">快乐的方式不只一种</a></li>
-			    </ul>
+	    	<div class="am-btn-group" style="width: 100%;" >	    	  
+			  <div class="am-dropdown" style="width: 28%;" data-am-dropdown >
+			  	<el-cascader
+				    expand-trigger="hover"
+				    :options="nodeList"
+				    v-model="selectedOptions"
+				    :show-all-levels="false"
+				    clearable>
+				  </el-cascader>			    
 			  </div>
 			  
-			  <div class="am-dropdown" style="width: 33%;" data-am-dropdown>
-			    <button class="am-btn am-btn-secondary am-dropdown-toggle" style="width:100%;color: #999999;background-color: white;border-color: #999999;" data-am-dropdown-toggle> 
-			    	排序<span  style="float: right;" class="am-icon-angle-down"></span>
-			    </button>
-			    <ul class="am-dropdown-content">
-			      <li><a href="#">快乐的方式不只一种</a></li>
-			    </ul>
+			  <div class="am-dropdown" style="width: 28%;" data-am-dropdown>
+			  	<el-cascader
+				    expand-trigger="hover"
+				    :options="orderList"
+				    v-model="selectedOptions1"
+				    :show-all-levels="false"
+				    clearable>
+				  </el-cascader>			    
 			  </div>
 			  
-			  <div class="am-dropdown" style="width: 34%;" data-am-dropdown>
-			    <button class="am-btn am-btn-secondary am-dropdown-toggle" style="width:100%;color: #999999;background-color: white;border-color: #999999;" data-am-dropdown-toggle> 
-			    	搜索<span  style="float: right;" class="am-icon-search"></span>
-			    </button>
-			    <ul class="am-dropdown-content">
-			      <li class="am-dropdown-header">标题</li>
-			      <li><a href="#">快乐的方式不只一种</a></li>
-			    </ul>
+			  <div class="am-dropdown" style="width: 44%;" data-am-dropdown>
+			  	<input type="text" v-model="txtTitle" autocomplete="off" placeholder="搜索" class="el-input__inner" 
+			  		style="float:left;width: 117px;">			  	
+			  	<span class="am-input-group-btn" >
+			        <button class="am-btn am-btn-default" type="button" v-on:click="Query()" style="border-top-right-radius:5px;border-bottom-right-radius:5px;"><span class="am-icon-search"></span> </button>
+			     </span>	  	
+			  	
 			  </div>	 
 				    	
 		    </div>
@@ -115,24 +115,42 @@
 		data:{
 			myClassList:[],
 			txtTitle:"",
+			nodeList:[],
+			selectedOptions: [],
+			orderList:[				
+				{
+	              value: 'CreateTime',
+	              label: '上架时间'
+	            },
+	            {
+	              value: 'ClassPrice',
+	              label: '价格'
+	            }
+			],
+			selectedOptions1: [],
 		},
 		created: function () {
-                this.Query()
+                this.Query();
+                this.GetNodes();
          },
          methods:{
          	Query:function () {  
 			    var _self = this;
                 var title = this.txtTitle;
+                var classGroup=_self.selectedOptions.join('-');
+                var order=_self.selectedOptions1.join('');
                 $.ajax({
                     type: "get",
                     dataType: "json",
                     contentType: "application/json",
                     url: "/WxClass/GetClassByCondition?pGuid=" + guid(),
                     data:{
-                    	name:null,
+                    	name:title,
                     	classType:"2",
                     	startDate:null,
-                    	endDate:null                    	
+                    	endDate:null,
+                    	classGroup:classGroup,
+                    	order:order
                     },
                     success: function (result) {                       
                         _self.myClassList = result;
@@ -161,7 +179,24 @@
                     }
                 });
 				window.location.href = "ClassDetail?openid=" + openid+"&&classId="+id;
-			}
+			},
+			GetNodes:function(){
+				var _self=this;
+				$.ajax({
+                    type: "post",
+                    dataType: "json",
+                    url: "/WxClass/GetDicInfoList?pGuid=" + guid(),
+                    data:{
+                    	key:"33e9c5ee-3358-4ff8-86cc-6807b98273ce"
+                    },
+                    success: function (result) {
+                    	_self.nodeList=result
+                    },
+                    error: function (json) {
+                        
+                    }
+                });
+			},
          }
 	});
 	

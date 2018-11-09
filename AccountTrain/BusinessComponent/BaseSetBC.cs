@@ -182,7 +182,7 @@ namespace BusinessComponent
 
             var result = da.GetHelpConfigByKey(id);
 
-            result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
+            //result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
 
             return result;
         }
@@ -207,7 +207,7 @@ namespace BusinessComponent
             List<VMImages> imgs = new List<VMImages>();
 
             var result = da.GetHelpConfigByKey(id);
-            result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
+            //result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
 
 
             int begin = result.ImageUrl.IndexOf("/Images");
@@ -260,13 +260,13 @@ namespace BusinessComponent
         {
             BaseSetDA da = new BaseSetDA();
             var result=da.GetIndexImagesByCondition(KeyName);
-            if(result!=null && result.Count>0)
-            {
-                foreach (var item in result)
-                {
-                    item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
-                }
-            }
+            //if(result!=null && result.Count>0)
+            //{
+            //    foreach (var item in result)
+            //    {
+            //        item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
+            //    }
+            //}
             return result;
         }
 
@@ -280,13 +280,13 @@ namespace BusinessComponent
             BaseSetDA da = new BaseSetDA();
 
             var result = da.GetAllIndexImages();
-            if (result != null && result.Count > 0)
-            {
-                foreach (var item in result)
-                {
-                    item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
-                }
-            }
+            //if (result != null && result.Count > 0)
+            //{
+            //    foreach (var item in result)
+            //    {
+            //        item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
+            //    }
+            //}
 
             return result;
         }
@@ -297,39 +297,39 @@ namespace BusinessComponent
 
             var result=da.GetIndexImageByKey(id);
 
-            result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
+            //result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
 
             return result;
         }
 
-        public List<VMImages> GetIndexImages(string id)
-        {
-            BaseSetDA da = new BaseSetDA();
+        //public List<VMImages> GetIndexImages(string id)
+        //{
+        //    BaseSetDA da = new BaseSetDA();
 
-            List<VMImages> imgs = new List<VMImages>();
+        //    List<VMImages> imgs = new List<VMImages>();
 
-            var result=da.GetIndexImageByKey(id);
-            result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
+        //    var result=da.GetIndexImageByKey(id);
+        //    result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
 
 
 
 
       
-            int begin = result.ImageUrl.IndexOf("/Images");
-            if (begin > 0)
-            {
-                VMImages img = new VMImages()
-                {
-                    imageId = result.ImageId,
-                    name = result.ImageTitle,
-                    url = result.ImageUrl
-                };
-                imgs.Add(img);
-            }  
+        //    int begin = result.ImageUrl.IndexOf("/Images");
+        //    if (begin > 0)
+        //    {
+        //        VMImages img = new VMImages()
+        //        {
+        //            imageId = result.ImageId,
+        //            name = result.ImageTitle,
+        //            url = result.ImageUrl
+        //        };
+        //        imgs.Add(img);
+        //    }  
         
 
-            return imgs;
-        }
+        //    return imgs;
+        //}
 
 
         public int SaveIndexImage(IndexImageEntity indexImage, string loginName)
@@ -356,8 +356,8 @@ namespace BusinessComponent
             {
                 foreach (var item in result)
                 {
-                    item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
-                    item.ArticleType = new BaseSetBC().GetDicItemValueByKey(item.ArticleType, "ArticleKey").ItemValue;
+                    //item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
+                    item.ArticleType = new BaseSetBC().GetDicItemValueByKey(item.ArticleType, DictionaryConstant.ArticleKey).ItemValue;
                 }
             }
             return result;
@@ -373,8 +373,8 @@ namespace BusinessComponent
             {
                 foreach (var item in result)
                 {
-                    item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
-                    item.ArticleType = new BaseSetBC().GetDicItemValueByKey(item.ArticleType, "ArticleKey").ItemValue;
+                    //item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
+                    item.ArticleType = new BaseSetBC().GetDicItemValueByKey(item.ArticleType, DictionaryConstant.ArticleKey).ItemValue;
                 }
             }
             return result;
@@ -388,8 +388,8 @@ namespace BusinessComponent
             {
                 foreach (var item in result)
                 {
-                    item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
-                    item.ArticleType = new BaseSetBC().GetDicItemValueByKey(item.ArticleType, "ArticleKey").ItemValue;
+                    //item.ImageUrl = CommonHelper.LinkImageUrl(item.ImageUrl);
+                    item.ArticleType = new BaseSetBC().GetDicItemValueByKey(item.ArticleType, DictionaryConstant.ArticleKey).ItemValue;
                 }
             }
             return result;
@@ -401,37 +401,37 @@ namespace BusinessComponent
 
             var result = da.GetArticleByKey(id);
 
-            result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
+            //result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
 
             return result;
         }
 
-        public List<VMImages> GetArticleImage(string id)
-        {
-            BaseSetDA da = new BaseSetDA();
+        //public List<VMImages> GetArticleImage(string id)
+        //{
+        //    BaseSetDA da = new BaseSetDA();
 
-            List<VMImages> imgs = new List<VMImages>();
+        //    List<VMImages> imgs = new List<VMImages>();
 
-            var result = da.GetArticleByKey(id);
-            result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
+        //    var result = da.GetArticleByKey(id);
+        //    result.ImageUrl = CommonHelper.LinkImageUrl(result.ImageUrl);
 
 
-            int begin = result.ImageUrl.IndexOf("/Images");
-            if (begin > 0)
-            {
-                VMImages img = new VMImages()
-                {
-                    imageId = result.ArticleId,
-                    name = result.ArticleTitle,
-                    url = result.ImageUrl
-                };
-                imgs.Add(img);
-            }        
+        //    int begin = result.ImageUrl.IndexOf("/Images");
+        //    if (begin > 0)
+        //    {
+        //        VMImages img = new VMImages()
+        //        {
+        //            imageId = result.ArticleId,
+        //            name = result.ArticleTitle,
+        //            url = result.ImageUrl
+        //        };
+        //        imgs.Add(img);
+        //    }        
                      
 
 
-            return imgs;
-        }
+        //    return imgs;
+        //}
 
 
         public int SaveArticle(ArticleEntity Article, string loginName)

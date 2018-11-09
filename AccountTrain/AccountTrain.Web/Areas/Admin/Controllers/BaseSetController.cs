@@ -1,5 +1,6 @@
 ﻿using AccountTrain.Web.Common;
 using BusinessComponent;
+using BusinessEntity.Common;
 using BusinessEntity.Model;
 using BusinessEntitys;
 using System;
@@ -263,6 +264,9 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
                 return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        
         #endregion
         
         #region 推广管理
@@ -420,42 +424,42 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult HelpUpload()
-        {
-            try
-            {
-                if (Request.Files == null || Request.Files.Count == 0)
-                {
-                    ViewBag.ErrorMessage = "Please select a file!!";
-                    return View();
-                }
-                HttpPostedFileBase file = Request.Files["file"];
-                string filePath = string.Empty;
-                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string url = "/Images/upload/";
-                var UserInfo = CacheManager.Instance.CurrentUser;
-                if (UserInfo == null)
-                    return Json("false");
-                string fileName = timestamp.ToString() + Path.GetFileName(file.FileName);
-                filePath = Path.Combine(HttpContext.Server.MapPath(url), fileName);
-                file.SaveAs(filePath);
-                Session["HelpImgUrl"] = url + fileName;
+        //[HttpPost]
+        //public ActionResult HelpUpload()
+        //{
+        //    try
+        //    {
+        //        if (Request.Files == null || Request.Files.Count == 0)
+        //        {
+        //            ViewBag.ErrorMessage = "Please select a file!!";
+        //            return View();
+        //        }
+        //        HttpPostedFileBase file = Request.Files["file"];
+        //        string filePath = string.Empty;
+        //        string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+        //        string url = "/Images/upload/";
+        //        var UserInfo = CacheManager.Instance.CurrentUser;
+        //        if (UserInfo == null)
+        //            return Json("false");
+        //        string fileName = timestamp.ToString() + Path.GetFileName(file.FileName);
+        //        filePath = Path.Combine(HttpContext.Server.MapPath(url), fileName);
+        //        file.SaveAs(filePath);
+        //        Session["HelpImgUrl"] = url + fileName;
 
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return Json("success");
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return Json("success");
+        //}
 
-        [HttpPost]
-        public ActionResult HelpRemove()
-        {
-            Session["HelpImgUrl"] = "";
-            return Json("success");
-        }
+        //[HttpPost]
+        //public ActionResult HelpRemove()
+        //{
+        //    Session["HelpImgUrl"] = "";
+        //    return Json("success");
+        //}
 
         public ActionResult GetHelpConfigsByCondition(string className)
         {
@@ -487,23 +491,23 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
             try
             {
 
-                if (Session["HelpImgUrl"] == null)
-                {
-                    int begin = entity.ImageUrl.IndexOf("/Images");
-                    if (begin < 0)
-                    {
-                        entity.ImageUrl = "";
-                    }
-                    else
-                    {
-                        entity.ImageUrl = entity.ImageUrl.Substring(begin);
-                    }
+                //if (Session["HelpImgUrl"] == null)
+                //{
+                //    int begin = entity.ImageUrl.IndexOf("/Images");
+                //    if (begin < 0)
+                //    {
+                //        entity.ImageUrl = "";
+                //    }
+                //    else
+                //    {
+                //        entity.ImageUrl = entity.ImageUrl.Substring(begin);
+                //    }
 
-                }
-                else
-                {
-                    entity.ImageUrl = Session["HelpImgUrl"].ToString();
-                }
+                //}
+                //else
+                //{
+                //    entity.ImageUrl = Session["HelpImgUrl"].ToString();
+                //}
 
                 var result = new BaseSetBC().SaveHelpConfig(entity, CurrentUserInfo.Account);
                 if (result == 0)
@@ -628,42 +632,42 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
         }
 
 
-        [HttpPost]
-        public ActionResult IndexImgUpload()
-        {
-            try
-            {
-                if (Request.Files == null || Request.Files.Count == 0)
-                {
-                    ViewBag.ErrorMessage = "Please select a file!!";
-                    return View();
-                }
-                HttpPostedFileBase file = Request.Files["file"];
-                string filePath = string.Empty;
-                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string url = "/Images/upload/";
-                var UserInfo = CacheManager.Instance.CurrentUser;
-                if (UserInfo == null)
-                    return Json("false");
-                string fileName = timestamp.ToString() + Path.GetFileName(file.FileName);
-                filePath = Path.Combine(HttpContext.Server.MapPath(url), fileName);
-                file.SaveAs(filePath);
-                Session["IndexImgUrl"] = url + fileName;
+        //[HttpPost]
+        //public ActionResult IndexImgUpload()
+        //{
+        //    try
+        //    {
+        //        if (Request.Files == null || Request.Files.Count == 0)
+        //        {
+        //            ViewBag.ErrorMessage = "Please select a file!!";
+        //            return View();
+        //        }
+        //        HttpPostedFileBase file = Request.Files["file"];
+        //        string filePath = string.Empty;
+        //        string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+        //        string url = "/Images/upload/";
+        //        var UserInfo = CacheManager.Instance.CurrentUser;
+        //        if (UserInfo == null)
+        //            return Json("false");
+        //        string fileName = timestamp.ToString() + Path.GetFileName(file.FileName);
+        //        filePath = Path.Combine(HttpContext.Server.MapPath(url), fileName);
+        //        file.SaveAs(filePath);
+        //        Session["IndexImgUrl"] = url + fileName;
 
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return Json("success");
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return Json("success");
+        //}
 
-        [HttpPost]
-        public ActionResult IndexRemove()
-        {
-            Session["IndexImgUrl"] = "";
-            return Json("success");
-        }
+        //[HttpPost]
+        //public ActionResult IndexRemove()
+        //{
+        //    Session["IndexImgUrl"] = "";
+        //    return Json("success");
+        //}
 
         public ActionResult GetIndexImagesByCondition(string KeyName)
         {
@@ -706,17 +710,17 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
             }
         }
 
-        public ActionResult GetIndexImages(string id)
-        {
-            try
-            {
-                return Json(new BaseSetBC().GetIndexImages(id), JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new List<VMImages>(), JsonRequestBehavior.AllowGet);
-            }
-        }
+        //public ActionResult GetIndexImages(string id)
+        //{
+        //    try
+        //    {
+        //        return Json(new BaseSetBC().GetIndexImages(id), JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new List<VMImages>(), JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
 
 
@@ -725,23 +729,23 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
 
             try
             {
-                if (Session["IndexImgUrl"] == null)
-                {
+                //if (Session["IndexImgUrl"] == null)
+                //{
 
-                    int begin = indexImage.ImageUrl.IndexOf("/Images");
-                    if (begin < 0)
-                    {
-                        indexImage.ImageUrl = "";
-                    }
-                    else
-                    {
-                        indexImage.ImageUrl = indexImage.ImageUrl.Substring(begin);
-                    }
-                }
-                else
-                {
-                    indexImage.ImageUrl = Session["IndexImgUrl"].ToString();
-                }
+                //    int begin = indexImage.ImageUrl.IndexOf("/Images");
+                //    if (begin < 0)
+                //    {
+                //        indexImage.ImageUrl = "";
+                //    }
+                //    else
+                //    {
+                //        indexImage.ImageUrl = indexImage.ImageUrl.Substring(begin);
+                //    }
+                //}
+                //else
+                //{
+                //    indexImage.ImageUrl = Session["IndexImgUrl"].ToString();
+                //}
 
                 
                 var result = new BaseSetBC().SaveIndexImage(indexImage, CurrentUserInfo.Account);
@@ -784,42 +788,42 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult ArticleUpload()
-        {
-            try
-            {
-                if (Request.Files == null || Request.Files.Count == 0)
-                {
-                    ViewBag.ErrorMessage = "Please select a file!!";
-                    return View();
-                }
-                HttpPostedFileBase file = Request.Files["file"];
-                string filePath = string.Empty;
-                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string url = "/Images/upload/";
-                var UserInfo = CacheManager.Instance.CurrentUser;
-                if (UserInfo == null)
-                    return Json("false");
-                string fileName = timestamp.ToString() + Path.GetFileName(file.FileName);
-                filePath = Path.Combine(HttpContext.Server.MapPath(url), fileName);
-                file.SaveAs(filePath);
-                Session["ArticleImgUrl"] = url + fileName;
+        //[HttpPost]
+        //public ActionResult ArticleUpload()
+        //{
+        //    try
+        //    {
+        //        if (Request.Files == null || Request.Files.Count == 0)
+        //        {
+        //            ViewBag.ErrorMessage = "Please select a file!!";
+        //            return View();
+        //        }
+        //        HttpPostedFileBase file = Request.Files["file"];
+        //        string filePath = string.Empty;
+        //        string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+        //        string url = "/Images/upload/";
+        //        var UserInfo = CacheManager.Instance.CurrentUser;
+        //        if (UserInfo == null)
+        //            return Json("false");
+        //        string fileName = timestamp.ToString() + Path.GetFileName(file.FileName);
+        //        filePath = Path.Combine(HttpContext.Server.MapPath(url), fileName);
+        //        file.SaveAs(filePath);
+        //        Session["ArticleImgUrl"] = url + fileName;
 
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return Json("success");
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return Json("success");
+        //}
 
-        [HttpPost]
-        public ActionResult ArticleRemove()
-        {
-            Session["ArticleImgUrl"] = "";
-            return Json("success");
-        }
+        //[HttpPost]
+        //public ActionResult ArticleRemove()
+        //{
+        //    Session["ArticleImgUrl"] = "";
+        //    return Json("success");
+        //}
 
         public ActionResult GetArticlesByCondition(string KeyName)
         {
@@ -859,17 +863,17 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
             }
         }
 
-        public ActionResult GetArticleImage(string id)
-        {
-            try
-            {
-                return Json(new BaseSetBC().GetArticleImage(id), JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new List<VMImages>(), JsonRequestBehavior.AllowGet);
-            }
-        }
+        //public ActionResult GetArticleImage(string id)
+        //{
+        //    try
+        //    {
+        //        return Json(new BaseSetBC().GetArticleImage(id), JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new List<VMImages>(), JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
 
 
@@ -878,23 +882,23 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
 
             try
             {
-                if (Session["ArticleImgUrl"] == null )
-                {
-                    int begin = Article.ImageUrl.IndexOf("/Images");
-                    if (begin < 0)
-                    {
-                        Article.ImageUrl = "";
-                    }
-                    else
-                    {
-                        Article.ImageUrl = Article.ImageUrl.Substring(begin);
-                    }                   
+                //if (Session["ArticleImgUrl"] == null )
+                //{
+                //    int begin = Article.ImageUrl.IndexOf("/Images");
+                //    if (begin < 0)
+                //    {
+                //        Article.ImageUrl = "";
+                //    }
+                //    else
+                //    {
+                //        Article.ImageUrl = Article.ImageUrl.Substring(begin);
+                //    }                   
                     
-                }
-                else
-                {
-                    Article.ImageUrl = Session["ArticleImgUrl"].ToString();
-                }
+                //}
+                //else
+                //{
+                //    Article.ImageUrl = Session["ArticleImgUrl"].ToString();
+                //}
                 
                 var result = new BaseSetBC().SaveArticle(Article, CurrentUserInfo.Account);
                 if (result == 0)

@@ -87,16 +87,8 @@
             </el-row>
             <el-row>
                  <el-col span="12">
-                    <el-form-item label="上传图片">
-                        <el-upload class="upload-demo"
-					               :action="uploadActionUrl"
-					               :on-remove="handleRemove"
-					               :file-list="fileList2"
-					               show-file-list="true"
-					               list-type="picture">
-					        <el-button size="small" type="primary">点击上传</el-button>
-					        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-					    </el-upload>
+                    <el-form-item label="首页图片">
+                        <el-input v-model="form.ImageUrl" style="width: 540px;" clearable></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -119,8 +111,8 @@
                 txtName:"",
                 dialogImageFormVisible: false,
                 form: {},
-                uploadActionUrl:"/BaseSet/IndexImgUpload",
-                fileList2: [],
+//              uploadActionUrl:"/BaseSet/IndexImgUpload",
+//              fileList2: [],
                 currentPage:1,
         		pagesize:8,
             },
@@ -145,18 +137,6 @@
                         },
                         success: function (result) { 
                             _self.form = result;
-                        }
-                    });
-                    $.ajax({
-                        type: "get",
-                        dataType: "json",
-                        contentType: "application/json",
-                        url: "/BaseSet/GetIndexImages?pGuid=" + guid(),
-                        data: {
-                            id: ImageId
-                        },
-                        success: function (result) { 
-                            _self.fileList2 = result;
                         }
                     });
                     this.dialogImageFormVisible = true;
@@ -230,17 +210,17 @@
                         }
                     });
                 },
-                handleRemove:function(file, fileList){
-	                $.ajax({
-	                        type: "get",
-	                        dataType: "json",
-	                        contentType: "application/json",
-	                        url: "/BaseSet/IndexRemove",
-	                        success: function (result) {
-	                            //self.fileList2 = result;
-	                        }
-	                    });
-                },
+//              handleRemove:function(file, fileList){
+//	                $.ajax({
+//	                        type: "get",
+//	                        dataType: "json",
+//	                        contentType: "application/json",
+//	                        url: "/BaseSet/IndexRemove",
+//	                        success: function (result) {
+//	                            //self.fileList2 = result;
+//	                        }
+//	                    });
+//              },
                 handleSizeChange: function (size) {
 			        this.pagesize = size;
 			    },

@@ -43,6 +43,9 @@
     <Compile Include="BargainLogEntity.cs" />
     <Compile Include="BargainEntity.cs" />
     <Compile Include="ChapterEntity.cs" />
+    <Compile Include="Common\DictionaryInfo.cs" />
+    <Compile Include="GroupBuyMemberEntity.cs" />
+    <Compile Include="GroupBuyEntity.cs" />
     <Compile Include="Model\VMClassCar.cs" />
     <Compile Include="Model\VMBargainClass.cs" />
     <Compile Include="Model\VMGBClass.cs" />

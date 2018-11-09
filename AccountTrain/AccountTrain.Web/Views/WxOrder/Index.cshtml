@@ -117,7 +117,7 @@
 				console.log("SureOrder");
 				
 				//调用微信支付接口
-                //window.location.href = "CheckOut?openid=" + openid + "&price=" + _self.sumPrice;
+                window.location.href = "CheckOut?openid=" + openid + "&&price=" + _self.sumPrice+"&&orderNo="+orderNo;
 			},
          }
 	});

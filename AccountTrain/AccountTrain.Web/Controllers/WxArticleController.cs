@@ -81,6 +81,18 @@ namespace AccountTrain.Web.Controllers
                 return Json(new List<VMWxArticle>(), JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult GetArticlesByCondition(string KeyName)
+        {
+            try
+            {
+                return Json(new BaseSetBC().GetArticlesByCondition(KeyName), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<ArticleEntity>(), JsonRequestBehavior.AllowGet);
+            }
+        }
         #endregion
 
        

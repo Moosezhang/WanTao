@@ -100,16 +100,8 @@
             </el-row>
             <el-row>
                  <el-col span="12">
-                    <el-form-item label="上传图片">
-                        <el-upload class="upload-demo"
-					               :action="uploadActionUrl"
-					               :on-remove="handleRemove"
-					               :file-list="fileList2"
-					               show-file-list="true"
-					               list-type="picture">
-					        <el-button size="small" type="primary">点击上传</el-button>
-					        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-					    </el-upload>
+                    <el-form-item label="图片链接">
+                        <el-input v-model="form.ImageUrl" style="width:220px;" clearable></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -132,8 +124,8 @@
                 txtName:"",
                 dialogArticleFormVisible: false,
                 form: {},
-                uploadActionUrl:"/BaseSet/ArticleUpload",
-                fileList2: [],
+                //uploadActionUrl:"/BaseSet/ArticleUpload",
+                //fileList2: [],
                 DicData:[],
                 currentPage:1,
         		pagesize:8,
@@ -146,7 +138,7 @@
                     contentType: "application/json",
                     url: "/BaseSet/GetDicItemsByDicKey",
                     data:{
-                    	key:"ArticleKey"
+                    	key:"6E62949A-8EC7-42C4-B691-DEEB7483514C"
                     },
                     success: function (result) {
                         _self.DicData = result;
@@ -176,18 +168,7 @@
                             _self.form = result;
                         }
                     });
-                    $.ajax({
-                        type: "get",
-                        dataType: "json",
-                        contentType: "application/json",
-                        url: "/BaseSet/GetArticleImage?pGuid=" + guid(),
-                        data: {
-                            id: ArticleId
-                        },
-                        success: function (result) { 
-                            _self.fileList2 = result;
-                        }
-                    });
+                   
                     this.dialogArticleFormVisible = true;
                 },
                 QueryData: function () {
@@ -259,17 +240,17 @@
                         }
                     });
                 },
-                handleRemove:function(file, fileList){
-	                $.ajax({
-	                        type: "get",
-	                        dataType: "json",
-	                        contentType: "application/json",
-	                        url: "/BaseSet/ArticleRemove",
-	                        success: function (result) {
-	                            //self.fileList2 = result;
-	                        }
-	                    });
-                },
+//              handleRemove:function(file, fileList){
+//	                $.ajax({
+//	                        type: "get",
+//	                        dataType: "json",
+//	                        contentType: "application/json",
+//	                        url: "/BaseSet/ArticleRemove",
+//	                        success: function (result) {
+//	                            //self.fileList2 = result;
+//	                        }
+//	                    });
+//              },
                 handleSizeChange: function (size) {
 			        this.pagesize = size;
 			    },

@@ -42,48 +42,48 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
         }
 
 
-        [HttpPost]
-        public ActionResult ClassUpload()
+        //[HttpPost]
+        //public ActionResult ClassUpload()
+        //{
+        //    try
+        //    {
+        //        if (Request.Files == null || Request.Files.Count == 0)
+        //        {
+        //            ViewBag.ErrorMessage = "Please select a file!!";
+        //            return View();
+        //        }
+        //        HttpPostedFileBase file = Request.Files["file"];
+        //        string filePath = string.Empty;
+        //        string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+        //        string url = "/Images/upload/";
+        //        var UserInfo = CacheManager.Instance.CurrentUser;
+        //        if (UserInfo == null)
+        //            return Json("false");
+        //        string fileName = timestamp.ToString() + Path.GetFileName(file.FileName);
+        //        filePath = Path.Combine(HttpContext.Server.MapPath(url), fileName);
+        //        file.SaveAs(filePath);
+        //        Session["ClassImgUrl"] = url + fileName;
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return Json("success");
+        //}
+
+
+        //[HttpPost]
+        //public ActionResult IndexRemove()
+        //{
+        //    Session["ClassImgUrl"] = "";
+        //    return Json("success");
+        //}
+        public ActionResult GetClassByCondition(string name, string classType, string startDate, string endDate, string classGroup, string order)
         {
             try
             {
-                if (Request.Files == null || Request.Files.Count == 0)
-                {
-                    ViewBag.ErrorMessage = "Please select a file!!";
-                    return View();
-                }
-                HttpPostedFileBase file = Request.Files["file"];
-                string filePath = string.Empty;
-                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string url = "/Images/upload/";
-                var UserInfo = CacheManager.Instance.CurrentUser;
-                if (UserInfo == null)
-                    return Json("false");
-                string fileName = timestamp.ToString() + Path.GetFileName(file.FileName);
-                filePath = Path.Combine(HttpContext.Server.MapPath(url), fileName);
-                file.SaveAs(filePath);
-                Session["ClassImgUrl"] = url + fileName;
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return Json("success");
-        }
-
-
-        [HttpPost]
-        public ActionResult IndexRemove()
-        {
-            Session["ClassImgUrl"] = "";
-            return Json("success");
-        }
-        public ActionResult GetClassByCondition(string name, string classType, string startDate, string endDate)
-        {
-            try
-            {
-                return Json(new ClassBC().GetClassByCondition(name, classType, startDate, endDate), JsonRequestBehavior.AllowGet);
+                return Json(new ClassBC().GetClassByCondition(name, classType, startDate, endDate, classGroup, order), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -103,17 +103,17 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
             }
         }
 
-        public ActionResult GetClassImage(string id)
-        {
-            try
-            {
-                return Json(new ClassBC().GetClassImage(id), JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new List<VMImages>(), JsonRequestBehavior.AllowGet);
-            }
-        }
+        //public ActionResult GetClassImage(string id)
+        //{
+        //    try
+        //    {
+        //        return Json(new ClassBC().GetClassImage(id), JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new List<VMImages>(), JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
 
         [HttpPost]
@@ -123,25 +123,25 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
 
             try
             {
-                if (Session["ClassImgUrl"] == null )
-                {
+                //if (Session["ClassImgUrl"] == null )
+                //{
 
-                    int begin = Class.ClassImages.IndexOf("/Images");
-                    if (begin < 0)
-                    {
-                        Class.ClassImages = "";
-                    }
-                    else
-                    {
-                        Class.ClassImages = Class.ClassImages.Substring(begin);
-                    }
+                //    int begin = Class.ClassImages.IndexOf("/Images");
+                //    if (begin < 0)
+                //    {
+                //        Class.ClassImages = "";
+                //    }
+                //    else
+                //    {
+                //        Class.ClassImages = Class.ClassImages.Substring(begin);
+                //    }
                    
-                    //Class.ClassImages = Class.ClassImages.Split();
-                }
-                else
-                {
-                    Class.ClassImages = Session["ClassImgUrl"].ToString();
-                }
+                //    //Class.ClassImages = Class.ClassImages.Split();
+                //}
+                //else
+                //{
+                //    Class.ClassImages = Session["ClassImgUrl"].ToString();
+                //}
                 
                 var result = new ClassBC().SaveClass(Class, CurrentUserInfo.Account);
                 if (result == 0)
