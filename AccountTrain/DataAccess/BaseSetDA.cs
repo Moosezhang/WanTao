@@ -730,7 +730,7 @@ namespace DataAccess
                                                where t.status=1");
                 if (!string.IsNullOrEmpty(KeyName))
                 {
-                    string sql = string.Format(" and t.ImageTitle='{0}'", KeyName);
+                    string sql = string.Format(" and t.ImageTitle like '%{0}%'", KeyName);
                     query = query + sql;
                 }
 
@@ -804,7 +804,7 @@ namespace DataAccess
                     string query = string.Format(@" UPDATE Train_IndexImage
                                                     SET ImageTitle ='{0}'
                                                       ,ImageUrl ='{1}'
-                                                      ,ImageLink = {2}
+                                                      ,ImageLink = '{2}'
                                                       ,Remark = '{3}'                                                      
                                                       ,UpdateTime = getdate()
                                                       ,UpdateUser = '{4}'
@@ -835,7 +835,7 @@ namespace DataAccess
                                                where t.status=1");
                 if (!string.IsNullOrEmpty(KeyName))
                 {
-                    string sql = string.Format(" and t.ArticleTitle='{0}'", KeyName);
+                    string sql = string.Format(" and t.ArticleTitl like '%{0}%'", KeyName);
                     query = query + sql;
                 }
 
@@ -927,7 +927,7 @@ namespace DataAccess
                                                     SET ArticleType='{0}'
                                                       ,ArticleTitle ='{1}'
                                                       ,ImageUrl ='{2}'
-                                                      ,ImageLink = {3}
+                                                      ,ImageLink = '{3}'
                                                       ,Remark = '{4}'                                                      
                                                       ,UpdateTime = getdate()
                                                       ,UpdateUser = '{5}'

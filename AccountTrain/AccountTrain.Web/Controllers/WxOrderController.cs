@@ -5,6 +5,8 @@ using Common;
 using Common.WxPay;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -29,6 +31,15 @@ namespace AccountTrain.Web.Controllers
             {
                 if (param==null)
                     return Json(string.Empty);
+
+                //判断是否注册
+                var userInfo = new WxUserBC().GetWxUserByOpenid(param.openid);
+                if (string.IsNullOrEmpty(userInfo.Phone))
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
+                }
+
+
                 string OrderNo = CommonHelper.CreateOrderNo();
                 OrderEntity order = new OrderEntity() 
                 {
@@ -90,7 +101,7 @@ namespace AccountTrain.Web.Controllers
 
                 if (string.IsNullOrEmpty(openid))
                 {
-                    Response.Redirect(CommonHelper.GetRedirect("My%2fRegistered"));
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
                 }
             }
 
@@ -133,7 +144,7 @@ namespace AccountTrain.Web.Controllers
             }
         }
 
-
+        #region 支付
         /// <summary>
         /// 支付
         /// </summary>
@@ -142,14 +153,14 @@ namespace AccountTrain.Web.Controllers
         /// <param name="mark"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public ActionResult CheckOut(string openId, int price,string orderNo)
+        public ActionResult CheckOut(string openId, int price, string orderNo)
         {
             try
             {
                 AppSetting setting = new AppSetting();
                 WxPayClient client = new WxPayClient();
 
-               
+
 
                 //插入充值表
                 //DeliveryRechargeEntity Entry = new DeliveryRechargeEntity();
@@ -199,11 +210,12 @@ namespace AccountTrain.Web.Controllers
                     ViewBag.OrderNo = orderNo;
                 }
 
-
+                ViewBag.OpenId = openId;
+                ViewBag.OrderNo = orderNo;
             }
             catch (Exception ex)
             {
-               // Log.WriteLog("CheckOut Error:" + ex.Message);
+                // Log.WriteLog("CheckOut Error:" + ex.Message);
             }
             return View();
         }
@@ -212,13 +224,13 @@ namespace AccountTrain.Web.Controllers
         /// 支付完成
         /// </summary>
         /// <returns></returns>
-        public ActionResult rechargesucc(string openId,string orderNo)
+        public ActionResult rechargesucc(string openId, string orderNo)
         {
-            OrderBC bc= new OrderBC();
-            var result=bc.GetOrderByOrderNo(orderNo);
+            OrderBC bc = new OrderBC();
+            var result = bc.GetOrderByOrderNo(orderNo);
 
-            //支付成功，1.更新订单状态；2.更新课程热度
-            UpdateOrderStatus(orderNo,2);//1
+            //支付成功，1.更新订单状态；2.更新课程热度；3.增加用户积分
+            UpdateOrderStatus(orderNo, 2);//1
 
             var goods = bc.GetOrderGoodsListByOrderId(result.OrderId);
             if (goods != null && goods.Count > 0)
@@ -228,6 +240,40 @@ namespace AccountTrain.Web.Controllers
                     new ClassBC().UpdateClassHot(item.ClassId);//2
                 }
             }
+
+            var point = bc.GetPointsByOpenid(openId);
+            if (point == null)
+            {
+                PointsEntity points = new PointsEntity()
+                {
+                    OpenId = openId,
+                    Points = result.PayPrice,
+                };
+                bc.AddPoint(points, openId);
+                PointsLogEntity log=new PointsLogEntity()
+                {
+                    OrderId=result.OrderId,
+                    LogType="1",
+                    Points=result.PayPrice,
+                    OpenId=openId,
+
+                };                
+                bc.AddPointLog(log, openId);
+            }
+            else
+            {
+                bc.UpdatePonits(openId, result.PayPrice);
+                PointsLogEntity log = new PointsLogEntity()
+                {
+                    OrderId = result.OrderId,
+                    LogType = "1",
+                    Points = result.PayPrice,
+                    OpenId = openId,
+
+                };
+                bc.AddPointLog(log, openId);
+            }
+
             //根据订单来源，变更不同推广状态
             switch (result.OrderSource)
             {
@@ -252,10 +298,10 @@ namespace AccountTrain.Web.Controllers
                         {
                             GroupBuyEntity buy = new GroupBuyEntity()
                             {
-                                ClassId=item.ClassId,
-                                NowCount=1,
+                                ClassId = item.ClassId,
+                                NowCount = 1,
                             };
-                            bc.AddGroupBuy(buy,openId);
+                            bc.AddGroupBuy(buy, openId);
                         }
                         gbEntity = bc.GetGroupBuyByClassId(item.ClassId);
                         //记录团购成员表
@@ -271,12 +317,12 @@ namespace AccountTrain.Web.Controllers
                         var nowCount = nowCountEntity.NowCount;
                         var needCount = bc.GetGroupBuyConfigByClassId(item.ClassId).NeedCount;
 
-                        if(nowCount==needCount)
+                        if (nowCount == needCount)
                         {
-                            bc.UpdateGroupBuyStatus(nowCountEntity.GroupBuyId,2);
+                            bc.UpdateGroupBuyStatus(nowCountEntity.GroupBuyId, 2);
                         }
                     }
-                    
+
                     break;
                 case "4"://助力
 
@@ -290,6 +336,9 @@ namespace AccountTrain.Web.Controllers
 
             return View();
         }
+        #endregion
+
+       
 
 
         public ActionResult UpdateOrderStatus(string orderNo,int status)
@@ -303,6 +352,7 @@ namespace AccountTrain.Web.Controllers
                 return Json(new VMGBClass(), JsonRequestBehavior.AllowGet);
             }
         }
+      
         #region 团购
         public ActionResult GroupBuy(string openid, string classId)
         {
@@ -310,6 +360,15 @@ namespace AccountTrain.Web.Controllers
             {
                 Response.Redirect(CommonHelper.GetRedirect("WxOrder%2fGroupBuy"));
             }
+
+            //判断是否注册
+            var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
+            if (string.IsNullOrEmpty(userInfo.Phone))
+            {
+                Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
+            }
+
+
 
             ViewBag.Openid = openid;
             ViewBag.ClassId = classId;
@@ -372,6 +431,15 @@ namespace AccountTrain.Web.Controllers
                 if (string.IsNullOrEmpty(openid)||string.IsNullOrEmpty(classid)||string.IsNullOrEmpty(price))
                     return Json(string.Empty);
 
+
+                //判断是否注册
+                var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
+                if (string.IsNullOrEmpty(userInfo.Phone))
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
+                }
+
+
                 string bargainId=Guid.NewGuid().ToString();
 
                 BargainEntity entity = new BargainEntity()
@@ -429,7 +497,7 @@ namespace AccountTrain.Web.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new List<BargainLogEntity>(), JsonRequestBehavior.AllowGet);
+                return Json(new List<VMBargainLog>(), JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -439,7 +507,7 @@ namespace AccountTrain.Web.Controllers
         /// <param name="openid"></param>
         /// <param name="classid"></param>
         /// <returns></returns>
-        public ActionResult BargainClass(string openid, string classid)
+        public ActionResult BargainClass(string ownOpenid,string openid, string classid)
         {
             try
             {
@@ -453,7 +521,7 @@ namespace AccountTrain.Web.Controllers
                 decimal cutPrce = CommonHelper.GetRandNum(floor*100,top*100)/100;
                 var floorPrice = config.FloorPrice;
                 //更新最新价格，插入砍价记录表
-                var bargainEntity = bc.GetBargainByOpenIdAndClassId(classid,openid);
+                var bargainEntity = bc.GetBargainByOpenIdAndClassId(classid, ownOpenid);
                 var nowPrice = bargainEntity.NowPrice;
                 if (nowPrice - floorPrice < cutPrce)
                 {
@@ -476,6 +544,176 @@ namespace AccountTrain.Web.Controllers
                 return Json("false", JsonRequestBehavior.AllowGet);
             }
         }
+        #endregion
+
+
+        #region 助力
+        /// <summary>
+        /// 1.根据classid找到课程助力配置
+        /// 2.根据openid判断是否助力过
+        /// 3.生成该openid该课程助力数据
+        /// 4.更新助力人的助力人数
+        /// 5.插入助力人员表
+        /// </summary>
+        /// <param name="openid"></param>
+        /// <param name="classid"></param>
+        /// <returns></returns>
+        public ActionResult HelpClass(string openid,string code, string state, string classid,string ownOpenid)
+        {
+            if (string.IsNullOrEmpty(openid))
+            {
+                openid = GetOpenId(code).openid;
+
+                if (string.IsNullOrEmpty(openid))
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxOrder%2fHelpClass"));
+                }
+            }
+
+            string msg = string.Empty;
+
+            OrderBC bc = new OrderBC();
+            var config= bc.GetHelpConfigByClassId(classid);
+            var entity = bc.GetHelpByOpenIdAndClassId(classid, ownOpenid);
+            if (ownOpenid != openid)//非发起用户进入
+            {
+                var helpinfo = bc.GetHelpMemberByOpenid(openid);
+                if (helpinfo != null)
+                {
+                    msg = "该用户已助力";
+                    return Json(msg, JsonRequestBehavior.AllowGet);
+                }
+
+                HelpInfoEntity help = new HelpInfoEntity()
+                {
+                    ClassId = classid,
+                    OpenId = openid,
+                    NowCount = 0,
+                };
+                var addResult = bc.AddHelpInfo(help, openid);
+                HelpMemberEntity member = new HelpMemberEntity() 
+                {
+                    HelpInfoId=entity.HelpInfoId,
+                    OpenId=openid,
+                };
+                var addMember = bc.AddHelpMember(member,openid);
+                var updateInfo = bc.UpdateHelpNowCount(entity.HelpInfoId, entity.NowCount+1);
+                entity = bc.GetHelpByOpenIdAndClassId(classid, ownOpenid);
+                int diff = config.HelpCount - entity.NowCount;
+                var wxUser=new WxUserBC().GetWxUserByOpenid(openid);
+                if (diff <= 0)
+                {
+                    string OrderNo = CommonHelper.CreateOrderNo();
+                    OrderEntity order = new OrderEntity()
+                    {
+                        OrderNo = OrderNo,
+                        Openid = openid,
+                        PayPrice = 0,
+                        OrderSource = "4",
+                        Nickname = wxUser.Nickname
+                    };
+
+                    AddTextToImg(wxUser.Nickname);
+
+                    List<OrderGoodsEntity> goods = new List<OrderGoodsEntity>();
+
+                    var classEntity = new ClassBC().GetClassByKey(classid);
+                    OrderGoodsEntity good = new OrderGoodsEntity()
+                    {
+                        ClassId = classEntity.ClassId,
+                        ClassName = classEntity.ClassName,
+                        Price = 0
+                    };
+                    goods.Add(good);
+
+                    var result = new OrderBC().SaveOrder(order, goods, openid);
+
+
+                    msg = "助力成功";
+                    return Json(msg, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else//发起用户进入
+            {
+                int diff = config.HelpCount - entity.NowCount;
+                if (diff > 0)
+                {
+                    msg = string.Format("还差 {0} 人助力成功", diff);
+                    return Json(msg, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    msg = string.Format("已助力成功", diff);
+                    return Json(msg, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return View();
+
+
+
+
+            
+        }
+
+
+        /// <summary>
+        /// 指定图片添加指定文字
+        /// </summary> 
+        /// <param name="text">添加的文字</param>
+        /// <param name="picname">生成文件名</param>
+        private void AddTextToImg(string text)
+        {
+
+            string filename = string.Format("{0}.png", text);
+            string saveUrl = "/Images/QR/";
+            string filePath = Path.Combine(HttpContext.Server.MapPath(saveUrl), filename);
+
+            
+
+            if (string.IsNullOrEmpty(text))
+                return;
+
+            Image image = Image.FromFile(filePath);        
+            Bitmap bitmap = new Bitmap(image, image.Width, image.Height);
+            Graphics g = Graphics.FromImage(bitmap);
+
+            float fontSize = 50f;
+            float textWidth = text.Length * fontSize;
+
+            System.Drawing.Font font = new System.Drawing.Font("加粗", fontSize, FontStyle.Bold);
+
+            //字体矩形位置 ：
+            //x = 图片的长度的中心位置 - 字体长度的一半 - 字行距
+            //y = 图片的高度的中心位置 - 字体大小的一半 - 偏移（去掉偏移，是居中位置）
+            float rectX = image.Width / 2 - textWidth / 2 - font.Height;
+            float rectY = image.Height / 2 - fontSize / 2 - 30;
+
+            float rectWidth = text.Length * fontSize + font.Height * 2;
+
+            //英文字体的1磅，相当于1/72 
+            //英寸常用的1024x768或800x600等标准的分辨率计算出来的dpi是一个常数：96
+            //因此计算出来的毫米与像素的关系也约等于一个常数： 基本上 1毫米 约等于 3.78像素
+            float rectHeight = (fontSize / 72) * 96;
+
+            RectangleF textArea = new RectangleF(rectX, rectY, rectWidth, rectHeight);
+
+            Brush whiteBrush = new SolidBrush(Color.White);
+
+            Brush blackBrush = new SolidBrush(Color.Black);
+
+            g.FillRectangle(blackBrush, rectX, rectY, rectWidth, rectHeight);
+
+            g.DrawString(text, font, whiteBrush, textArea);
+
+            bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            g.Dispose();
+            bitmap.Dispose();
+            image.Dispose();
+
+        }
+
         #endregion
     }
 

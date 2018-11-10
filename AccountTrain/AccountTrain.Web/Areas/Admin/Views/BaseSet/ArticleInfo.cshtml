@@ -66,16 +66,19 @@
     <el-dialog title="文章信息" v-bind:visible.sync="dialogArticleFormVisible" v-model="dialogArticleFormVisible" style="height:600px;">
         <el-form model="form" style="margin-top:-20px;height:auto" label-width="80px">
             <el-row>
+            	<el-col span="12">
+                    <el-form-item label="文章标题">
+                        <el-input v-model="form.ArticleTitle" style="width:540px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
                 <el-col span="12" style="display: none;">
                     <el-form-item label="Id">
                         <el-input v-model="form.ArticleId" style="width:220px;" clearable></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col span="12">
-                    <el-form-item label="文章标题">
-                        <el-input v-model="form.ArticleTitle" style="width:220px;" clearable></el-input>
-                    </el-form-item>
-                </el-col>
+                
                 <el-col span="12">
                     <el-form-item label="文章类型">
                         <el-select v-model="form.ArticleType" placeholder="请选择文章类型" style="width:220px;">
@@ -92,16 +95,19 @@
                         <el-input v-model="form.ImageLink" style="width:220px;" clearable></el-input>
                     </el-form-item>
                 </el-col>                
-                <el-col span="12">
+                
+            </el-row>
+            <el-row>
+            	<el-col span="12">
                     <el-form-item label="备  注">
-                        <el-input v-model="form.Remark" style="width: 220px;" clearable></el-input>
+                        <el-input v-model="form.Remark" style="width: 540px;" clearable></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                  <el-col span="12">
-                    <el-form-item label="图片链接">
-                        <el-input v-model="form.ImageUrl" style="width:220px;" clearable></el-input>
+                    <el-form-item label="图片地址">
+                        <el-input v-model="form.ImageUrl" style="width:540px;" clearable></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>

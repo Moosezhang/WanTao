@@ -70,7 +70,7 @@
                         type: "get",
                         dataType: "json",
                         contentType: "application/json",
-                        url: "/My/getValidSMS?pGuid=" + guid(),
+                        url: "/WxMy/getValidSMS?pGuid=" + guid(),
                         data: {
                             strTel: phone
                         },
@@ -101,7 +101,7 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/My/Register",
+                    url: "/WxMy/Register",
                     data:{
                     	openid:openid,
                     	phone:phone,
@@ -113,6 +113,7 @@
                                 type: 'success',
                                 message: '注册成功!'
                             });
+                            window.location.href = "/WxHome/Index?openid="+openid+"&&code=null&&state=null";
                         } else {
                             _self.$message.error(result);
                         }

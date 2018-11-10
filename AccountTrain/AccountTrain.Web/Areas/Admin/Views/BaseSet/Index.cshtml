@@ -73,12 +73,10 @@
                     <el-form-item label="图片标题">
                         <el-input v-model="form.ImageTitle" style="width:220px;" clearable></el-input>
                     </el-form-item>
-                </el-col>
-                <el-col span="12">
-                    <el-form-item label="图片链接">
-                        <el-input v-model="form.ImageLink" style="width:220px;" clearable></el-input>
-                    </el-form-item>
-                </el-col>                
+                </el-col>                           
+                
+            </el-row>
+            <el-row>
                 <el-col span="12">
                     <el-form-item label="备  注">
                         <el-input v-model="form.Remark" style="width: 540px;" clearable></el-input>
@@ -86,8 +84,15 @@
                 </el-col>
             </el-row>
             <el-row>
+                <el-col span="12">
+                    <el-form-item label="跳转地址">
+                        <el-input v-model="form.ImageLink" style="width:540px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>     
+            </el-row>
+            <el-row>
                  <el-col span="12">
-                    <el-form-item label="首页图片">
+                    <el-form-item label="图片地址">
                         <el-input v-model="form.ImageUrl" style="width: 540px;" clearable></el-input>
                     </el-form-item>
                 </el-col>

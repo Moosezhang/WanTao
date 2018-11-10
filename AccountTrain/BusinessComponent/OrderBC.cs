@@ -153,7 +153,7 @@ namespace BusinessComponent
             return da.GetBargainClass(BargainId);
         }
 
-        public List<BargainLogEntity> GetBargainLogs(string BargainId)
+        public List<VMBargainLog> GetBargainLogs(string BargainId)
         {
             OrderDA da = new OrderDA();
             return da.GetBargainLogs(BargainId);
@@ -167,6 +167,71 @@ namespace BusinessComponent
         }
         #endregion
 
+        #region 助力
+        public HelpInfoEntity GetHelpByOpenIdAndClassId(string classid, string openid)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetHelpByOpenIdAndClassId(classid, openid);
+        }
+        public HelpConfigEntity GetHelpConfigByClassId(string classid)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetHelpConfigByClassId(classid);
+        }
 
+
+        public HelpMemberEntity GetHelpMemberByOpenid(string openid)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetHelpMemberByOpenid(openid);
+        }
+
+
+        public int AddHelpInfo(HelpInfoEntity help, string loginName)
+        {
+            OrderDA da = new OrderDA();
+            return da.AddHelpInfo(help,loginName);
+        }
+
+        public int UpdateHelpNowCount(string HelpInfoId, int NowCount)
+        {
+            OrderDA da = new OrderDA();
+            return da.UpdateHelpNowCount(HelpInfoId,NowCount);
+        }
+
+
+        public int AddHelpMember(HelpMemberEntity member, string loginName)
+        {
+            OrderDA da = new OrderDA();
+            return da.AddHelpMember(member, loginName);
+        }
+        #endregion
+
+        #region 积分
+        public PointsEntity GetPointsByOpenid(string openid)
+        {
+
+            OrderDA da = new OrderDA();
+            return da.GetPointsByOpenid(openid);
+        }
+
+        public int AddPoint(PointsEntity entity, string loginName)
+        {
+            OrderDA da = new OrderDA();
+            return da.AddPoint(entity, loginName);
+        }
+
+        public int AddPointLog(PointsLogEntity entity, string loginName)
+        {
+            OrderDA da = new OrderDA();
+            return da.AddPointLog(entity, loginName);
+        }
+
+        public int UpdatePonits(string OpenId, decimal point)
+        {
+            OrderDA da = new OrderDA();
+            return da.UpdatePonits(OpenId, point);
+        }
+        #endregion
     }
 }

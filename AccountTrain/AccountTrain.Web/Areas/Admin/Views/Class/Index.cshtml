@@ -17,7 +17,7 @@
         <el-col span="24">
             <div>
                 <el-input v-model="txtName" id="txtName" placeholder="请输入课程名称" clearable style="width:200px;"></el-input>
-                <el-input v-model="txtClassType" id="txtClassType" placeholder="请输入课程类型" clearable style="width:200px;"></el-input>
+                <el-input v-model="txtClassType" v-if="false" id="txtClassType" placeholder="请输入课程类型" clearable style="width:200px;"></el-input>
                 <el-date-picker v-model="stratDate"
                                 type="date"
                                 placeholder="选择日期"
@@ -45,32 +45,27 @@
                       v-bind:default-sort="{prop: 'CreateTime', order: 'descending'}"
                       style="width: 100%">
                 <el-table-column prop="ClassName"
-                                 label="课程名称"
-                                 width="130">
+                                 label="课程名称">
                 </el-table-column>
                  <el-table-column prop="ClassType"
-                                 label="课程类型"
-                                 width="130">
+                                 label="课程类型">
                 </el-table-column>
                 <el-table-column  prop="ClassTeacher" 
-                				 label="课程讲师"
-                				 width="130">                 	
+                				 label="课程讲师">                 	
                 </el-table-column>
                 <el-table-column  prop="ClassPrice" 
-                				 label="课程价格"
-                				 width="130"> 
+                				 label="课程价格"> 
                 </el-table-column>
                 <el-table-column  prop="HotCount" 
-                				 label="课程热度"
-                				 width="130"> 
+                				 label="课程热度"> 
                 </el-table-column>
                 <el-table-column fixed="right"
                                  label="操作"
-                                 width="auto" header-align="center" align="center">
+                                 width="300" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini"
                                    v-on:click="handleEdit(scope.row.ClassId)">编辑</el-button>
-                        <el-button v-if="scope.row.Status==1" size="mini"
+                        <el-button v-if="scope.row.Status==0" size="mini"
                                    type="danger"
                                    v-on:click="handleDisable(scope.row.ClassId,1)">上架</el-button>
                         <el-button v-if="scope.row.Status==1" size="mini"
@@ -141,7 +136,7 @@
             },
             methods: {
                 handleAdd: function () {
-                    window.location.href = "Detail?id=''";
+                    window.location.href = "Detail?id=null";
                 },
                 handleEdit: function (ClassId) {
                 	window.location.href = "Detail?id=" + ClassId;
@@ -161,7 +156,9 @@
                             name: userName,
                             classType: classType,
                             startDate: startDate,
-                            endDate: endDate
+                            endDate: endDate,
+                            classGroup:"",
+                            order:"",
                         },
                         success: function (result) {
                             ClassVue.tableData = result;

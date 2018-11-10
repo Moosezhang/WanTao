@@ -25,9 +25,17 @@ namespace AccountTrain.Web.Controllers
                 if (string.IsNullOrEmpty(openid))
                 {
                     //Response.Redirect(string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa7f322fb262e5a7b&redirect_uri=http%3a%2f%2f {0}%2fonebox%2fgoparty%2findex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", setting.AppDomainName.Replace("http://", "")));
-                    Response.Redirect(CommonHelper.GetRedirect("My%2fRegistered"));
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
                 }
             }
+
+            //判断是否注册
+            var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
+            if (string.IsNullOrEmpty(userInfo.Phone))
+            {
+                Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
+            }
+
 
             ViewBag.Openid = openid;
 
@@ -61,7 +69,7 @@ namespace AccountTrain.Web.Controllers
                 if (string.IsNullOrEmpty(openid))
                 {
                     //Response.Redirect(string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa7f322fb262e5a7b&redirect_uri=http%3a%2f%2f {0}%2fonebox%2fgoparty%2findex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", setting.AppDomainName.Replace("http://", "")));
-                    Response.Redirect(CommonHelper.GetRedirect("My%2fRegistered"));
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
                 }
             }
 
@@ -229,7 +237,7 @@ namespace AccountTrain.Web.Controllers
 
                 if (string.IsNullOrEmpty(openid))
                 {
-                    Response.Redirect(CommonHelper.GetRedirect("My%2fRegistered"));
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
                 }
             }
 
@@ -253,7 +261,7 @@ namespace AccountTrain.Web.Controllers
 
                 if (string.IsNullOrEmpty(openid))
                 {
-                    Response.Redirect(CommonHelper.GetRedirect("My%2fRegistered"));
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
                 }
             }
 
@@ -311,6 +319,14 @@ namespace AccountTrain.Web.Controllers
 
         public ActionResult AddCar(string openid, string classId)
         {
+
+            //判断是否注册
+            var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
+            if (string.IsNullOrEmpty(userInfo.Phone))
+            {
+                Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
+            }
+
             ShopCarEntity entity=new ShopCarEntity(){
                 Openid=openid,
                 ClassId=classId

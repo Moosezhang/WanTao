@@ -343,8 +343,8 @@ namespace DataAccess
         #endregion
 
 
-        #region 新增砍价数据
-        public BargainEntity GetBargainByOpenIdAndClassId(string openid,string classid)
+        #region 砍价数据
+        public BargainEntity GetBargainByOpenIdAndClassId(string classid, string openid)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
@@ -435,7 +435,7 @@ namespace DataAccess
                 string query = string.Format(@" UPDATE Train_Bargain
                                                     SET NowPrice= {0}                                                         
                                                        ,UpdateTime = getdate()
-                                                    WHERE ClassId='{1}'",
+                                                    WHERE BargainId='{1}'",
                                           nowPrice, BargainId);
                 return conn.Execute(query);
             }
@@ -456,14 +456,15 @@ namespace DataAccess
             }
         }
 
-        public List<BargainLogEntity> GetBargainLogs(string BargainId)
+        public List<VMBargainLog> GetBargainLogs(string BargainId)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
-                string query = string.Format(@"select t.* from Train_BargainLog t
-                                                where t.status=1 and t.BargainId='{0}'", BargainId);
+                string query = string.Format(@"select t.*,t1.Nickname,t1.Headimgurl from Train_BargainLog t
+                                               inner join Train_WxUser t1 on t.OpenId=t1.Openid
+                                               where t.status=1 and t.BargainId='{0}'", BargainId);
 
-                return conn.Query<BargainLogEntity>(query).ToList();
+                return conn.Query<VMBargainLog>(query).ToList();
 
             }
         }
@@ -479,5 +480,197 @@ namespace DataAccess
            
         #endregion
 
+
+        #region 助力
+        public HelpInfoEntity GetHelpByOpenIdAndClassId(string classid, string openid)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_HelpInfo
+                                            where status=1 and ClassId='{0}' and OpenId='{1}'", classid, openid);
+
+                return conn.Query<HelpInfoEntity>(query).FirstOrDefault();
+
+            }
+        }
+
+        public HelpConfigEntity GetHelpConfigByClassId(string classid)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_HelpConfig
+                                            where status=1 and ClassId='{0}'", classid);
+
+                return conn.Query<HelpConfigEntity>(query).FirstOrDefault();
+
+            }
+        }
+
+
+        public HelpMemberEntity GetHelpMemberByOpenid(string openid)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_HelpMember
+                                            where status=1 and OpenId='{0}'", openid);
+
+                return conn.Query<HelpMemberEntity>(query).FirstOrDefault();
+
+            }
+        }
+
+
+        public int AddHelpInfo(HelpInfoEntity help, string loginName)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"INSERT INTO Train_HelpInfo
+                                               (HelpInfoId
+                                               ,ClassId
+                                               ,OpenId
+                                               ,NowCount
+                                               ,Status
+                                               ,CreateTime
+                                               ,CreateUser
+                                               ,UpdateTime
+                                               ,UpdateUser)
+                                         VALUES
+                                               ('{0}'
+                                               ,'{1}'
+                                               ,'{2}'
+                                               ,'{3}'
+                                               ,'{4}'
+                                               ,getdate()
+                                               ,'{5}'
+                                               ,getdate()
+                                               ,'{6}')",
+                    Guid.NewGuid().ToString(), help.ClassId, help.OpenId, 1, 1, loginName, loginName);
+                return conn.Execute(query);
+            }
+        }
+
+        public int UpdateHelpNowCount(string HelpInfoId, int NowCount)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@" UPDATE Train_HelpInfo
+                                                    SET NowCount= {0}                                                         
+                                                       ,UpdateTime = getdate()
+                                                    WHERE HelpInfoId='{1}'",
+                                          NowCount, HelpInfoId);
+                return conn.Execute(query);
+            }
+        }
+
+
+        public int AddHelpMember(HelpMemberEntity member, string loginName)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"INSERT INTO Train_HelpMember
+                                               (HelpMemberId
+                                               ,HelpInfoId
+                                               ,OpenId
+                                               ,Status
+                                               ,CreateTime
+                                               ,CreateUser
+                                               ,UpdateTime
+                                               ,UpdateUser)
+                                         VALUES
+                                               ('{0}'
+                                               ,'{1}'
+                                               ,'{2}'
+                                               ,'{3}'
+                                               ,getdate()
+                                               ,'{5}'
+                                               ,getdate()
+                                               ,'{6}')",
+                    Guid.NewGuid().ToString(), member.HelpInfoId, member.OpenId,1, loginName, loginName);
+                return conn.Execute(query);
+            }
+        }
+        #endregion
+
+        #region 积分
+
+        public PointsEntity GetPointsByOpenid(string openid)
+        {
+
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_Points
+                                            where status=1 and OpenId='{0}'", openid);
+
+                return conn.Query<PointsEntity>(query).FirstOrDefault();
+
+            }
+        }
+
+        public int AddPoint(PointsEntity entity, string loginName)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"INSERT INTO Train_Points
+                                               (PointsId
+                                               ,OpenId
+                                               ,Points
+                                               ,Status
+                                               ,CreateTime
+                                               ,CreateUser
+                                               ,UpdateTime
+                                               ,UpdateUser)
+                                         VALUES
+                                               ('{0}'
+                                               ,'{1}'
+                                               ,'{2}'
+                                               ,'{3}'
+                                               ,getdate()
+                                               ,'{4}'
+                                               ,getdate()
+                                               ,'{5}')",
+                    Guid.NewGuid().ToString(), entity.OpenId, entity.Points, 1, loginName, loginName);
+                return conn.Execute(query);
+            }
+        }
+
+        public int AddPointLog(PointsLogEntity entity, string loginName)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"INSERT INTO Train_PointsLog
+                                               (PointsLogId
+                                               ,OrderId
+                                               ,LogType
+                                               ,Points
+                                               ,Status
+                                               ,CreateTime
+                                               ,CreateUser
+                                               ,UpdateTime
+                                               ,UpdateUser
+                                               ,OpenId)
+                                         VALUES
+                                               ('{0}'
+                                               ,'{1}'
+                                               ,'{2}'
+                                               ,'{3}'
+                                               ,'{4}'
+                                               ,getdate()
+                                               ,'{5}'
+                                               ,getdate()
+                                               ,'{6}','{7}')",
+                    Guid.NewGuid().ToString(), entity.OrderId, entity.LogType, entity.Points, 1, loginName, loginName, entity.OpenId);
+                return conn.Execute(query);
+            }
+        }
+
+        public int UpdatePonits(string OpenId, decimal point)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"update Train_Points set Points=Points+{0}  where OpenId='{1}'", point, OpenId);
+                return conn.Execute(query);
+            }
+        }
+        #endregion
     }
 }

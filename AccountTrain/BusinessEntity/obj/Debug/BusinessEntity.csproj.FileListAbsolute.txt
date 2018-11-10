@@ -7,4 +7,3 @@ E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\bin\Debug\
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\bin\Debug\BusinessEntity.pdb
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\obj\Debug\BusinessEntity.dll
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\obj\Debug\BusinessEntity.pdb
-E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\obj\Debug\BusinessEntity.csprojResolveAssemblyReference.cache

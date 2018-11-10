@@ -42,7 +42,7 @@ namespace BusinessEntitys
         /// 单笔积分
         /// </summary>
         [EnitityMappingAttribute(ColumnName = "Points")]
-        public string Points { get; set; }
+        public decimal Points { get; set; }
        
 
         /// <summary>

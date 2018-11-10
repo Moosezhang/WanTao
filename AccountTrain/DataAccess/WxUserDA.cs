@@ -46,8 +46,8 @@ namespace DataAccess
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
-                string query = string.Format(@"select t.*,t1.Points from Train_WxUser t
-                                               inner join Train_Points t1 on t.Openid=t1.Openid
+                string query = string.Format(@"select t.*,isnull(t1.Points,0) as Points from Train_WxUser t
+                                               left join Train_Points t1 on t.Openid=t1.Openid
                                                where t.Openid='{0}'", Openid);
 
                 return conn.Query<VMWxUserPoints>(query).FirstOrDefault();

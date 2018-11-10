@@ -22,47 +22,48 @@
             </el-col>
             <el-col span="6">
                 <el-form-item label="课程名称">
-                    <el-input v-model="form.ClassName" style="width:180px;" clearable></el-input>
-                </el-form-item>
-            </el-col>
-            <el-col span="6">
-                <el-form-item label="课程简介">
-                    <el-input v-model="form.ClassAbstract" style="width:180px;" clearable></el-input>
-                </el-form-item>
-            </el-col>
-            <el-col span="6">
-                <el-form-item label="课程类型">
-                    <el-select v-model="form.ClassType" placeholder="请选择课程类型" style="width:180px;">
-                        <el-option v-for="item in DicData"
-                                   v-bind:key="item.ItemKey"
-                                   v-bind:label="item.ItemValue"
-                                   v-bind:value="item.ItemKey">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-            </el-col>
-            <el-col span="6">
-                <el-form-item label="课程类别">
-                    <el-cascader
-				    expand-trigger="click"
-				    :options="nodeList"
-				    v-model="selectedOptions"
-				    :show-all-levels="false">
-				  	</el-cascader>
-                </el-form-item>
-            </el-col>
-            <el-col span="6">
-                <el-form-item label="课程价格">
-                    <el-input v-model="form.ClassPrice" style="width:180px;" clearable></el-input>
-                </el-form-item>
-            </el-col>
-            <el-col span="6">
-                <el-form-item label="课程讲师">
-                    <el-input v-model="form.ClassTeacher" style="width:180px;" clearable></el-input>
+                    <el-input v-model="form.ClassName" style="width:465px;" clearable></el-input>
                 </el-form-item>
             </el-col>
             
-            <el-col span="6">
+            
+            
+        </el-row>	        
+        <el-row>
+        	<el-col span="6">
+	                <el-form-item label="课程价格">
+	                    <el-input v-model="form.ClassPrice" style="width:180px;" clearable></el-input>
+	                </el-form-item>
+	            </el-col>
+	            <el-col span="6">
+	                <el-form-item label="课程讲师">
+	                    <el-input v-model="form.ClassTeacher" style="width:180px;" clearable></el-input>
+	                </el-form-item>
+	            </el-col>
+	            <el-col span="6">
+	                <el-form-item label="课程类别">
+	                    <el-cascader
+					    expand-trigger="click"
+					    :options="nodeList"
+					    v-model="selectedOptions"
+					    :show-all-levels="false">
+					  	</el-cascader>
+	                </el-form-item>
+            	</el-col>
+	            <el-col span="6">
+	                <el-form-item label="课程类型">
+	                    <el-select v-model="form.ClassType" placeholder="请选择课程类型" style="width:210px;">
+	                        <el-option v-for="item in DicData"
+	                                   v-bind:key="item.ItemKey"
+	                                   v-bind:label="item.ItemValue"
+	                                   v-bind:value="item.ItemKey">
+	                        </el-option>
+	                    </el-select>
+	                </el-form-item>
+	            </el-col>
+        </el-row>
+        <el-row>
+        	<el-col span="6">
                 <el-form-item label="是否团购">                	
                 	<el-switch v-model="form.IsGroupBuy"
                                active-color="#13ce66"
@@ -70,7 +71,7 @@
                                active-value="1"
     						   inactive-value="0">
                     </el-switch>
-                    <!--<el-input v-model="form.IsGroupBuy" style="width:180px;" clearable></el-input>-->
+                   
                 </el-form-item>
             </el-col>
             <el-col span="6">
@@ -81,7 +82,7 @@
                                active-value="1"
     						   inactive-value="0">
                     </el-switch>
-                    <!--<el-input v-model="form.IsBargain" style="width:180px;" clearable></el-input>-->
+                   
                 </el-form-item>
             </el-col>
             
@@ -93,30 +94,42 @@
                                active-value="1"
     						   inactive-value="0">
                     </el-switch>
-                    <!--<el-input v-model="form.IsHelp" style="width:180px;" clearable></el-input>-->
-                </el-form-item>
-            </el-col>                
-            <el-col span="12">
-                <el-form-item label="备  注">
-                    <el-input v-model="form.Remark" style="width: 750px;" clearable></el-input>
+                    
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row>
-        	<el-col >
+        	<el-col>
+                <el-form-item label="课程简介">
+                    <el-input v-model="form.ClassAbstract" style="width:750px;" clearable></el-input>
+                </el-form-item>
+            </el-col>
+        </el-row>     
+        <el-row>
+        	<el-col span="12">
+                <el-form-item label="备  注">
+                    <el-input v-model="form.Remark" style="width: 750px;" clearable></el-input>
+                </el-form-item>
+            </el-col>
+        </el-row>   
+        <el-row>
+             <el-col >
+                <el-form-item label="图片地址">
+                    <el-input v-model="form.ClassImages" style="width:750px;" clearable></el-input>
+                </el-form-item>
+            </el-col>
+        </el-row>
+        
+        
+        <el-row>
+        	<el-col>
         		 <el-form-item label="课程详情">
 	                <div id="editor" type="text/plain" style="height:200px; width:99%; padding-top:40px">
 	                </div>
 	            </el-form-item>
         	</el-col>
         </el-row>       
-        <el-row>
-             <el-col >
-                <el-form-item label="课程图片">
-                    <el-input v-model="form.ClassImages" style="width:180px;" clearable></el-input>
-                </el-form-item>
-            </el-col>
-        </el-row>
+        
     </el-form>
     <div slot="footer" class="dialog-footer" style="margin-top:-30px;margin-left:500px;">
         <el-button size="small" v-on:click="dialogClassFormVisible = false">取 消</el-button>
@@ -156,15 +169,17 @@
         },
         created: function () {
         	var _self = this;
-            if(ClassId!=null)
-            {
-            	_self.LoadData();
-            	_self.GetNodes();	
-            }
-            else
-            {
-            	_self.form= {};
-            }
+//          if(ClassId!="null")
+//          {
+//          	_self.LoadData();
+//          	
+//          }
+//          else
+//          {
+//          	_self.form= {};
+//          }
+			_self.LoadData();
+            _self.GetNodes();	
         },
         methods: {
         	LoadData:function(){
@@ -183,26 +198,16 @@
 	                    	 _self.selectedOptions=result.ClassGroup.split('-'); 
 	                    }
 	                   
-	                    _self.editor = UE.getEditor('editor');
-	                    _self.editor.addListener("ready", function () {
-	                    _self.editor.setContent(_self.form.ClassContent); // 确保UE加载完成后，放入内容。
-	                    });
-	                    
+
+						_self.editor = UE.getEditor('editor');
+						_self.editor.setContent(_self.form.ClassContent);
+//			            _self.editor.addListener("ready", function () {
+//			            	_self.editor.setContent(_self.form.ClassContent); // 确保UE加载完成后，放入内容。
+//			            });
 	                }
 	            });
 	            
         	},
-//      	handleRemove:function(file, fileList){
-//              $.ajax({
-//                      type: "get",
-//                      dataType: "json",
-//                      contentType: "application/json",
-//                      url: "/Class/ClassRemove",
-//                      success: function (result) {
-//                          //self.fileList2 = result;
-//                      }
-//                  });
-//         },
            SaveClass: function (classInfo) {
                 var _self = this;
                 var content = this.editor.getContent();
@@ -264,5 +269,11 @@
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+	
+	
+$(document).ready(function(){
+			detailVue.editor = new UE.ui.Editor(5);  
+			detailVue.editor.render("editor");            
+})
 
 </script>

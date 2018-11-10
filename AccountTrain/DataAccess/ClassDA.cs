@@ -55,7 +55,7 @@ namespace DataAccess
                                 where 1=1");
                 if (!string.IsNullOrEmpty(name))
                 {
-                    string sql = string.Format(" and ClassName='{0}'", name);
+                    string sql = string.Format(" and ClassName like '%{0}%'", name);
                     query = query + sql;
                 }
                 if (!string.IsNullOrEmpty(classType))
@@ -228,13 +228,13 @@ namespace DataAccess
                                                where t1.status=1 and t.status=1");
                 if (!string.IsNullOrEmpty(className))
                 {
-                    string sql = string.Format(" and t1.ClassName='{0}'", className);
+                    string sql = string.Format(" and t1.ClassName like '%{0}%'", className);
                     query = query + sql;
                 }
 
                 if (!string.IsNullOrEmpty(chapterTitle))
                 {
-                    string sql = string.Format(" and t.ChapterTitle='{0}'", chapterTitle);
+                    string sql = string.Format(" and t.ChapterTitle like '%{0}%'", chapterTitle);
                     query = query + sql;
                 }
 
