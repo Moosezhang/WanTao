@@ -186,7 +186,7 @@ namespace DataAccess
 
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
-                string query = string.Format(@" select t2.*,t.status as OrderStatus,t.OrderNo
+                string query = string.Format(@" select t2.*,t.status as OrderStatus,t.OrderNo,t1.Price as RealPrice
                                                 from Train_Order t
                                                 inner join Train_OrderGoods t1 on t.OrderId=t1.OrderId
                                                 inner join Train_Class t2 on t1.ClassId=t2.ClassId

@@ -65,7 +65,7 @@ ul,li{ list-style:none}
                		<h4 v-if="isOwner" style="text-indent:65px;color: red;">邀请你的好友帮忙砍一刀</h4>
                		<h4 v-if="!isOwner" style="text-indent:65px;color: red;">您的好友邀请你帮他砍一刀</h4>
                		<h5 style="text-indent:20px;">我在万韬财税发现一个课程,帮我砍到最低价吧</h5>
-               		<div style="height: 55%;background-color: white;border-radius: 10px;position: relative;margin: 20px;">
+               		<div v-on:click="GoClassDetail(data)" style="height: 55%;background-color: white;border-radius: 10px;position: relative;margin: 20px;">
                			<div class="am-u-sm-4 am-list-thumb" style="height: 100%;width: 20%;padding-right: 0px;">
 				        	<img style="height: 100%;width: 170%;" :src="data.ClassImages"/>
 				        </div>
@@ -147,19 +147,33 @@ ul,li{ list-style:none}
                     	bargainId:bargainid
                     },
                     success: function (result) {
-                        _self.data = result;
-                        _self.ownerOpenid=result.ownerOpenid;
-                        _self.endTime=_self.ChangeDateFormat(result.EndTime);
-                        _self.classId=result.ClassId;
-                        _self.classPrice=result.ClassPrice;
-                        if(result.ownerOpenid==openid)
-                        {
-                        	_self.isOwner=true;
-                        }
-                        countTime();
+//                  	if(result.ClassId==null)
+//                  	{
+//                  		_self.$message.error('砍价已结束');
+//                  		window.location.href = "../WxHome/Index?openid=" + openid+"&&code=null&&state=null";
+//                  	}
+//                  	else
+//                  	{
+                    		_self.data = result;
+	                        _self.ownerOpenid=result.ownerOpenid;
+	                        _self.endTime=_self.ChangeDateFormat(result.EndTime);
+	                        _self.classId=result.ClassId;
+	                        _self.classPrice=result.ClassPrice;
+	                        if(result.ownerOpenid==openid)
+	                        {
+	                        	_self.isOwner=true;
+	                        }
+	                        countTime();
+	                        _self.GetLog();
+//                  	}
+                        
                     }
                 });
-                $.ajax({
+                
+         	},
+         	GetLog:function()
+         	{
+         		$.ajax({
                     type: "get",
                     dataType: "json",
                     contentType: "application/json",
@@ -200,6 +214,7 @@ ul,li{ list-style:none}
                     },
                     success: function (result) {
                     	_self.Query();
+                    	//微信分享接口
                     }
                 });
 			},
@@ -226,7 +241,27 @@ ul,li{ list-style:none}
 			},
 			Share:function(){
 				
-			}
+			},
+			GoClassDetail:function(item){
+				var type="1";
+				var id=item.ClassId;
+				$.ajax({
+                    type: "post",
+                    dataType: "json",
+                    url: "/WxBase/ClickLog?pGuid=" + guid(),
+                    data: {
+                    	obType:type,
+						id:id,
+						openid:openid
+                    },
+                    success: function (result) {
+                    },
+                    error: function (json) {
+                        
+                    }
+                });
+				window.location.href = "/WxClass/ClassDetail?openid=" + openid+"&&classId="+id;
+			},
          }
 	});
 	

@@ -449,7 +449,7 @@ namespace DataAccess
                                                 from Train_Class t
                                                 inner join Train_BargainConfig t1 on t.ClassId=t1.ClassId
                                                 inner join Train_Bargain t2 on t.ClassId=t2.ClassId
-                                                where t2.BargainId='{0}'", BargainId);
+                                                where t2.BargainId='{0}' and t2.status=1", BargainId);
 
                 return conn.Query<VMBargainClass>(query).FirstOrDefault();
 

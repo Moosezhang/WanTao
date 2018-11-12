@@ -57,7 +57,10 @@ namespace DataAccess
 
         public int SaveWxUser(WxUserEntity wxUser, string loginName)
         {
-            if (string.IsNullOrEmpty(wxUser.WxUserId))
+
+            var hasInfo = GetWxUserByOpenid(wxUser.Openid);
+
+            if (hasInfo==null)
             {
                 using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
                 {

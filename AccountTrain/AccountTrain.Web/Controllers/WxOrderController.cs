@@ -387,7 +387,22 @@ namespace AccountTrain.Web.Controllers
             }
         }
 
-
+        public ActionResult GetGroupBuyConfigByClassId(string classid)
+        {
+            try
+            {
+                var result = new OrderBC().GetGroupBuyConfigByClassId(classid);
+                if (result == null)
+                {
+                    result = new GroupBuyConfigEntity();
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new GroupBuyConfigEntity(), JsonRequestBehavior.AllowGet);
+            }
+        }
         #endregion
 
         #region 砍价
@@ -476,7 +491,12 @@ namespace AccountTrain.Web.Controllers
         {
             try
             {
-                return Json(new OrderBC().GetBargainClass(bargainId), JsonRequestBehavior.AllowGet);
+                var result = new OrderBC().GetBargainClass(bargainId);
+                if (result == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxHome%2fIndex"));
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -542,6 +562,40 @@ namespace AccountTrain.Web.Controllers
             catch (Exception ex)
             {
                 return Json("false", JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetBargainConfigByClassId(string classid)
+        {
+            try
+            {
+                var result = new OrderBC().GetBargainConfigByClassId(classid);
+                if (result == null)
+                {
+                    result = new BargainConfigEntity();
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new BargainConfigEntity(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetBargainByOpenIdAndClassId(string ClassId,string openId)
+        {
+            try
+            {
+                var result = new OrderBC().GetBargainByOpenIdAndClassId(ClassId, openId);
+                if (result == null)
+                {
+                    result = new BargainEntity();
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new BargainEntity(), JsonRequestBehavior.AllowGet);
             }
         }
         #endregion
@@ -714,6 +768,23 @@ namespace AccountTrain.Web.Controllers
 
         }
 
+
+        public ActionResult GetHelpConfigByClassId(string classid)
+        {
+            try
+            {
+                var result = new OrderBC().GetHelpConfigByClassId(classid);
+                if (result == null)
+                {
+                    result = new HelpConfigEntity();
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new HelpConfigEntity(), JsonRequestBehavior.AllowGet);
+            }
+        }
         #endregion
     }
 

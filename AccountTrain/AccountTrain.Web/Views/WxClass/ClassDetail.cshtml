@@ -87,12 +87,15 @@ list-style-type:none;
 						  </div>
 					</div>
 					<header class="am-topbar  am-topbar-fixed-bottom" style="height: 40px;">
-						<div class="div-inline" v-if="form.IsGroupBuy=='1' && status!=2" v-on:click="GoGroupBuy()" style="margin-left: 10px;margin-top: 7px;width: 19%;border-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #ff8a00;"  >
+						<div class="div-inline" v-if="form.IsGroupBuy=='1' && status!=2" v-on:click="GoGroupBuy()" style="margin-left: 10px;margin-top: 7px;width: 20%;border-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #ff8a00;"  >
 							我要团购
 						</div>	
-						<div class="div-inline" v-if="form.IsBargain=='1' && status!=2" v-on:click="GoBargain(form.ClassPrice)" style="margin-left: 10px;margin-top: 7px;width: 19%;border-radius:55px;color: #332c25;font-size: 15px;height: 35px;background-color: #f9d001;"  >
+						<div class="div-inline" v-if="form.IsBargain=='1' && status!=2 && bargainId==''" v-on:click="GoBargain(form.ClassPrice)" style="margin-left: 10px;margin-top: 7px;width: 20%;border-radius:55px;color: #332c25;font-size: 15px;height: 35px;background-color: #f9d001;"  >
 							我要砍价
 						</div>	
+						<div class="div-inline" v-if="form.IsBargain=='1' && status!=2 && bargainId!=''"  style="margin-left: 10px;margin-top: 7px;width: 20%;border-radius:55px;color: #332c25;font-size: 15px;height: 35px;background-color: #f9d001;"  >
+							现价:¥ {{nowPrice}}
+						</div>
 						<div class="div-inline" v-if="status!=2" v-on:click="GoBuy(form.ClassPrice)" style="float:right;margin-top: 7px;width: 25%;border-top-right-radius:55px;border-bottom-right-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #4395ff;"  >
 							立即购买
 						</div>
@@ -138,6 +141,7 @@ list-style-type:none;
 			form:{},
 			bargainId:"",
 			orderNo:"",
+			nowPrice:"",
 		},
 		created: function () {
                 this.Query();
@@ -184,6 +188,98 @@ list-style-type:none;
                         _self.$message.error('查询失败');
                     }
                 });  
+                _self.GetGroupBuyConfig();
+                _self.GetBargainConfig();
+                _self.GetHelpConfig();
+                _self.GetBargain();
+                
+			},
+			ChangeDateFormat:function(timeSpan) {
+				    var timeSpan = timeSpan.replace('Date','').replace('(','').replace(')','').replace(/\//g,'');
+				    var d = new Date(parseInt(timeSpan));
+				    return d;
+			},
+			GetGroupBuyConfig:function(){
+				var _self = this;
+				//获取团购时间，并判断是否在时间内
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/WxOrder/GetGroupBuyConfigByClassId?pGuid=" + guid(),
+                    data: {
+                        classid:classid
+                    },
+                    success: function (result) { 
+                    	var nowDate = new Date(); 
+                    	if(result.StartTime!=undefined && result.EndTime!=undefined)
+                    	{
+                    		if(nowDate>_self.ChangeDateFormat(result.StartTime) && nowDate<_self.ChangeDateFormat(result.EndTime))
+	                    	{
+	                    		detailVue.form.IsGroupBuy="1";
+	                    	}
+	                    	else
+	                    	{
+	                    		detailVue.form.IsGroupBuy="0";
+	                    	}    
+                    	}
+                    	
+                    }
+                }); 
+			},
+			GetBargainConfig:function(){
+				var _self = this;
+				//获取砍价时间，并判断是否在时间内
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/WxOrder/GetBargainConfigByClassId?pGuid=" + guid(),
+                    data: {
+                        classid:classid
+                    },
+                    success: function (result) { 
+                    	var nowDate = new Date();
+                    	if(result.StartTime!=undefined && result.EndTime!=undefined)
+                    	{
+                    		if(nowDate>_self.ChangeDateFormat(result.StartTime) && nowDate<_self.ChangeDateFormat(result.EndTime))
+	                    	{
+	                    		detailVue.form.IsBargain="1";
+	                    	}
+	                    	else
+	                    	{
+	                    		detailVue.form.IsBargain="0";
+	                    	}    
+                    	}
+                    }
+                }); 
+			},
+			GetHelpConfig:function(){
+				var _self = this;
+				//获取助力时间，并判断是否在时间内
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/WxOrder/GetHelpConfigByClassId?pGuid=" + guid(),
+                    data: {
+                        classid:classid
+                    },
+                    success: function (result) { 
+                    	var nowDate = new Date();
+                    	if(result.StartTime!=undefined && result.EndTime!=undefined)
+                    	{
+                    		if(nowDate>_self.ChangeDateFormat(result.StartTime) && nowDate<_self.ChangeDateFormat(result.EndTime))
+	                    	{
+	                    		detailVue.form.IsHelp="1";
+	                    	}
+	                    	else
+	                    	{
+	                    		detailVue.form.IsHelp="0";
+	                    	}    
+                    	}
+                    }
+                }); 
 			},
 			changeVideo:function(item){
 				if(status==2)
@@ -222,11 +318,23 @@ list-style-type:none;
 			GoBuy:function(price)
 			{
 				var _self = this;	
+				if(_self.bargainId!='')
+				{
+					var realPrice=_self.nowPrice;
+					var source="2";
+				}
+				else
+				{
+					var realPrice=price;
+					var source="1";
+				}
+				
+				
 				var param={
 					classids:"",
 					openid:openid,
-					source:"1",
-					price:price
+					source:source,
+					price:realPrice
 				}
 				
 				param.classids=classid+"|";
@@ -271,7 +379,26 @@ list-style-type:none;
 			},
 			GoHelp:function(){
 				console.log(classid)
-			}
+			},
+			GetBargain:function()
+			{
+				var _self = this;
+				//获取团购时间，并判断是否在时间内
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/WxOrder/GetBargainByOpenIdAndClassId?pGuid=" + guid(),
+                    data: {
+                        ClassId:classid,
+                        openId:openid
+                    },
+                    success: function (result) {     
+                    	_self.bargainId=result.BargainId;
+                    	_self.nowPrice=result.NowPrice;
+                    }
+                }); 
+			},
 			
          }
 	});

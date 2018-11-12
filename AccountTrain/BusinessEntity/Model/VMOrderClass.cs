@@ -47,6 +47,8 @@ namespace BusinessEntity.Model
        
         public decimal ClassPrice { get; set; }
 
+        public decimal RealPrice { get; set; }
+
         /// <summary>
         /// 课程讲师
         /// </summary>
