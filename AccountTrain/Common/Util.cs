@@ -20,7 +20,38 @@ namespace Common
         private static List<AccessTokenObject> lstAccessToken = new List<AccessTokenObject>();
         private static List<AccessTokenObject> tokenList = new List<AccessTokenObject>();
 
-     
+        public static void WriteLog(HttpServerUtility Server, string strMsg)
+        {
+            string TrunOffLog = ConfigurationManager.AppSettings["TrunOffLog"];
+            if (!string.IsNullOrWhiteSpace(TrunOffLog) && TrunOffLog.ToLower() == "true")
+                return;
+
+            string filename = Server.MapPath("~/logs/log.txt");
+            if (!Directory.Exists(Server.MapPath("~/logs")))
+                Directory.CreateDirectory(Server.MapPath("~/logs"));
+
+            StreamWriter sr = null;
+            try
+            {
+                if (!File.Exists(filename))
+                {
+                    sr = File.CreateText(filename);
+                }
+                else
+                {
+                    sr = File.AppendText(filename);
+                }
+                sr.WriteLine(string.Format("{0} - {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), strMsg));
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (sr != null)
+                    sr.Close();
+            }
+        }
 
         /// <summary>  
         /// 获取POST返回来的数据  
@@ -948,7 +979,7 @@ namespace Common
     /// <summary>
     /// 写日志(用于跟踪)
     /// </summary>
-    public static class Log
+    public  class Log
     {
         public static void WriteLog(string strMsg)
         {

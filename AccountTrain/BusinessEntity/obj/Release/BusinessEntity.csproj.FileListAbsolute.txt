@@ -1,0 +1,5 @@
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\bin\Release\BusinessEntity.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\bin\Release\BusinessEntity.pdb
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\obj\Release\BusinessEntity.csprojResolveAssemblyReference.cache
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\obj\Release\BusinessEntity.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\BusinessEntity\obj\Release\BusinessEntity.pdb

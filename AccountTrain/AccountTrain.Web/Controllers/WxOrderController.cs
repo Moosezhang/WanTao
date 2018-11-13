@@ -1,4 +1,5 @@
-﻿using BusinessComponent;
+﻿using AccountTrain.Web.Common;
+using BusinessComponent;
 using BusinessEntity.Model;
 using BusinessEntitys;
 using Common;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WxPayAPI;
+using Common;
 
 namespace AccountTrain.Web.Controllers
 {
@@ -94,16 +96,45 @@ namespace AccountTrain.Web.Controllers
         /// 确认订单页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index(string openid,string orderNo)
+        public ActionResult Index(string code,string orderNo)
         {
-            if (string.IsNullOrEmpty(openid))
-            {              
 
-                if (string.IsNullOrEmpty(openid))
-                {
-                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
-                }
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
+            {
+                openid = "123";
             }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fMyClass"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                   
+                }
+            }  
+
+           
 
             ViewBag.Openid = openid;
             ViewBag.OrderNo = orderNo;
@@ -229,7 +260,7 @@ namespace AccountTrain.Web.Controllers
             OrderBC bc = new OrderBC();
             var result = bc.GetOrderByOrderNo(orderNo);
 
-            //支付成功，1.更新订单状态；2.更新课程热度；3.增加用户积分
+            //支付成功，1.更新订单状态；2.更新课程热度；3.增加用户积分;4.删除购物车
             UpdateOrderStatus(orderNo, 2);//1
 
             var goods = bc.GetOrderGoodsListByOrderId(result.OrderId);
@@ -238,10 +269,11 @@ namespace AccountTrain.Web.Controllers
                 foreach (var item in goods)
                 {
                     new ClassBC().UpdateClassHot(item.ClassId);//2
+                    new ShopCarBC().EnableShopCar(openId,item.ClassId,2);//4
                 }
             }
 
-            var point = bc.GetPointsByOpenid(openId);
+            var point = bc.GetPointsByOpenid(openId);//3
             if (point == null)
             {
                 PointsEntity points = new PointsEntity()
@@ -273,6 +305,8 @@ namespace AccountTrain.Web.Controllers
                 };
                 bc.AddPointLog(log, openId);
             }
+
+            
 
             //根据订单来源，变更不同推广状态
             switch (result.OrderSource)
@@ -354,12 +388,43 @@ namespace AccountTrain.Web.Controllers
         }
       
         #region 团购
-        public ActionResult GroupBuy(string openid, string classId)
+        public ActionResult GroupBuy(string code,string classId)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                Response.Redirect(CommonHelper.GetRedirect("WxOrder%2fGroupBuy"));
+                openid = "123";
             }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fGroupBuy"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                   
+                }
+            }
+            
 
             //判断是否注册
             var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
@@ -414,17 +479,44 @@ namespace AccountTrain.Web.Controllers
         /// <param name="state"></param>
         /// <param name="bargainid"></param>
         /// <returns></returns>
-        public ActionResult Bargain(string openid, string code, string state,string bargainid)
+        public ActionResult Bargain(string code, string state,string bargainid)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
 
-                if (string.IsNullOrEmpty(openid))
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
                 {
                     Response.Redirect(CommonHelper.GetRedirect("WxOrder%2fBargain"));
                 }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    
+                }
             }
+
+           
 
             ViewBag.Openid = openid;
             ViewBag.Bargainid = bargainid;

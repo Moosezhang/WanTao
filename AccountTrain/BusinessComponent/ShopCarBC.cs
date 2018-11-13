@@ -29,6 +29,11 @@ namespace BusinessComponent
             return da.EnableShopCar(shopCarId, status);
         }
 
+        public int EnableShopCar(string Openid, string ClassId, int status)
+        {
+            var da = new ShopCarDA();
+            return da.EnableShopCar(Openid, ClassId, status);
+        }
 
     }
 }

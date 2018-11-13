@@ -109,6 +109,14 @@ namespace Common
             }
         }
 
+        public string IsDebug
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["IsDebug"];
+            }
+        }
+
         public string WeiXinEncodingAESKey
         {
             get

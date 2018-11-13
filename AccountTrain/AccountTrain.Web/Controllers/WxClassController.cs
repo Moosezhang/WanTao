@@ -1,4 +1,5 @@
-﻿using BusinessComponent;
+﻿using AccountTrain.Web.Common;
+using BusinessComponent;
 using BusinessEntity.Common;
 using BusinessEntity.Model;
 using BusinessEntitys;
@@ -13,14 +14,6 @@ namespace AccountTrain.Web.Controllers
 {
     public class WxClassController : WxBaseController
     {
-        /// <summary>
-        /// 精品课程和专家访谈页面
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Index()
-        {
-            return View();
-        }
 
         /// <summary>
         /// 课程列表
@@ -29,17 +22,44 @@ namespace AccountTrain.Web.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult ClassList(string openid, string code, string state)
+        public ActionResult ClassList(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
 
-                if (string.IsNullOrEmpty(openid))
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
                 {
                     Response.Redirect(CommonHelper.GetRedirect("WxClass%2fClassList"));
                 }
-            }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "ClassListError:" + ex.Message);
+                }
+            }    
+
+            
 
             ViewBag.Openid = openid;
 
@@ -53,12 +73,43 @@ namespace AccountTrain.Web.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult ClassDetail(string openid, string classId)
+        public ActionResult ClassDetail(string code,string classId)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                Response.Redirect(CommonHelper.GetRedirect("WxClass%ClassDetail"));
+                openid = "123";
             }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxClass%ClassDetail"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "ClassDetailError:" + ex.Message);
+                }
+            }  
+            
 
             var result = new OrderBC().GetOrderByOpenIdandClassId(openid, classId);
             if (result != null)
@@ -151,17 +202,45 @@ namespace AccountTrain.Web.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult ExpertViewList(string openid, string code, string state)
+        public ActionResult ExpertViewList(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
-            {
-                openid = GetOpenId(code).openid;
 
-                if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
+            {
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
                 {
                     Response.Redirect(CommonHelper.GetRedirect("WxClass%2fExpertViewList"));
                 }
-            }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "ExpertViewList Error:" + ex.Message);
+                }
+            } 
+
+           
 
             ViewBag.Openid = openid;
 
@@ -175,12 +254,42 @@ namespace AccountTrain.Web.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult ExpertViewDetail(string openid, string classId)
+        public ActionResult ExpertViewDetail(string code, string classId)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                Response.Redirect(CommonHelper.GetRedirect("WxClass%2fExpertViewDetail"));
+                openid = "123";
             }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxClass%2fExpertViewDetail"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "ExpertViewDetail Error:" + ex.Message);
+                }
+            }            
 
             var result = new OrderBC().GetOrderByOpenIdandClassId(openid, classId);
             if (result != null)

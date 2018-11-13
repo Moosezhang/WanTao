@@ -1,4 +1,5 @@
-﻿using BusinessComponent;
+﻿using AccountTrain.Web.Common;
+using BusinessComponent;
 using BusinessEntitys;
 using Common;
 using System;
@@ -15,17 +16,43 @@ namespace AccountTrain.Web.Controllers
         /// 首页页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index(string openid, string code, string state)
+        public ActionResult Index(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
-            {
-                openid = GetOpenId(code).openid;
 
-                if (string.IsNullOrEmpty(openid))
-                {                    
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
+            {
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
                     Response.Redirect(CommonHelper.GetRedirect("WxHome%2fIndex"));
                 }
-            }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "IndexError:" + ex.Message);
+                }
+            }    
 
             ViewBag.Openid = openid;
 
@@ -69,18 +96,42 @@ namespace AccountTrain.Web.Controllers
         }
 
         #region 联系我们
-        public ActionResult CompanyInfo(string openid, string code, string state)
+        public ActionResult CompanyInfo(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
-
-                if (string.IsNullOrEmpty(openid))
-                {
-                    //Response.Redirect(string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa7f322fb262e5a7b&redirect_uri=http%3a%2f%2f {0}%2fonebox%2fgoparty%2findex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", setting.AppDomainName.Replace("http://", "")));
-                    Response.Redirect(CommonHelper.GetRedirect("My%2fRegistered"));
-                }
+                openid = "123";
             }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxHome%2fCompanyInfo"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "CompanyInfoError:" + ex.Message);
+                }
+            }             
 
             ViewBag.Openid = openid;
 
@@ -101,18 +152,42 @@ namespace AccountTrain.Web.Controllers
         #endregion
 
         #region 职位自荐
-        public ActionResult JobInfo(string openid, string code, string state)
+        public ActionResult JobInfo(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
-
-                if (string.IsNullOrEmpty(openid))
-                {
-                    //Response.Redirect(string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa7f322fb262e5a7b&redirect_uri=http%3a%2f%2f {0}%2fonebox%2fgoparty%2findex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", setting.AppDomainName.Replace("http://", "")));
-                    Response.Redirect(CommonHelper.GetRedirect("My%2fRegistered"));
-                }
+                openid = "123";
             }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxHome%2fJobInfo"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "JobInfoError:" + ex.Message);
+                }
+            }              
 
             ViewBag.Openid = openid;
 

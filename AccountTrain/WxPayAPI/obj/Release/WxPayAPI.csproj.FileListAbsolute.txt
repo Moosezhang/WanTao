@@ -49,3 +49,12 @@ E:\SVN\dzt\trunk\SourceCode\JSF\WxPayAPI\bin\ThoughtWorks.QRCode.dll
 E:\SVN\dzt\trunk\SourceCode\JSF\WxPayAPI\obj\Release\WxPayAPI.csprojResolveAssemblyReference.cache
 E:\SVN\dzt\trunk\SourceCode\JSF\WxPayAPI\obj\Release\WxPayAPI.dll
 E:\SVN\dzt\trunk\SourceCode\JSF\WxPayAPI\obj\Release\WxPayAPI.pdb
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\bin\WxPayAPI.dll.config
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\bin\WxPayAPI.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\bin\WxPayAPI.pdb
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\bin\LitJson.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\bin\QuickMark.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\bin\ThoughtWorks.QRCode.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\obj\Release\WxPayAPI.csprojResolveAssemblyReference.cache
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\obj\Release\WxPayAPI.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\obj\Release\WxPayAPI.pdb

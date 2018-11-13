@@ -933,5 +933,127 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
             }
         }
         #endregion
+
+        #region 集中上传图片，音视频
+        public ActionResult UpLoadCenter()
+        {
+            return View();
+        }
+
+        public ActionResult UpLoad()
+        {
+            try
+            {
+                if (Request.Files == null || Request.Files.Count == 0)
+                {
+                    ViewBag.ErrorMessage = "Please select a file!!";
+                    return View();
+                }
+                HttpPostedFileBase file = Request.Files["file"];
+                string filePath = string.Empty;
+                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+                string url = "/Images/upload/";
+                var UserInfo = CacheManager.Instance.CurrentUser;
+                if (UserInfo == null)
+                    return Json("false");
+                string fileName = timestamp.ToString() + Path.GetFileName(file.FileName);
+                
+                filePath = Path.Combine(HttpContext.Server.MapPath(url), fileName);
+                file.SaveAs(filePath);
+                Session["UpLoadUrl"] = url + fileName;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return Json("success");
+        }
+
+
+        public ActionResult GetUpLoadCenterListByCondition(string KeyName)
+        {
+            try
+            {
+                return Json(new BaseSetBC().GetUpLoadCenterListByCondition(KeyName), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<UpLoadCenterEntity>(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        public ActionResult GetUpLoadCenterByKey(string id)
+        {
+            try
+            {
+                return Json(new BaseSetBC().GetUpLoadCenterByKey(id), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new UpLoadCenterEntity(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        public ActionResult SaveUpLoadCenter(UpLoadCenterEntity UpLoad)
+        {
+
+            try
+            {
+                if (Session["UpLoadUrl"] == null)
+                {
+                    int begin = UpLoad.UpLoadUrl.IndexOf("/Images");
+                    if (begin < 0)
+                    {
+                        UpLoad.UpLoadUrl = "";
+                    }
+                    else
+                    {
+                        UpLoad.UpLoadUrl = UpLoad.UpLoadUrl.Substring(begin);
+                    }
+
+                }
+                else
+                {
+                    UpLoad.UpLoadUrl = Session["UpLoadUrl"].ToString();
+                }
+
+                string type = System.IO.Path.GetExtension(UpLoad.UpLoadUrl);
+                UpLoad.UpLoadType = type.Split('.')[1];
+                var result = new BaseSetBC().SaveUpLoadCenter(UpLoad, CurrentUserInfo.Account);
+                if (result == 0)
+                    return Json(string.Empty);
+                return Json("保存成功");
+            }
+            catch (Exception ex)
+            {
+                return Json(string.Empty);
+            }
+        }
+
+        public ActionResult EnableUpLoadCenter(string UpLoadId, int status)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(UpLoadId))
+                    return Json(string.Empty);
+                var result = new BaseSetBC().EnableUpLoadCenter(UpLoadId, status);
+                if (result > 0)
+                {
+                    return Json("更新成功", JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(string.Empty, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
     }
 }

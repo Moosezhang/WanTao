@@ -1,4 +1,5 @@
-﻿using BusinessComponent;
+﻿using AccountTrain.Web.Common;
+using BusinessComponent;
 using BusinessEntity.Model;
 using BusinessEntitys;
 using Common;
@@ -16,18 +17,43 @@ namespace AccountTrain.Web.Controllers
         /// 个人中心页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index(string openid, string code, string state)
+        public ActionResult Index(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
 
-                if (string.IsNullOrEmpty(openid))
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
                 {
-                    //Response.Redirect(string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa7f322fb262e5a7b&redirect_uri=http%3a%2f%2f {0}%2fonebox%2fgoparty%2findex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", setting.AppDomainName.Replace("http://", "")));
                     Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
                 }
-            }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "WxMy-Index Error:" + ex.Message);
+                }
+            }  
+           
 
             //判断是否注册
             var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
@@ -60,18 +86,42 @@ namespace AccountTrain.Web.Controllers
         /// 注册页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult Registered(string openid, string code, string state)
+        public ActionResult Registered(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
 
-                if (string.IsNullOrEmpty(openid))
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
                 {
-                    //Response.Redirect(string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa7f322fb262e5a7b&redirect_uri=http%3a%2f%2f {0}%2fonebox%2fgoparty%2findex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", setting.AppDomainName.Replace("http://", "")));
                     Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
                 }
-            }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "Registered Error:" + ex.Message);
+                }
+            }             
 
             ViewBag.Openid = openid;
 
@@ -185,7 +235,7 @@ namespace AccountTrain.Web.Controllers
 
 
                                     Entry.Subscribe = userInfo.subscribe;
-                                    Entry.Openid = model.openid;
+                                    Entry.Openid = userInfo.openid;
                                     Entry.Nickname = userInfo.nickname;
                                     Entry.Sex = userInfo.sex;
                                     Entry.City = userInfo.city;
@@ -194,7 +244,7 @@ namespace AccountTrain.Web.Controllers
                                     Entry.UserLanguage = userInfo.language;
                                     Entry.Headimgurl = userInfo.headimgurl;
                                     Entry.Phone = model.phone;
-                                    int d = new WxUserBC().SaveWxUser(Entry,"system");
+                                    int d = new WxUserBC().SaveWxUser(Entry, userInfo.openid);
 
                                     if (d == 0)
                                     {
@@ -229,17 +279,43 @@ namespace AccountTrain.Web.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult MyClass(string openid, string code, string state)
+        public ActionResult MyClass(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
-
-                if (string.IsNullOrEmpty(openid))
-                {
-                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
-                }
+                openid = "123";
             }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fMyClass"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "MyClass Error:" + ex.Message);
+                }
+            }  
+          
 
             ViewBag.Openid = openid;
 
@@ -253,17 +329,42 @@ namespace AccountTrain.Web.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult MyCar(string openid, string code, string state)
+        public ActionResult MyCar(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
-
-                if (string.IsNullOrEmpty(openid))
-                {
-                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
-                }
+                openid = "123";
             }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fMyCar"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "MyCar Error:" + ex.Message);
+                }
+            }             
 
             ViewBag.Openid = openid;
 
@@ -275,7 +376,20 @@ namespace AccountTrain.Web.Controllers
         {
             try
             {
-                return Json(new ClassBC().GetMyClassByopenId(openid, title), JsonRequestBehavior.AllowGet);
+                var result=new ClassBC().GetMyClassByopenId(openid, title);
+                List<VMOrderClass> returnList = new List<VMOrderClass>();
+                returnList = result.Where(p => p.OrderStatus == 2).ToList();
+                result = result.Where(p => p.OrderStatus != 2).ToList();
+                foreach (var item in result)
+                {
+                    var hasCount=returnList.Where(p => p.ClassId == item.ClassId).ToList().Count;
+                    if (hasCount==0)
+                    {
+                        returnList.Add(item);
+                    }
+                }
+
+                return Json(returnList, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -322,7 +436,7 @@ namespace AccountTrain.Web.Controllers
 
             //判断是否注册
             var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
-            if (string.IsNullOrEmpty(userInfo.Phone))
+            if (userInfo==null ||string.IsNullOrEmpty(userInfo.Phone))
             {
                 Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
             }

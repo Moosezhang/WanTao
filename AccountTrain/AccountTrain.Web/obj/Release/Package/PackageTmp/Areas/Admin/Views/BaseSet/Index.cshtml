@@ -1,0 +1,248 @@
+﻿@{
+    ViewBag.Title = "首页管理";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+<div class="wz">
+        您当前所在的位置：首页管理
+</div>
+<div id="Image">
+    <el-row style="margin-top:10px;margin-left:10px">
+        <el-col span="24">
+            <div>
+                <el-input v-model="txtName" id="txtName" placeholder="请输入图片标题" clearable style="width:200px;"></el-input>
+                <el-button size="mini" style="margin-left:10px" type="primary"
+                           v-on:click="QueryData()">查询</el-button>
+                <el-button size="mini" type="warning"
+                           v-on:click="handleAdd()">新增</el-button>
+            </div>
+        </el-col>
+    </el-row>
+
+    <div style="margin-top:5px;margin-left:10px">
+        <template>
+            <el-table border stripe
+                      v-bind:data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                      v-bind:default-sort="{prop: 'CreateTime', order: 'descending'}"
+                      style="width: 100%">
+                <el-table-column prop="ImageTitle"
+                                 label="图片标题">
+                </el-table-column>
+
+                <el-table-column label="图片缩略图">
+                 	<template slot-scope="scope">
+			        	<img v-bind:src="scope.row.ImageUrl" width="50px" height="50px">			        	
+			      	</template>
+                </el-table-column>
+                <el-table-column fixed="right"
+                                 label="操作"
+                                 width="auto" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   v-on:click="handleEdit(scope.row.ImageId)">编辑</el-button>
+                        <el-button v-if="scope.row.Status==1" size="mini"
+                                   type="danger"
+                                   v-on:click="handleDisable(scope.row.ImageId,0)">禁用</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination 
+            				v-on:size-change="handleSizeChange"
+							v-on:current-change="handleCurrentChange"
+						    :current-page="currentPage"
+						    :page-sizes="[10, 20, 50, 100]"
+						    :page-size="pagesize"
+						    layout="total, prev, pager, next"
+						    :total="tableData.length">
+            </el-pagination>
+        </template>
+
+    </div>
+
+    <el-dialog title="图片信息" v-bind:visible.sync="dialogImageFormVisible" v-model="dialogImageFormVisible" style="height:600px;">
+        <el-form model="form" style="margin-top:-20px;height:auto" label-width="80px">
+            <el-row>
+                <el-col span="12" style="display: none;">
+                    <el-form-item label="Id">
+                        <el-input v-model="form.ImageId" style="width:220px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col span="12">
+                    <el-form-item label="图片标题">
+                        <el-input v-model="form.ImageTitle" style="width:220px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>                           
+                
+            </el-row>
+            <el-row>
+                <el-col span="12">
+                    <el-form-item label="备  注">
+                        <el-input v-model="form.Remark" style="width: 540px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col span="12">
+                    <el-form-item label="跳转地址">
+                        <el-input v-model="form.ImageLink" style="width:540px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>     
+            </el-row>
+            <el-row>
+                 <el-col span="12">
+                    <el-form-item label="图片地址">
+                        <el-input v-model="form.ImageUrl" style="width: 540px;" clearable></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer" style="margin-top:-30px;">
+            <el-button size="small" v-on:click="dialogImageFormVisible = false">取 消</el-button>
+            <el-button type="primary" size="small" v-on:click="SaveImage(form)">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+
+<script>
+    var ImageVue;
+    $(function () {
+        NProgress.done();
+        ImageVue = new Vue({
+            el: "#Image",
+            data: {
+                tableData: [],
+                txtName:"",
+                dialogImageFormVisible: false,
+                form: {},
+//              uploadActionUrl:"/BaseSet/IndexImgUpload",
+//              fileList2: [],
+                currentPage:1,
+        		pagesize:8,
+            },
+            created: function () {
+                this.QueryData();
+            },
+            methods: {
+                handleAdd: function () {
+                    var _self = this;
+                    _self.form = {};
+                    this.dialogImageFormVisible = true;
+                },
+                handleEdit: function (ImageId) {
+                    var _self = this;
+                    $.ajax({
+                        type: "get",
+                        dataType: "json",
+                        contentType: "application/json",
+                        url: "/BaseSet/GetIndexImageByKey?pGuid=" + guid(),
+                        data: {
+                            id: ImageId
+                        },
+                        success: function (result) { 
+                            _self.form = result;
+                        }
+                    });
+                    this.dialogImageFormVisible = true;
+                },
+                QueryData: function () {
+                    var _self = this;
+                    var title = this.txtName;
+                    $.ajax({
+                        type: "get",
+                        dataType: "json",
+                        contentType: "application/json",
+                        url: "/BaseSet/GetIndexImagesByCondition?pGuid=" + guid(),
+                        data: {
+                            KeyName: title
+                        },
+                        success: function (result) {
+                            ImageVue.tableData = result;
+                        },
+                        error: function (json) {
+                            _self.$message.error('加载图片信息失败');
+                        }
+                    });
+                },
+                SaveImage: function (Image) {
+                    var _self = this;
+                    $.ajax({
+                        type: "post",
+                        dataType: "json",
+                        url: "/BaseSet/SaveIndexImage",
+                        data: Image,
+                        success: function (result) {
+                            if (result) {
+                                _self.dialogImageFormVisible = false;
+                                _self.QueryData();
+                                _self.$message({
+                                    type: 'success',
+                                    message: '保存成功!'
+                                });
+                            } else {
+                                _self.$message.error('保存图片信息失败');
+                            }
+                        },
+                        error: function (json) {
+                            _self.$message.error('保存图片信息失败');
+                        }
+                    });
+                },
+                handleDisable: function (ImageId, status) {
+                    var _self = this;
+                    $.ajax({
+                        type: "get",
+                        dataType: "json",
+                        url: "/BaseSet/EnableImage",
+                        data: {
+                            ImageId: ImageId,
+                            status: status
+                        },
+                        success: function (result) {
+                            if (result) {
+                                _self.$message({
+                                    type: 'success',
+                                    message: '保存成功!'
+                                });
+                                _self.QueryData();
+                            } else {
+                                _self.$message({
+                                    type: 'info',
+                                    message: '保存失败!'
+                                });
+                            }
+                        }
+                    });
+                },
+//              handleRemove:function(file, fileList){
+//	                $.ajax({
+//	                        type: "get",
+//	                        dataType: "json",
+//	                        contentType: "application/json",
+//	                        url: "/BaseSet/IndexRemove",
+//	                        success: function (result) {
+//	                            //self.fileList2 = result;
+//	                        }
+//	                    });
+//              },
+                handleSizeChange: function (size) {
+			        this.pagesize = size;
+			    },
+			    handleCurrentChange: function(currentPage){
+			        this.currentPage = currentPage;
+			    }
+            }
+
+        });
+    })
+
+    function guid() {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    }
+
+
+</script>

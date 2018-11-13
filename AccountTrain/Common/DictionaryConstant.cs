@@ -12,5 +12,7 @@ namespace Common
         public const string ArticleKey = "6E62949A-8EC7-42C4-B691-DEEB7483514C";
         public const string ClassKey = "7C5BE2E8-2D74-4047-B6EB-CBC1F8A1D701";
         public const string OSKey = "E6954E93-1DCA-425A-84BF-73ABA42D310B";
+
+        public static string WXOpenIDCookieKey = "WechatCookie_WanTao";
     }
 }

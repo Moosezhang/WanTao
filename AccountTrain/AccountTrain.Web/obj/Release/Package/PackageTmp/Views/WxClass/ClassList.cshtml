@@ -1,0 +1,226 @@
+﻿
+@{
+     ViewBag.Title = "精品课程";
+}
+
+
+<style>
+	.zoomImage{
+    width:100%;
+    height:0;
+    padding-bottom: 75%;
+    overflow:hidden;
+    background-position: center center;
+    background-repeat: no-repeat;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    background-size:cover;
+}
+</style>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>精品课程</title>
+</head>
+<body>
+  	<header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
+	  <div class="am-header-left am-header-nav">
+		    <a href="javascript:window.history.back(); " class="">
+		  	<img class="am-header-icon-custom"  src="~/Images/icon/返回.png" alt=""/>
+		  </a>
+	  </div>
+	   <h3 class="am-header-title" 
+	   	style="width:150px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
+          精品课程
+      </h3>
+      <div class="am-input-group">	
+	      <span class="am-input-group-btn" >
+	      	<button class="am-btn" type="button" onclick="GoHome()" 
+	        	style="background-color: white;border-color:white;margin-left: 45px;">
+	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
+	        </button>
+	        
+	      </span>
+	    </div>
+	</header>
+  	<hr style="margin-top: 0px;"/>
+  	<div id="myClass">
+  		<div class="am-u-lg-6" style="float: none;padding-right: 0px;padding-left: 0px;">
+	    	<div class="am-btn-group" style="width: 100%;" >	    	  
+			  <div class="am-dropdown" style="width: 28%;" data-am-dropdown >
+			  	<el-cascader
+				    expand-trigger="hover"
+				    :options="nodeList"
+				    v-model="selectedOptions"
+				    :show-all-levels="false"
+				    clearable>
+				  </el-cascader>			    
+			  </div>
+			  
+			  <div class="am-dropdown" style="width: 28%;" data-am-dropdown>
+			  	<el-cascader
+				    expand-trigger="hover"
+				    :options="orderList"
+				    v-model="selectedOptions1"
+				    :show-all-levels="false"
+				    clearable>
+				  </el-cascader>			    
+			  </div>
+			  
+			  <div class="am-dropdown" style="width: 44%;" data-am-dropdown>
+			  	<input type="text" v-model="txtTitle" autocomplete="off" placeholder="搜索" class="el-input__inner" 
+			  		style="float:left;width: 117px;">			  	
+			  	<span class="am-input-group-btn" >
+			        <button class="am-btn am-btn-default" type="button" v-on:click="Query()" style="border-top-right-radius:5px;border-bottom-right-radius:5px;"><span class="am-icon-search"></span> </button>
+			     </span>	  	
+			  	
+			  </div>	 
+				    	
+		    </div>
+	  	</div>  	
+        <div data-am-widget="list_news" class="am-list-news am-list-news-default" style="margin-left:0px;margin-right:0px;">		
+			  <div class="am-list-news-bd">
+				  <ul class="am-list" v-for="item in myClassList">
+				     <!--缩略图在标题左边-->
+				      <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" 
+				      	style="padding-top: 5px;padding-bottom: 5px;height: 110px;">
+				        <div class="am-u-sm-4 am-list-thumb" style="width: 49%;height: 100%;padding-right: 0px;max-height: 100px;">
+				        	<div class="zoomImage" style="height: 100px;" v-bind:style="{backgroundImage:'url(' + item.ClassImages + ')'}"></div>
+				        </div>
+						<table class=" am-u-sm-8 am-list-main" style="width: 49%;height: 100%;position:relative;" v-on:click="GoDetail(item.ClassId)">
+							<tr>
+								<td colspan="2">
+									<div style="color: #444444;overflow: hidden;height: 40px;"><b>{{item.ClassName}}</b></div>									
+								</td>
+								
+							</tr>
+							<tr>
+								<td colspan="2">
+									<div style="color: #999999;font-size: 10px;overflow: hidden;height: 35px;">{{item.ClassAbstract}}</div>									
+								</td>
+								
+							</tr>
+							<tr>
+								<td style="width: 50%;">
+									<div style="color: red;padding-top: 10px;">¥{{item.ClassPrice}}</div>
+								</td>
+								<td>
+									<div style="font-size: 5px;color:#0084C7;padding-top: 10px;">{{item.ClassTeacher}}</div>
+								</td>
+								
+							</tr>
+						</table>				        
+				      </li>  
+				    </ul>
+			  </div>
+		</div>
+  	</div>
+  	
+</body>
+
+
+<script>
+	var openid = '@ViewBag.Openid';
+	var myClassVue=new Vue({
+		el:"#myClass",
+		data:{
+			myClassList:[],
+			txtTitle:"",
+			nodeList:[],
+			selectedOptions: [],
+			orderList:[				
+				{
+	              value: 'CreateTime',
+	              label: '上架时间'
+	            },
+	            {
+	              value: 'ClassPrice',
+	              label: '价格'
+	            }
+			],
+			selectedOptions1: [],
+		},
+		created: function () {
+                this.Query();
+                this.GetNodes();
+         },
+         methods:{
+         	Query:function () {  
+			    var _self = this;
+                var title = this.txtTitle;
+                var classGroup=_self.selectedOptions.join('-');
+                var order=_self.selectedOptions1.join('');
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/WxClass/GetClassByCondition?pGuid=" + guid(),
+                    data:{
+                    	name:title,
+                    	classType:"2",
+                    	startDate:null,
+                    	endDate:null,
+                    	classGroup:classGroup,
+                    	order:order
+                    },
+                    success: function (result) {                       
+                        _self.myClassList = result;
+                    },
+                    error: function (json) {
+                        _self.$message.error('查询失败');
+                    }
+                });
+			},
+			GoDetail:function(classId){	
+				var type="1";
+				var id=classId;
+				$.ajax({
+                    type: "post",
+                    dataType: "json",
+                    url: "/WxBase/ClickLog?pGuid=" + guid(),
+                    data: {
+                    	obType:type,
+						id:id,
+						openid:openid
+                    },
+                    success: function (result) {
+                    },
+                    error: function (json) {
+                        
+                    }
+                });
+				window.location.href = "ClassDetail?openid=" + openid+"&&classId="+id;
+			},
+			GetNodes:function(){
+				var _self=this;
+				$.ajax({
+                    type: "post",
+                    dataType: "json",
+                    url: "/WxClass/GetDicInfoList?pGuid=" + guid(),
+                    data:{
+                    	key:"33e9c5ee-3358-4ff8-86cc-6807b98273ce"
+                    },
+                    success: function (result) {
+                    	_self.nodeList=result
+                    },
+                    error: function (json) {
+                        
+                    }
+                });
+			},
+         }
+	});
+	
+	 function guid() {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    }
+	
+	 
+	 function GoHome()
+	 {
+	 	window.location.href = "/WxHome/Index?openid="+openid+"&&code=null&&state=null";
+	 }
+</script>

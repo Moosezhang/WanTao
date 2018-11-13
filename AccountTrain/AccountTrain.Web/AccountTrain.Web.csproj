@@ -183,6 +183,7 @@
     <Compile Include="Common\Menus\SystemMenuHelper.cs" />
     <Compile Include="Common\MyAuthorizeAttribute.cs" />
     <Compile Include="Common\PassportLoginRequest.cs" />
+    <Compile Include="Common\SystemConfig.cs" />
     <Compile Include="Controllers\WxArticleController.cs" />
     <Compile Include="Controllers\WxBaseController.cs" />
     <Compile Include="Controllers\WxClassController.cs" />
@@ -212,7 +213,27 @@
     <Content Include="Images\icon\add\ic_changepw.png" />
     <Content Include="Images\icon\add\ic_logout.png" />
     <Content Include="Images\icon\add\ic_message.png" />
+    <Content Include="Images\icon\b.png" />
+    <Content Include="Images\icon\bargainImage.jpg" />
+    <Content Include="Images\icon\home_class.png" />
+    <Content Include="Images\icon\home_gif.png" />
+    <Content Include="Images\icon\home_my.png" />
+    <Content Include="Images\icon\home_traffic.png" />
+    <Content Include="Images\icon\line_b.png" />
+    <Content Include="Images\icon\logo.png" />
+    <Content Include="Images\icon\myBack.png" />
+    <Content Include="Images\icon\myClass.png" />
+    <Content Include="Images\icon\myPoint.png" />
+    <Content Include="Images\icon\myShop.png" />
+    <Content Include="Images\icon\my_delete.png" />
+    <Content Include="Images\icon\主页.png" />
+    <Content Include="Images\icon\前往.png" />
+    <Content Include="Images\icon\喇叭.png" />
+    <Content Include="Images\icon\日历.png" />
+    <Content Include="Images\icon\眼睛.png" />
+    <Content Include="Images\icon\购物车.png" />
     <Content Include="Images\icon\返回.png" />
+    <Content Include="Images\icon\默认头像.png" />
     <Content Include="Scripts\amazeui.js" />
     <Content Include="Scripts\amazeui.min.js" />
     <Content Include="Scripts\amazeui.widgets.helper.min.js" />
@@ -223,6 +244,21 @@
     <Content Include="Scripts\echarts-3.8.4\echarts-3.8.4.min.js" />
     <Content Include="Scripts\echarts-3.8.4\theme\shine.js" />
     <Content Include="Scripts\element-ui.min.js" />
+    <Content Include="Scripts\fileupload\app.js" />
+    <Content Include="Scripts\fileupload\jquery.fileupload-angular.js" />
+    <Content Include="Scripts\fileupload\jquery.fileupload-audio.js" />
+    <Content Include="Scripts\fileupload\jquery.fileupload-image.js" />
+    <Content Include="Scripts\fileupload\jquery.fileupload-jquery-ui.js" />
+    <Content Include="Scripts\fileupload\jquery.fileupload-process.js" />
+    <Content Include="Scripts\fileupload\jquery.fileupload-ui.js" />
+    <Content Include="Scripts\fileupload\jquery.fileupload-validate.js" />
+    <Content Include="Scripts\fileupload\jquery.fileupload-video.js" />
+    <Content Include="Scripts\fileupload\jquery.fileupload.js" />
+    <Content Include="Scripts\fileupload\jquery.iframe-transport.js" />
+    <Content Include="Scripts\fileupload\jquery.postmessage-transport.js" />
+    <Content Include="Scripts\fileupload\jquery.ui.widget.js" />
+    <Content Include="Scripts\fileupload\jquery.xdr-transport.js" />
+    <Content Include="Scripts\fileupload\main.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\layer\layer.js" />
@@ -640,12 +676,6 @@
     <Content Include="fonts\FontAwesome.otf" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\WxArticle\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\WxClass\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\WxHome\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -713,6 +743,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\WxOrder\rechargesucc.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\BaseSet\UpLoadCenter.cshtml" />
+    <None Include="Properties\PublishProfiles\123.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,4 +1,5 @@
-﻿using BusinessComponent;
+﻿using AccountTrain.Web.Common;
+using BusinessComponent;
 using BusinessEntity.Model;
 using BusinessEntitys;
 using Common;
@@ -12,15 +13,6 @@ namespace AccountTrain.Web.Controllers
 {
     public class WxArticleController : WxBaseController
     {
-        /// <summary>
-        /// 线下活动和法规快递页面
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         #region 线下活动
         /// <summary>
         /// 线下活动页面
@@ -29,17 +21,42 @@ namespace AccountTrain.Web.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult Activists(string openid, string code, string state)
+        public ActionResult Activists(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
 
-                if (string.IsNullOrEmpty(openid))
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
                 {
                     Response.Redirect(CommonHelper.GetRedirect("WxArticle%2fActivists"));
                 }
-            }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+                        
+                        openid = GetOpenId(code).openid;
+                       
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "ActivistsError:" + ex.Message);
+                }
+            }            
 
             ViewBag.Openid = openid;
 
@@ -53,17 +70,44 @@ namespace AccountTrain.Web.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult Laws(string openid, string code, string state)
+        public ActionResult Laws(string code, string state)
         {
-            if (string.IsNullOrEmpty(openid))
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
             {
-                openid = GetOpenId(code).openid;
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
 
-                if (string.IsNullOrEmpty(openid))
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
                 {
                     Response.Redirect(CommonHelper.GetRedirect("WxArticle%2fLaws"));
                 }
-            }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "LawsError:" + ex.Message);
+                }
+            }    
+
+
 
             ViewBag.Openid = openid;
 

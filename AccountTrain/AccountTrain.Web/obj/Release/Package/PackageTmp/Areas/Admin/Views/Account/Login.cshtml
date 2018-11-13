@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "后台管理系统";
+}
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台登录管理</title>
+    <link href="~/Content/login.css" rel="stylesheet" />
+    @Styles.Render("~/Content/nprogress")
+    @Scripts.Render("~/bundles/nprogress")
+    @Scripts.Render("~/bundles/jquery")
+    <script>
+        $(function () {
+            NProgress.configure({ ease: 'ease', speed: 500, showSpinner: false, });
+            NProgress.start();
+        });
+    </script>
+    <style>
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="login_block">
+        <div class="login">
+            <div class="message">后台管理系统</div>
+            <div id="darkbannerwrap"></div>
+            @using (Html.BeginForm("LoginAccess", "Account"))
+            {
+                @Html.AntiForgeryToken()
+                <i class="fa fa-user fa-lg id_ico"></i>
+                <input type = "text" id = "username" name = "username"  placeholder = "用户名" />
+                <hr class="hr15">
+                <i class="fa fa-keyboard-o fa-lg pw_ico"></i>
+                <input type="password" id="password" name="password" placeholder="密码"/>
+                <hr class="hr15">
+                <input type="submit" id="Btn_Login" class="button_login" name="Btn_Login" value="登 录" />
+                <div class="topic">
+                    <div id="err_msg_panel">
+                        @ViewBag.ValidateInfo
+                    </div>
+                </div>
+                <hr class="hr20">
+            }
+        </div>      
+    </div>
+    <script>$(function () { NProgress.done(); })</script>
+</body>
+
+</html>

@@ -66,6 +66,15 @@ namespace DataAccess
             }
         }
 
+        public int EnableShopCar(string Openid, string ClassId, int status)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"update Train_ShopCar set status={0}  where Openid='{1}' and ClassId='{2}'", status, Openid, ClassId);
+                return conn.Execute(query);
+            }
+        }
+
        
     }
 }

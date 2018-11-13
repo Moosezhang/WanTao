@@ -455,5 +455,43 @@ namespace BusinessComponent
         }
         #endregion
 
+
+        #region 上传中心
+        public List<VMUpLoad> GetUpLoadCenterListByCondition(string title)
+        {
+            BaseSetDA da = new BaseSetDA();
+
+
+            var result =da.GetUpLoadCenterListByCondition(title);
+            if (result != null && result.Count > 0)
+            {
+                foreach (var item in result)
+                {
+                    item.ShowUrl = CommonHelper.LinkImageUrl(item.UpLoadUrl);
+                    
+                }
+            }
+            return result;
+        }
+
+        public UpLoadCenterEntity GetUpLoadCenterByKey(string id)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.GetUpLoadCenterByKey(id);
+        }
+
+
+        public int SaveUpLoadCenter(UpLoadCenterEntity entity, string loginName)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.SaveUpLoadCenter(entity, loginName);
+        }
+
+        public int EnableUpLoadCenter(string id, int status)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.EnableUpLoadCenter(id, status);
+        }
+        #endregion
     }
 }

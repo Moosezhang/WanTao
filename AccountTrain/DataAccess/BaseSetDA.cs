@@ -978,5 +978,90 @@ namespace DataAccess
             }
         }
         #endregion
+
+        #region 上传中心
+        public List<VMUpLoad> GetUpLoadCenterListByCondition(string title)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select t.*,t.UpLoadUrl as ShowUrl from Train_UpLoadCenter t
+                                            where t.status=1");
+                if (!string.IsNullOrEmpty(title))
+                {
+                    string sql = string.Format(" and t.UpLoadTitle='{0}'", title);
+                    query = query + sql;
+                }
+
+                return conn.Query<VMUpLoad>(query).ToList();
+
+            }
+        }
+
+        public UpLoadCenterEntity GetUpLoadCenterByKey(string id)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_UpLoadCenter
+                                            where UpLoadId='{0}'", id);
+                return conn.Query<UpLoadCenterEntity>(query).FirstOrDefault();
+            }
+        }
+
+
+        public int SaveUpLoadCenter(UpLoadCenterEntity entity, string loginName)
+        {
+            if (string.IsNullOrEmpty(entity.UpLoadId))
+            {
+                using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+                {
+                    string query = string.Format(@"INSERT INTO Train_UpLoadCenter
+                                                   (UpLoadId
+                                                   ,UpLoadTitle
+                                                   ,UpLoadUrl
+                                                   ,UpLoadType                                                   
+                                                   ,Status
+                                                   ,CreateTime
+                                                   ,CreateUser
+                                                   ,UpdateTime
+                                                   ,UpdateUser)
+                                             VALUES
+                                                   ('{0}'
+                                                   ,'{1}'
+                                                   ,'{2}'
+                                                   ,'{3}'
+                                                   ,'{4}'
+                                                   ,getdate()
+                                                   ,'{5}'
+                                                   ,getdate()
+                                                   ,'{6}')",
+                        Guid.NewGuid().ToString(), entity.UpLoadTitle, entity.UpLoadUrl, entity.UpLoadType, 1, loginName, loginName);
+                    return conn.Execute(query);
+                }
+            }
+            else
+            {
+                using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+                {
+                    string query = string.Format(@"UPDATE Train_UpLoadCenter
+                                                   SET UpLoadTitle = '{0}'
+                                                      ,UpLoadUrl='{1}'                                                      
+                                                      ,UpdateTime = getdate()
+                                                      ,UpdateUser = '{2}'
+                                                 WHERE UpLoadId='{3}'",
+                                               entity.UpLoadTitle,entity.UpLoadUrl, loginName, entity.UpLoadId);
+                    return conn.Execute(query);
+                }
+            }
+        }
+
+        public int EnableUpLoadCenter(string id, int status)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"update Train_UpLoadCenter set status={0}  where UpLoadId='{1}'", status, id);
+                return conn.Execute(query);
+            }
+        }
+        #endregion
     }
 }

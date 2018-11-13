@@ -1,5 +1,6 @@
 ﻿
 using BusinessComponent;
+using BusinessEntitys;
 using Common;
 using Common.WeChat;
 using Newtonsoft.Json;
@@ -23,6 +24,7 @@ namespace AccountTrain.Web.Controllers
         private string WeiXinAppToken;
         private string WeiXinEncodingAESKey;
         private string WeiXinAppId;
+        private string IsDebug;
 
         public WxBaseController()
         {
@@ -55,6 +57,25 @@ namespace AccountTrain.Web.Controllers
             var response = client.Execute(request);
 
             var data = JsonConvert.DeserializeObject<OpenId>(response.Content);
+
+            if (data != null)
+            {
+                var userInfo = GetUserInfo(data.openid,data.access_token);
+                if (userInfo != null)
+                {
+                    WxUserEntity Entry = new WxUserEntity();
+                    Entry.Subscribe = userInfo.subscribe;
+                    Entry.Openid = userInfo.openid;
+                    Entry.Nickname = userInfo.nickname;
+                    Entry.Sex = userInfo.sex;
+                    Entry.City = userInfo.city;
+                    Entry.Country = userInfo.country;
+                    Entry.Province = userInfo.province;
+                    Entry.UserLanguage = userInfo.language;
+                    Entry.Headimgurl = userInfo.headimgurl;
+                    new WxUserBC().SaveWxUser(Entry, userInfo.openid);
+                }
+            }
 
             return data??new OpenId();
         }
