@@ -6,18 +6,33 @@
 
 <style>
 	.key-span {
+		float: left;
 		font-size: 17px;
 		padding-left: 20px;
 	}
 	.value-span {
-		margin-left: 185px;
+		float: right;
 		font-size: 17px;
 		color: #999;
 	}
+	
+	#main {
+		position: absolute;
+		left:50%;
+		top:50%; 
+		margin-left:-48px;
+		margin-top:-46px;
+		} 
 </style>
 
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta charset="UTF-8" />
     <title>个人中心</title>
 </head>
 <body>
@@ -32,44 +47,45 @@
       </h3>
 	</header>
     <form class="am-form">
-        <fieldset>
+        <div>
             <div id="wxUser" model="data">
                 <div class="am-input-group" style="width: 100%; height: 180px;background-image:url(/Images/icon/myBack.png);background-size: 100% 100%; ">
-                   	<div style="margin: 65px 155px;">
+                   	<!--<div style="margin: 65px 155px;">-->
+                   	<div id="main">	
                    		<img v-if="data.Headimgurl!=''" :src="data.Headimgurl" style="width: 80px;height: 80px">
                    		<img v-if="data.Headimgurl==''" src="~/Images/icon/默认头像.png" style="width: 80px;height: 80px">   
                    	</div>	
                 </div>
                 <hr style="margin-top: 0px;"/>
-                <div class="am-input-group" style="margin-bottom: 10px;">
+                <div class="am-input-group" style="margin-bottom: 10px;width: 100%;">
                     <span class="key-span">
                     	<img style="margin-right: 3px;width: 55px;" class="am-header-icon-custom" src="~/Images/icon/myPoint.png" alt=""/>
                     	我的积分
                     </span>
-                    <span class="value-span">{{data.Points}}分</span>
+                    <span class="value-span" style="margin-right: 10px;margin-top: 15px;">{{data.Points}}分</span>
                 </div>
                 <hr style="margin-top: 0px;"/>
-                <div class="am-input-group" style="margin-bottom: 10px;">
+                <div class="am-input-group" style="margin-bottom: 10px;width: 100%;">
                     <span class="key-span">
                     	<img style="margin-right: 3px;width: 55px;" class="am-header-icon-custom" src="~/Images/icon/myClass.png" alt=""/>
                     	我的课程
                     </span>
-                    <a href="/WxMy/MyClass?openid=@ViewBag.Openid&&code=null&&state=null" style="margin-left: 190px;font-size: 17px;color: #999;" >
+                    <a href="/WxMy/MyClass?openid=@ViewBag.Openid&&code=null&&state=null" style="margin-top: 15px;float:right;font-size: 17px;color: #999;" >
 				  		<img src="~/Images/icon/前往.png" alt=""/>
 				  	</a>
                 </div>
 				<hr style="margin-top: 0px;"/>
-                <div class="am-input-group" style="margin-bottom: 10px;">
+                <div class="am-input-group" style="margin-bottom: 10px;width: 100%;">
                     <span class="key-span">
                     	<img style="margin-right: 3px;width: 55px;" class="am-header-icon-custom" src="~/Images/icon/myShop.png" alt=""/>
                     	购物车
                     </span>    
-                    <a href="/WxMy/MyCar?openid=@ViewBag.Openid&&code=null&&state=null" style="margin-left: 205px;font-size: 17px;color: #999;" >
+                    <a href="/WxMy/MyCar?openid=@ViewBag.Openid&&code=null&&state=null" style="margin-top: 15px;float:right;font-size: 17px;color: #999;" >
 				  		<img  src="~/Images/icon/前往.png" alt=""/>
 				  	</a>
                 </div>             
             </div>
-        </fieldset>
+        </div>
     </form>
    
 </div>

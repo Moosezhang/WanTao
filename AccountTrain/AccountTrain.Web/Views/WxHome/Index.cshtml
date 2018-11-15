@@ -42,7 +42,13 @@
 </style>
 
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta charset="UTF-8" />
     <title>我的课程</title>
 </head>
 <body>  	
@@ -50,7 +56,7 @@
   		<div class="am-input-group" style="margin-top: 5px;">
     	  <img class="am-header-icon-custom" style="width: 85px;margin-top: 3px;margin-left: 10px;" src="~/Images/icon/logo.png" alt=""/>
 	      <input type="text" v-model="txtTitle" class="am-form-field" 
-	      	style="border-top-left-radius:5px;border-bottom-left-radius:5px;float:right;width: 65%;" placeholder="输入关键词">
+	      	style="border-top-left-radius:5px;border-bottom-left-radius:5px;float:right;width: 60%;" placeholder="输入关键词">
 		      <span class="am-input-group-btn" style="padding-right: 5px;">
 		        <button class="am-btn am-btn-default" type="button" v-on:click="QueryAll()" style="border-top-right-radius:5px;border-bottom-right-radius:5px;"><span class="am-icon-search"></span> </button>
 		      </span>
@@ -66,14 +72,14 @@
 			<div class="div-inline" v-on:click="GoClassList()"  style="float:left;width: 18%;margin-left: 10px;"  >
 				<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_class.png" alt=""/><div style="padding-top: 6px;">精品课程</div>
 			</div>	
-			<div class="div-inline" v-on:click="GoActivists()"  style="float:left;width: 18%;margin-left: 35px;"  >
+			<div class="div-inline" v-on:click="GoActivists()"  style="float:left;width: 18%;margin-left: 25px;"  >
 				<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_gif.png" alt=""/><div style="padding-top: 6px;">线下活动</div>
 			</div>	
-			<div class="div-inline" v-on:click="GoLaws()"  style="float:left;width: 18%;margin-left: 35px;"  >
+			<div class="div-inline" v-on:click="GoLaws()"  style="float:left;width: 18%;margin-left: 25px;"  >
 				<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_traffic.png" alt=""/><div style="padding-top: 6px;">法规快递</div>
 			</div>
-			<div class="div-inline" v-on:click="GoMy()"  style="float:right;width: 18%;"  >
-				<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_my.png" alt=""/><div style="padding-top: 6px;">个人中心</div> 
+			<div class="div-inline" v-on:click="GoMy()"  style="float:left;width: 18%;margin-left: 25px;"  >
+				<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_my.png" alt=""/><div style="padding-top: 6px;">专家访谈</div> 
 			</div>	
 		</div>
     	
@@ -103,14 +109,14 @@
 							</tr>
 							<tr>
 								<td colspan="2">
-									<div style="color: #999999;font-size: 10px;overflow: hidden;height: 35px;">{{item.ClassAbstract}}</div>									
+									<div style="color: #999999;font-size: 12px;overflow: hidden;height: 35px;">{{item.ClassAbstract}}</div>									
 								</td>
 								
 							</tr>
 							<tr>
 								
 								<td>
-									<div style="font-size: 5px;color:#FFD306">{{item.ClassTeacher}}</div>
+									<div style="font-size: 11px;color:#FFD306">{{item.ClassTeacher}}</div>
 								</td>
 								
 							</tr>
@@ -132,14 +138,15 @@
 				  	<ul class="am-list" v-for="item in newClassList">
 				      <li style="float: left;width: 50%;padding: 5px;" v-on:click="GoClassDetail(item)">
 				        <div style="width: 100%;height: 30%;">
-				        	<img style="height: 100px;" :src="item.ClassImages"/>
+				        	<div class="zoomImage" style="height: 100px;" v-bind:style="{backgroundImage:'url(' + item.ClassImages + ')'}"></div>
+				        	<!--<img style="height: 100px;" :src="item.ClassImages"/>-->
 				        </div>	
 				        <div style="overflow: hidden;height: 40px;">
 				        	{{item.ClassName}}
 				        </div>
 				        <div>
 				        	<div style="color: red;width: 50%;float: left;">¥{{item.ClassPrice}}</div>
-				        	<div style="font-size: 5px;color:#999999;float: right;">{{item.HotCount}} 人学习</div>
+				        	<div style="font-size: 14px;color:#999999;float: right;">{{item.HotCount}} 人学习</div>
 				        </div>
 				      </li>  
 				    </ul>
@@ -171,8 +178,8 @@
 						</tr>
 						<tr>
 							<td>
-								<div style="color: #999999;float: left;margin-left: 120px;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>
-								<div style="color: #999999;float: right;margin-right: 15px;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
+								<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
+								<div style="color: #999999;float: right;padding-top: 5px;margin-right: 10px;"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>
 							</td>
 							
 						</tr>
@@ -277,16 +284,16 @@
 				window.location.href = "/WxHome/IndexSearch?openid="+openid+"&&condition="+title;
 			},
 			GoClassList:function(){
-				window.location.href = "/WxClass/ClassList?openid="+openid+"&&code=null&&state=null";
+				window.location.href = "/WxClass/ClassList";
 			},
 			GoActivists:function(){
-				window.location.href = "/WxArticle/Activists?openid="+openid+"&&code=null&&state=null";
+				window.location.href = "/WxArticle/Activists";
 			},
 			GoLaws:function(){
-				window.location.href = "/WxArticle/Laws?openid="+openid+"&&code=null&&state=null";
+				window.location.href = "/WxArticle/Laws";
 			},
 			GoMy:function(){
-				window.location.href = "/WxMy/Index?openid="+openid+"&&code=null&&state=null";
+				window.location.href = "/WxClass/ExpertViewList";
 			},
 			GoClassDetail:function(item){
 				var type="1";

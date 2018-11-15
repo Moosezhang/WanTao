@@ -16,7 +16,7 @@
       <publishTime>10/20/2018 17:43:28</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/Login.cshtml">
-      <publishTime>10/20/2018 17:53:35</publishTime>
+      <publishTime>11/13/2018 13:34:34</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/NoPremission.cshtml">
       <publishTime>10/19/2018 16:06:56</publishTime>
@@ -57,6 +57,9 @@
     <File Include="Areas/Admin/Views/BaseSet/PublicFundsConfig.cshtml">
       <publishTime>11/05/2018 20:25:44</publishTime>
     </File>
+    <File Include="Areas/Admin/Views/BaseSet/UpLoadCenter.cshtml">
+      <publishTime>11/13/2018 14:52:00</publishTime>
+    </File>
     <File Include="Areas/Admin/Views/Class/Chapter.cshtml">
       <publishTime>11/10/2018 16:54:37</publishTime>
     </File>
@@ -85,16 +88,16 @@
       <publishTime>10/19/2018 16:06:56</publishTime>
     </File>
     <File Include="bin/AccountTrain.Web.dll">
-      <publishTime>11/12/2018 21:32:38</publishTime>
+      <publishTime>11/13/2018 15:20:24</publishTime>
     </File>
     <File Include="bin/Antlr3.Runtime.dll">
       <publishTime>10/09/2018 08:19:20</publishTime>
     </File>
     <File Include="bin/BusinessComponent.dll">
-      <publishTime>11/12/2018 21:32:36</publishTime>
+      <publishTime>11/13/2018 15:20:21</publishTime>
     </File>
     <File Include="bin/BusinessEntity.dll">
-      <publishTime>11/12/2018 13:30:31</publishTime>
+      <publishTime>11/13/2018 15:20:20</publishTime>
     </File>
     <File Include="bin/Common.dll">
       <publishTime>11/12/2018 21:32:35</publishTime>
@@ -103,7 +106,7 @@
       <publishTime>07/27/2016 10:44:30</publishTime>
     </File>
     <File Include="bin/DataAccess.dll">
-      <publishTime>11/12/2018 21:32:35</publishTime>
+      <publishTime>11/13/2018 15:20:21</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>10/09/2018 09:17:28</publishTime>
@@ -268,7 +271,7 @@
       <publishTime>10/19/2018 14:46:02</publishTime>
     </File>
     <File Include="Content/element-ui.min.css">
-      <publishTime>10/19/2018 14:59:21</publishTime>
+      <publishTime>11/13/2018 16:25:07</publishTime>
     </File>
     <File Include="Content/fonts/element-icons.ttf">
       <publishTime>10/19/2018 14:59:21</publishTime>
@@ -295,7 +298,7 @@
       <publishTime>10/29/2018 14:09:35</publishTime>
     </File>
     <File Include="Content/login.css">
-      <publishTime>11/10/2018 20:54:28</publishTime>
+      <publishTime>11/13/2018 13:31:25</publishTime>
     </File>
     <File Include="Content/Site.css">
       <publishTime>11/05/2018 20:38:29</publishTime>
@@ -443,6 +446,51 @@
     </File>
     <File Include="Scripts/element-ui.min.js">
       <publishTime>10/19/2018 14:59:58</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/app.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.fileupload-angular.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.fileupload-audio.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.fileupload-image.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.fileupload-jquery-ui.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.fileupload-process.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.fileupload-ui.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.fileupload-validate.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.fileupload-video.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.fileupload.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.iframe-transport.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.postmessage-transport.js">
+      <publishTime>11/13/2018 11:19:11</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.ui.widget.js">
+      <publishTime>11/13/2018 11:19:02</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/jquery.xdr-transport.js">
+      <publishTime>11/13/2018 11:19:11</publishTime>
+    </File>
+    <File Include="Scripts/fileupload/main.js">
+      <publishTime>11/13/2018 11:18:55</publishTime>
     </File>
     <File Include="Scripts/jquery-2.1.4.js">
       <publishTime>10/19/2018 14:59:58</publishTime>
@@ -1351,7 +1399,7 @@
       <publishTime>10/19/2018 14:59:54</publishTime>
     </File>
     <File Include="Scripts/_references.js">
-      <publishTime>10/29/2018 20:22:06</publishTime>
+      <publishTime>11/13/2018 11:19:11</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>09/07/2018 10:42:53</publishTime>
@@ -1375,16 +1423,16 @@
       <publishTime>11/10/2018 17:23:10</publishTime>
     </File>
     <File Include="Views/WxClass/ClassDetail.cshtml">
-      <publishTime>11/11/2018 16:29:07</publishTime>
+      <publishTime>11/13/2018 09:45:25</publishTime>
     </File>
     <File Include="Views/WxClass/ClassList.cshtml">
-      <publishTime>11/10/2018 17:13:05</publishTime>
+      <publishTime>11/13/2018 16:37:07</publishTime>
     </File>
     <File Include="Views/WxClass/ExpertViewDetail.cshtml">
-      <publishTime>11/11/2018 16:40:02</publishTime>
+      <publishTime>11/13/2018 09:55:29</publishTime>
     </File>
     <File Include="Views/WxClass/ExpertViewList.cshtml">
-      <publishTime>11/10/2018 17:53:32</publishTime>
+      <publishTime>11/13/2018 16:37:36</publishTime>
     </File>
     <File Include="Views/WxClass/Index.cshtml">
       <publishTime>10/29/2018 19:48:22</publishTime>
@@ -1393,7 +1441,7 @@
       <publishTime>10/31/2018 20:05:49</publishTime>
     </File>
     <File Include="Views/WxHome/Index.cshtml">
-      <publishTime>11/10/2018 21:05:53</publishTime>
+      <publishTime>11/13/2018 15:42:22</publishTime>
     </File>
     <File Include="Views/WxHome/IndexSearch.cshtml">
       <publishTime>11/07/2018 21:11:47</publishTime>
@@ -1411,7 +1459,7 @@
       <publishTime>11/12/2018 21:24:22</publishTime>
     </File>
     <File Include="Views/WxMy/MyClass.cshtml">
-      <publishTime>11/11/2018 15:33:00</publishTime>
+      <publishTime>11/13/2018 19:08:24</publishTime>
     </File>
     <File Include="Views/WxMy/Registered.cshtml">
       <publishTime>11/10/2018 15:00:50</publishTime>
@@ -1432,7 +1480,7 @@
       <publishTime>10/19/2018 14:46:00</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/12/2018 21:32:39</publishTime>
+      <publishTime>11/13/2018 15:20:25</publishTime>
     </File>
   </ItemGroup>
 </Project>

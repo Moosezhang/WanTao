@@ -42,7 +42,13 @@
 </style>
 
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta charset="UTF-8" />
     <title>我的课程</title>
 </head>
 <body>  
@@ -53,13 +59,13 @@
 		  </a>
 	  </div>
 	   <h3 class="am-header-title" 
-	   	style="width:150px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
+	   	style="width:100px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
           查询
       </h3>
       <div class="am-input-group">	
 	      <span class="am-input-group-btn" >
 	      	<button class="am-btn" type="button" onclick="GoHome()" 
-	        	style="background-color: white;border-color:white;margin-left: 45px;">
+	        	style="background-color: white;border-color:white;float: right;margin-top: 3px;">
 	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
 	        </button>
 	        
@@ -81,27 +87,27 @@
 				  <ul class="am-list" v-for="item in myClassList">
 				     <!--缩略图在标题左边-->
 				      <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" 
-				      	style="padding-top: 5px;padding-bottom: 5px;height: 90px;">
-				        <div class="am-u-sm-4 am-list-thumb" style="width: 49%;height: 100%;padding-right: 0px;">
-				        	<img style="height: 100px;" :src="item.ClassImages"/>
+				      	style="padding-top: 5px;padding-bottom: 5px;height: 110px;">
+				        <div class="am-u-sm-4 am-list-thumb" style="width: 49%;height: 100%;padding-right: 0px;max-height: 100px;">
+				        	<div class="zoomImage" style="height: 100px;" v-bind:style="{backgroundImage:'url(' + item.ClassImages + ')'}"></div>
 				        </div>
 						<table class=" am-u-sm-8 am-list-main" style="width: 49%;height: 100%;position:relative;" v-on:click="GoClassDetail(item)">
 							<tr>
 								<td colspan="2">
-									<div style="color: #444444;"><b>{{item.ClassName}}</b></div>									
+									<div style="color: #444444;overflow: hidden;height: 40px;"><b>{{item.ClassName}}</b></div>									
 								</td>
 								
 							</tr>
 							<tr>
 								<td colspan="2">
-									<div style="color: #999999;">{{item.ClassAbstract}}</div>									
+									<div style="color: #999999;font-size: 12px;overflow: hidden;height: 35px;">{{item.ClassAbstract}}</div>									
 								</td>
 								
 							</tr>
 							<tr>
 								
 								<td>
-									<div style="font-size: 5px;color:#0084C7">{{item.ClassTeacher}}</div>
+									<div style="font-size: 11px;color:#FFD306">{{item.ClassTeacher}}</div>
 								</td>
 								
 							</tr>
