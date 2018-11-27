@@ -37,13 +37,13 @@ namespace DataAccess
             }
         }
 
-        public List<ClassEntity> GetNewestClass()
+        public List<VMClassLike> GetNewestClass()
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
-                string query = string.Format(@"select top 6 * from Train_Class
+                string query = string.Format(@"select * from Train_Class
                                             where status=1 and ClassType in ('1','2')  order by createtime desc");
-                return conn.Query<ClassEntity>(query).ToList();
+                return conn.Query<VMClassLike>(query).ToList();
             }
         }
 
@@ -75,8 +75,21 @@ namespace DataAccess
                 }
                 if (!string.IsNullOrEmpty(order))
                 {
-                    string sql = string.Format(" order by {0} desc", order);
-                    query = query + sql;
+                    string sql = string.Empty;
+                    switch(order)
+                    {
+                        case "TimeDesc":
+                            sql = string.Format(" order by CreateTime desc", order);
+                            query = query + sql;
+                            break;
+                        case "TimeAsc":
+                            sql = string.Format(" order by CreateTime desc", order);
+                            query = query + sql;
+                            break;
+
+                    }
+
+                   
                 }
 
                 return conn.Query<ClassEntity>(query).ToList();
@@ -344,7 +357,24 @@ namespace DataAccess
         #endregion
 
 
-       
+        #region 我的历史
+        public List<VMWxHistory> GetHistoryData(string openid)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select tt.* from (
+                                            select t1.ArticleTitle as Name,t1.ImageUrl as images,'' as Abstract,t1.ImageLink as link,t.ObjectType,t.ObjectId,t.OpenId 
+                                            from Train_ClickCount t
+                                            inner join Train_Article t1 on t.ObjectId=t1.ArticleId
+                                            union 
+                                            select t1.ClassName as Name,t1.ClassImages as images,t1.ClassAbstract as Abstract,'' as link,t.ObjectType,t.ObjectId,t.OpenId 
+                                            from Train_ClickCount t
+                                            inner join Train_Class t1 on t.ObjectId=t1.ClassId) tt
+                                            where tt.OpenId='{0}'", openid);
+                return conn.Query<VMWxHistory>(query).ToList();
+            }
+        }
+        #endregion
 
 
     }

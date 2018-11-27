@@ -1,6 +1,6 @@
 ﻿
 @{
-     ViewBag.Title = "法规快递";
+     ViewBag.Title = "法规资讯";
 }
 
 
@@ -9,8 +9,14 @@
 </style>
 
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>法规快递</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta charset="UTF-8" />
+    <title>法规资讯</title>
 </head>
 <body>
   	<header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
@@ -21,7 +27,7 @@
 	  </div>
 	 <h3 class="am-header-title" 
 	   	style="width:150px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
-          	法规快递
+          	法规资讯
       </h3>
       <div class="am-input-group">	
 	      <span class="am-input-group-btn" >
@@ -35,37 +41,78 @@
 	</header>
   	<hr style="margin-top: 0px;"/>
   	<div id="activity">
-  		<div data-am-widget="list_news" class="am-list-news am-list-news-default" style="margin-top: -20px;">
-		  <!--列表标题-->		
-		  <div class="am-list-news-bd">
-			  <ul class="am-list" v-for="item in activityList">
-			     <!--缩略图在标题左边-->
-			      <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" style="padding-top: 5px;padding-bottom: 5px;">
-			        <div class="am-u-sm-4 am-list-thumb" style="width: 30%;height: 60px;padding-right: 0px;">
-			        	<img :src="item.ImageUrl"/>
-			        </div>
-					<table class=" am-u-sm-8 am-list-main" style="height: 70px;position:relative;" v-on:click="GoDetail(item)">
-						<tr>
-							<td style="height: 30px;">
-								<div class="am-list-item-hd" style="color: black;height:44px; overflow:hidden;">
-			            			{{item.ArticleTitle}}
-			            		</div>								
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div style="color: #999999;float: left;margin-left: 120px;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>
-								<div style="color: #999999;float: right;margin-right: 15px;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
-							</td>
-							
-						</tr>
-					</table>
-			       
-			      </li>  
-			    </ul>
-		  </div>
+  		<div data-am-widget="tabs" class="am-tabs am-tabs-d2" style="margin: 0px;">
+			  <ul class="am-tabs-nav am-cf" >
+			      <li class="am-active" ><a style=" text-decoration: none;" href="[data-tab-panel-0]">名家解读</a></li>
+			      <li ><a style=" text-decoration: none;" href="[data-tab-panel-1]">法规速递</a></li>
+			  </ul>
+			  <div class="am-tabs-bd" style="border: hidden;">
+			      <div data-tab-panel-0 class="am-tab-panel am-active" style="overflow-y: auto;">
+			        	<div data-am-widget="list_news" class="am-list-news am-list-news-default">
+						  <!--列表标题-->		
+						  <div class="am-list-news-bd">
+							  <ul class="am-list" v-for="item in activityList">
+							     <!--缩略图在标题左边-->
+							      <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" style="padding-top: 5px;padding-bottom: 5px;">
+							        <div class="am-u-sm-4 am-list-thumb" style="width: 30%;height: 60px;padding-right: 0px;">
+							        	<img :src="item.ImageUrl"/>
+							        </div>
+									<table class=" am-u-sm-8 am-list-main" style="height: 70px;position:relative;" v-on:click="GoDetail(item)">
+										<tr>
+											<td style="height: 30px;">
+												<div class="am-list-item-hd" style="color: black;height:42px; overflow:hidden;">
+							            			{{item.ArticleTitle}}
+							            		</div>								
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
+												<div style="color: #999999;float: right;padding-top: 5px;margin-right: 10px;"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>	
+											</td>
+											
+										</tr>
+									</table>
+							       
+							      </li>  
+							    </ul>
+						  </div>
+						</div>
+			      </div>
+			      <div data-tab-panel-1 class="am-tab-panel " style="overflow-y: auto;">
+			        <div data-am-widget="list_news" class="am-list-news am-list-news-default" >
+						  <!--列表标题-->		
+						  <div class="am-list-news-bd">
+							  <ul class="am-list" v-for="item in lawsList">
+							     <!--缩略图在标题左边-->
+							      <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" style="padding-top: 5px;padding-bottom: 5px;">
+							        <div class="am-u-sm-4 am-list-thumb" style="width: 30%;height: 60px;padding-right: 0px;">
+							        	<img :src="item.ImageUrl"/>
+							        </div>
+									<table class=" am-u-sm-8 am-list-main" style="height: 70px;position:relative;" v-on:click="GoDetail(item)">
+										<tr>
+											<td style="height: 30px;">
+												<div class="am-list-item-hd" style="color: black;height:42px; overflow:hidden;">
+							            			{{item.ArticleTitle}}
+							            		</div>								
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
+												<div style="color: #999999;float: right;padding-top: 5px;margin-right: 10px;"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>	
+											</td>
+											
+										</tr>
+									</table>
+							       
+							      </li>  
+							    </ul>
+						  </div>
+						</div>
+			      </div>
+			  </div>
 		</div>
-       
   	</div>
   	
 </body>
@@ -76,7 +123,8 @@
 	var activityVue=new Vue({
 		el:"#activity",
 		data:{
-			activityList:[]
+			activityList:[],
+			lawsList:[],
 		},
 		created: function () {
                 this.Query()
@@ -90,7 +138,7 @@
                     contentType: "application/json",
                     url: "/WxArticle/GetAllArticlesByType?pGuid=" + guid(),
                     data: {
-                    	type:"1"
+                    	type:"4"
                     },
                     success: function (result) {
                         $.each(result, function(index,value) {
@@ -104,6 +152,31 @@
                     		value.CreateTime= m + '-' + d;
                     	});
                         _self.activityList = result;
+                    },
+                    error: function (json) {
+                        _self.$message.error('查询失败');
+                    }
+                });
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    contentType: "application/json",
+                    url: "/WxArticle/GetAllArticlesByType?pGuid=" + guid(),
+                    data: {
+                    	type:"5"
+                    },
+                    success: function (result) {
+                        $.each(result, function(index,value) {
+                    		var date=value.CreateTime;                    		
+                    		var ncd=new Date(parseInt(date.substr(6, 13))); 
+                    		var y = ncd.getFullYear();  
+						    var m = ncd.getMonth() + 1;  
+						    m = m < 10 ? '0' + m : m;  
+						    var d = ncd.getDate();  
+						    d = d < 10 ? ('0' + d) : d; 
+                    		value.CreateTime= m + '-' + d;
+                    	});
+                        _self.lawsList = result;
                     },
                     error: function (json) {
                         _self.$message.error('查询失败');

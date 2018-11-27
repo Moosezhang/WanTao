@@ -44,11 +44,27 @@ namespace BusinessComponent
             return result;
         }
 
-        public List<ClassEntity> GetNewestClass()
+        public List<VMClassLike> GetNewestClass()
         {
             ClassDA da = new ClassDA();
-
             var result = da.GetNewestClass();
+
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    var likeResult = new BaseSetDA().GetLikeById(item.ClassId);
+                    if (likeResult != null && likeResult.Count > 0)
+                    {
+                        item.likeCount = likeResult.Count;
+                    }
+                    else
+                    {
+                        item.likeCount = 0;
+                    }
+                       
+                }
+            }
 
             return result;
         }
@@ -156,5 +172,14 @@ namespace BusinessComponent
             return da.EnableChapter(id, status);
         }
         #endregion
+
+        #region 我的历史
+        public List<VMWxHistory> GetHistoryData(string openid)
+        {
+            ClassDA da = new ClassDA();
+            return da.GetHistoryData(openid);
+        }
+        #endregion
     }
 }
+

@@ -4,6 +4,7 @@
 }
 
 
+
 <style>
 	.table-list{
 		margin-top: 15px;margin-bottom: 5px;width: 100%; position: relative;float: left;
@@ -37,7 +38,7 @@
 <body>
   	<header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
 	  <div class="am-header-left am-header-nav">
-		    <a href="javascript:window.history.back(); " class="">
+		    <a v-if="document.referrer!=''" href="javascript:window.history.back(); " class="">
 		  	<img class="am-header-icon-custom" src="~/Images/icon/返回.png" alt=""/>
 		  </a>
 	  </div>

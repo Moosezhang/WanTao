@@ -43,12 +43,15 @@
     <Compile Include="BargainLogEntity.cs" />
     <Compile Include="BargainEntity.cs" />
     <Compile Include="ChapterEntity.cs" />
+    <Compile Include="LikeLogEntity.cs" />
     <Compile Include="Common\DictionaryInfo.cs" />
     <Compile Include="GroupBuyMemberEntity.cs" />
     <Compile Include="GroupBuyEntity.cs" />
     <Compile Include="HelpInfoEntity.cs" />
     <Compile Include="HelpMemberEntity.cs" />
+    <Compile Include="Model\VMClassLike.cs" />
     <Compile Include="Model\VMUpLoad.cs" />
+    <Compile Include="Model\VMWxHistory.cs" />
     <Compile Include="UpLoadCenterEntity.cs" />
     <Compile Include="Model\VMBargainLog.cs" />
     <Compile Include="Model\VMClassCar.cs" />

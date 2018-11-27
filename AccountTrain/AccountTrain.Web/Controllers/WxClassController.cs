@@ -122,6 +122,51 @@ namespace AccountTrain.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 点赞
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="id"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Like(ClickModel model)
+        {
+            return Json(new BaseSetBC().SaveLike(model.obType, model.id, model.openid));
+        }
+
+        public ActionResult GetLikeByOpenidAndId(string openid, string id)
+        {
+            try
+            {
+                var result = new BaseSetBC().GetLikeByOpenidAndId(openid, id);
+                if (result == null)
+                {
+                    return Json(new LikeLogEntity(), JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return Json(new LikeLogEntity(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetLikeById(string id)
+        {
+            try
+            {
+                return Json(new BaseSetBC().GetLikeById( id), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<LikeLogEntity>(), JsonRequestBehavior.AllowGet);
+            }
+        }
 
         public ActionResult GetClassByCondition(string name, string classType, string startDate, string endDate, string classGroup, string order)
         {
@@ -132,6 +177,18 @@ namespace AccountTrain.Web.Controllers
             catch (Exception ex)
             {
                 return Json(new List<ClassEntity>(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetClickCountById(string id)
+        {
+            try
+            {
+                return Json(new BaseSetBC().GetClickCountById(id), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<ClickCountEntity>(), JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -155,7 +212,7 @@ namespace AccountTrain.Web.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new List<ClassEntity>(), JsonRequestBehavior.AllowGet);
+                return Json(new List<VMClassLike>(), JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -196,7 +253,7 @@ namespace AccountTrain.Web.Controllers
 
 
         /// <summary>
-        /// 专家访谈列表
+        /// 财经论道列表
         /// </summary>
         /// <param name="openid"></param>
         /// <param name="code"></param>
@@ -248,7 +305,7 @@ namespace AccountTrain.Web.Controllers
         }
 
         /// <summary>
-        /// 专家访谈详情
+        /// 财经论道详情
         /// </summary>
         /// <param name="openid"></param>
         /// <param name="code"></param>

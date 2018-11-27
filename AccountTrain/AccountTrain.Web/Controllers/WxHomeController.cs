@@ -67,7 +67,10 @@ namespace AccountTrain.Web.Controllers
         {
             try
             {
-                return Json(new BaseSetBC().GetAllIndexImages(), JsonRequestBehavior.AllowGet);
+                var result=new BaseSetBC().GetAllIndexImages();
+                result = result.Take(5).ToList();
+
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

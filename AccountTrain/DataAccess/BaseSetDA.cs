@@ -951,9 +951,19 @@ namespace DataAccess
         #region 点击量
         public int SaveClickCount(string type, string id,string openid)
         {
+            var result = GetClickCountByOpenidAndId(openid,id);
+
+
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
             {
-                string query = string.Format(@"INSERT INTO Train_ClickCount
+                if (result != null)
+                {
+                    string query = string.Format(@"update Train_ClickCount set UpdateTime=getdate() where ClickId='{0}'", result.ClickId);
+                    return conn.Execute(query);
+                }
+                else
+                {
+                    string query = string.Format(@"INSERT INTO Train_ClickCount
                                                    (ClickId
                                                    ,ObjectId
                                                    ,ObjectType
@@ -973,8 +983,96 @@ namespace DataAccess
                                                    ,'system'
                                                    ,getdate()
                                                    ,'system')",
-                    Guid.NewGuid().ToString(), id, type, openid,1);
-                return conn.Execute(query);
+                                       Guid.NewGuid().ToString(), id, type, openid, 1);
+                    return conn.Execute(query);
+                }
+
+                
+            }
+        }
+
+        public ClickCountEntity GetClickCountByOpenidAndId(string openid, string id)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_ClickCount
+                                            where ObjectId='{0}' and OpenId='{1}'", id, openid);
+                return conn.Query<ClickCountEntity>(query).FirstOrDefault();
+            }
+        }
+
+        public List<ClickCountEntity> GetClickCountById(string id)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_ClickCount
+                                            where ObjectId='{0}' ", id);
+                return conn.Query<ClickCountEntity>(query).ToList();
+            }
+        }
+        #endregion
+
+
+        #region 点赞
+        public int SaveLike(string type, string id,string openid)
+        {
+            var result = GetLikeByOpenidAndId(openid,id);
+
+
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                if (result != null)
+                {
+                    string query = string.Format(@"delete from Train_LikeLog where LikeLogId='{0}'", result.LikeLogId);
+                    return conn.Execute(query);
+                }
+                else
+                {
+                    string query = string.Format(@"INSERT INTO Train_LikeLog
+                                                   (LikeLogId
+                                                   ,ObjectId
+                                                   ,ObjectType
+                                                   ,OpenId                                                
+                                                   ,Status
+                                                   ,CreateTime
+                                                   ,CreateUser
+                                                   ,UpdateTime
+                                                   ,UpdateUser)
+                                             VALUES
+                                                   ('{0}'
+                                                   ,'{1}'
+                                                   ,'{2}'
+                                                   ,'{3}'
+                                                   ,'{4}'
+                                                   ,getdate()
+                                                   ,'system'
+                                                   ,getdate()
+                                                   ,'system')",
+                                       Guid.NewGuid().ToString(), id, type, openid, 1);
+                    return conn.Execute(query);
+                }
+
+                
+            }
+        }
+
+        public LikeLogEntity GetLikeByOpenidAndId(string openid, string id)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_LikeLog
+                                            where ObjectId='{0}' and OpenId='{1}'", id, openid);
+                return conn.Query<LikeLogEntity>(query).FirstOrDefault();
+            }
+        }
+
+        public List<LikeLogEntity> GetLikeById(string id)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_LikeLog
+                                            where ObjectId='{0}'", id);
+                return conn.Query<LikeLogEntity>(query).ToList();
             }
         }
         #endregion

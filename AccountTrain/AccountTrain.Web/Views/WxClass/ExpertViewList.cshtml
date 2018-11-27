@@ -49,7 +49,7 @@
 	<meta content="telephone=no" name="format-detection" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 	<meta charset="UTF-8" />
-    <title>专家访谈</title>
+    <title>财经论道</title>
 </head>
 <body>
   	<header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
@@ -60,7 +60,7 @@
 	  </div>
 	    <h3 class="am-header-title" 
 	   	style="width:100px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
-          专家访谈
+          财经论道
       </h3>
       <div class="am-input-group">	
 	      <span class="am-input-group-btn" >
@@ -73,37 +73,27 @@
 	    </div>
 	</header>
   	<hr style="margin-top: 0px;"/>
-  	<div id="myClass">
-  		<div class="am-u-lg-6" style="float: none;padding-right: 0px;padding-left: 0px;">
-	    	<div  style="width: 100%;" >	
-			    <el-cascader
-			    	expand-trigger="hover"
-			    	:options="nodeList"
-			    	v-model="selectedOptions"
-			    	:show-all-levels="false"			    	
-			    	clearable
-			    	placeholder="全部"
-			    	style="width: 28%;float: left;">
-			  	</el-cascader>
-	  
-			    <el-cascader
-				    expand-trigger="hover"
-				    :options="orderList"
-				    v-model="selectedOptions1"
-				    :show-all-levels="false"
-				    clearable
-				    placeholder="排序"
-				    style="width: 28%;float:left;">
+  	<div id="myClass"> 		
+	  	
+	  	<div class="am-input-group" style="margin-top: 5px;"> 
+	  			<el-cascader
+			    expand-trigger="hover"
+			    :options="orderList"
+			    v-model="selectedOptions1"
+			    :show-all-levels="false"
+			    clearable
+			    placeholder="排序"
+			    style="width: 50%;float:left;border-radius: 5px;">
 				</el-cascader>
-	  			
-	  			
-				<input type="text" v-model="txtTitle" autocomplete="off" placeholder="搜索" class="el-input__inner" 
-			  		style="float:left;width:29%;margin-top: 1px;">			  	
+    	  	
+			
+	      	<input type="text" v-model="txtTitle" autocomplete="off" placeholder="搜索" class="am-form-field" 
+			  		style="float:left;width:50%;margin-top: 1px;height: 40px;border-top-left-radius:5px;border-bottom-left-radius:5px;">			  	
 			  	<span class="am-input-group-btn" style="width: 15%;">
-			        <button style="margin-top: 1px;height: 40px;width: 100%;" class="am-btn am-btn-default" type="button" v-on:click="Query()" ><span class="am-icon-search"></span> </button>
+			        <button style="margin-top: 1px;height: 40px;width: 100%;border-top-right-radius:5px;border-bottom-right-radius:5px;" class="am-btn am-btn-default" type="button" v-on:click="Query()" ><span class="am-icon-search"></span> </button>
 			    </span>	 
-  			</div>
-	  	</div>  	
+	    </div>
+	  	
         <div data-am-widget="list_news" class="am-list-news am-list-news-default" style="margin-left:0px;margin-right:0px;">		
 			  <div class="am-list-news-bd">
 				  <ul class="am-list" v-for="item in myClassList">
@@ -160,12 +150,12 @@
 			selectedOptions: [],
 			orderList:[				
 				{
-	              value: 'CreateTime',
-	              label: '上架时间'
+	              value: 'TimeDesc',
+	              label: '从新到旧'
 	            },
 	            {
-	              value: 'ClassPrice',
-	              label: '价格'
+	              value: 'TimeAsc',
+	              label: '从旧到新'
 	            }
 			],
 			selectedOptions1: [],

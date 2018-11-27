@@ -453,6 +453,32 @@ namespace BusinessComponent
             BaseSetDA da = new BaseSetDA();
             return da.SaveClickCount(type, id, openid);
         }
+
+        public List<ClickCountEntity> GetClickCountById(string id)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.GetClickCountById(id);
+        }
+        #endregion
+
+        #region 点赞
+        public int SaveLike(string type, string id, string openid)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.SaveLike(type, id, openid);
+        }
+
+        public LikeLogEntity GetLikeByOpenidAndId(string openid, string id)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.GetLikeByOpenidAndId(openid, id);
+        }
+
+        public List<LikeLogEntity> GetLikeById(string id)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.GetLikeById(id);
+        }
         #endregion
 
 

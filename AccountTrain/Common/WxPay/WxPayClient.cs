@@ -17,8 +17,8 @@ namespace Common.WxPay
         public UnifiedOrderResponse UnifiedOrder(UnifiedOrderRequest request)
         {
             
-        //_logger = new LoggerFactory().SetCurrent(new Log4NetLoggerFactory("Wechat_Verify")).CreateLogger();
-        UnifiedOrderResponse resp = new UnifiedOrderResponse();
+            //_logger = new LoggerFactory().SetCurrent(new Log4NetLoggerFactory("Wechat_Verify")).CreateLogger();
+            UnifiedOrderResponse resp = new UnifiedOrderResponse();
             //统一下单
             try
             {
@@ -154,6 +154,55 @@ namespace Common.WxPay
             resp.TotalFee = int.Parse((string)result.GetValue("total_fee"));
 
             return resp;
+        }
+
+
+        public  WxPayData Refund(WxPayData inputObj, int timeOut = 6)
+        {
+            string url = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+            //检测必填参数
+            if (!inputObj.IsSet("out_trade_no") && !inputObj.IsSet("transaction_id"))
+            {
+                throw new WxPayException("退款申请接口中，out_trade_no、transaction_id至少填一个！");
+            }
+            else if (!inputObj.IsSet("out_refund_no"))
+            {
+                throw new WxPayException("退款申请接口中，缺少必填参数out_refund_no！");
+            }
+            else if (!inputObj.IsSet("total_fee"))
+            {
+                throw new WxPayException("退款申请接口中，缺少必填参数total_fee！");
+            }
+            else if (!inputObj.IsSet("refund_fee"))
+            {
+                throw new WxPayException("退款申请接口中，缺少必填参数refund_fee！");
+            }
+
+
+            inputObj.SetValue("op_user_id", WxPayConfig.MCHID);
+            inputObj.SetValue("appid", WxPayConfig.APPID);//公众账号ID
+            inputObj.SetValue("mch_id", WxPayConfig.MCHID);//商户号
+            inputObj.SetValue("nonce_str", Guid.NewGuid().ToString().Replace("-", ""));//随机字符串
+            
+            inputObj.SetValue("sign", inputObj.MakeSign());//签名
+
+            string xml = inputObj.ToXml();
+            var start = DateTime.Now;
+
+            Log.WriteLog("Refund request : " + xml);
+            string response = HttpService.Post(xml, url, true, timeOut);//调用HTTP通信接口提交数据到API
+            Log.WriteLog("Refund response : " + response);
+
+            var end = DateTime.Now;
+            int timeCost = (int)((end - start).TotalMilliseconds);//获得接口耗时
+
+            //将xml格式的结果转换为对象以返回
+            WxPayData result = new WxPayData();
+            result.FromXml(response);
+
+           
+
+            return result;
         }
 
         public string GenerateTimeStamp()

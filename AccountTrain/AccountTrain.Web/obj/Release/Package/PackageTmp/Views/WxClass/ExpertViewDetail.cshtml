@@ -29,24 +29,30 @@ list-style-type:none;
 </style>
 
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta charset="UTF-8" />
     <title>课程详情</title>
 </head>
 <body>
   	<header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
 	  <div class="am-header-left am-header-nav">
-		    <a href="javascript:window.history.back(); " class="">
+		    <a  href="javascript:window.history.back(); " class="">
 		  		<img class="am-header-icon-custom" src="~/Images/icon/返回.png" alt=""/>
 		  	</a>
 	  </div>
 	    <h3 class="am-header-title" 
-	   	style="width:150px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
+	   	style="width:100px;float:left;color: black;padding-top: 15px;font-size: 18px;margin-right: 0px;">
           访谈详情
       </h3>
       <div class="am-input-group">	
 	      <span class="am-input-group-btn" >
 	      	<button class="am-btn" type="button" onclick="GoHome()" 
-	        	style="background-color: white;border-color:white;margin-left: 45px;">
+	        	style="margin-top: 3px;float:right;background-color: white;border-color:white;margin-left: 45px;">
 	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
 	        </button>
 	        
@@ -63,13 +69,31 @@ list-style-type:none;
 					</video>-->
 					<audio v-if="status==2" v-bind:src="currVideoUrl" style="width: 100%;" controls="controls">
 					</audio>	
-                </div>
-               
-	            <div id="detail" model="form">
+               </div>
+	            	
+	            <!--<div id="detail" model="form">
+	            	<div style="margin-left: 15px;">
+	            		<h4>{{form.ClassName}}</h4>
+	            		<table style="width: 100%;">
+	            			<tr>
+								<th style="width: 33%;"  >
+									<span style="color: red;font-size: 15px;">¥  {{form.ClassPrice}}</span>
+								</th>
+								<th style="width: 33%;">
+									<div style="color: #999999;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{ClickCount}}</div>
+								</th>
+								<th style="width: 33%;">
+									<div v-if="isLike" style="color: #999999;padding-top: 5px;float: right;padding-right: 10px;"><img v-on:click="GoLike()" style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/已点赞.png" alt=""/>赞（{{likeCount}}）</div>
+									<div v-if="!isLike" style="color: #999999;padding-top: 5px;float: right;padding-right: 10px;"><img v-on:click="GoLike()" style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/未点赞.png" alt=""/>赞（{{likeCount}}）</div>
+								</th>
+							</tr>
+	            		</table>
+	            	</div>
+	            	<div style="width: 100%;height: 15px;background: #E0E0E0;"></div>-->
 	            	<div data-am-widget="tabs" class="am-tabs am-tabs-d2" style="margin: 0px;">
 						  <ul class="am-tabs-nav am-cf" >
-						      <li class="am-active" ><a  href="[data-tab-panel-0]">课程信息</a></li>
-						      <li  ><a  href="[data-tab-panel-1]">课程大纲</a></li>
+						      <li class="am-active" ><a style=" text-decoration: none;" href="[data-tab-panel-0]">课程信息</a></li>
+						      <li  ><a style=" text-decoration: none;" href="[data-tab-panel-1]">课程大纲</a></li>
 						  </ul>
 						  <div class="am-tabs-bd" style="border: hidden;">
 						      <div data-tab-panel-0 class="am-tab-panel am-active" style="overflow-y: auto;">
@@ -77,7 +101,7 @@ list-style-type:none;
                         			</div>
 						      </div>
 						      <div data-tab-panel-1 class="am-tab-panel " style="overflow-y: auto;">
-						        <ul v-for="item in capData" style="margin-bottom: -1px;">
+						        <ul v-for="item in capData" style="margin-bottom: -1px;padding-left: 0px;">
 								    <li><img class="am-header-icon-custom" style="height: 50px;" src="~/Images/icon/line_b.png" alt=""/><span style="margin-left: 10px;" v-on:click="changeVideo(item)">{{item.ChapterTitle}}</span></li>
 								</ul>
 						      </div>
@@ -213,6 +237,10 @@ list-style-type:none;
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
-
+	
+	function GoHome()
+	 {
+	 	window.location.href = "/WxHome/Index?openid="+openid+"&&code=null&&state=null";
+	 }
 	
 </script>

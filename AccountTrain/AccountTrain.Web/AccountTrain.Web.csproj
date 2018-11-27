@@ -229,7 +229,9 @@
     <Content Include="Images\icon\主页.png" />
     <Content Include="Images\icon\前往.png" />
     <Content Include="Images\icon\喇叭.png" />
+    <Content Include="Images\icon\已点赞.png" />
     <Content Include="Images\icon\日历.png" />
+    <Content Include="Images\icon\未点赞.png" />
     <Content Include="Images\icon\眼睛.png" />
     <Content Include="Images\icon\购物车.png" />
     <Content Include="Images\icon\返回.png" />
@@ -747,6 +749,8 @@
   <ItemGroup>
     <Content Include="Areas\Admin\Views\BaseSet\UpLoadCenter.cshtml" />
     <None Include="Properties\PublishProfiles\123.pubxml" />
+    <Content Include="Views\WxArticle\Lives.cshtml" />
+    <Content Include="Views\WxMy\MyHistory.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

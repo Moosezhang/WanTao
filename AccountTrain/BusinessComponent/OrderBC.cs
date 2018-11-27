@@ -116,6 +116,12 @@ namespace BusinessComponent
             return da.UpdateOrderStatus(orderNo, status);
         }
 
+        public int UpdatePayInfo(string outTradeNumber, string PayInfo, string orderNo)
+        {
+            OrderDA da = new OrderDA();
+            return da.UpdatePayInfo(outTradeNumber, PayInfo, orderNo);
+        }
+
         #region 砍价
         public BargainEntity GetBargainByOpenIdAndClassId(string classid, string openid)
         {

@@ -220,6 +220,15 @@ namespace DataAccess
             }
         }
 
+
+        public int UpdatePayInfo(string outTradeNumber, string PayInfo,string orderNo)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))
+            {
+                string query = string.Format(@"update Train_Order set WXPayOutTradeNumber='{0}',WXPayOutTradeTime=GETDATE(),WXPayUnifyInfo='{1}'  where OrderNo='{2}'", outTradeNumber, PayInfo, orderNo);
+                return conn.Execute(query);
+            }
+        }
      
         #region 团购数据
         public VMGBClass GetGbClass(string classid)

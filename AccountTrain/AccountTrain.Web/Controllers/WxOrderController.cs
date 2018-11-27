@@ -184,64 +184,90 @@ namespace AccountTrain.Web.Controllers
         /// <param name="mark"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public ActionResult CheckOut(string openId, int price, string orderNo)
+        public ActionResult CheckOut(string code,string orderNo)
         {
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
+            {
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxClass%2fClassList"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+            }    
+
             try
             {
                 AppSetting setting = new AppSetting();
                 WxPayClient client = new WxPayClient();
 
+                OrderBC bc=new OrderBC();
 
+                var order =bc.GetOrderByOrderNo(orderNo);
 
-                //插入充值表
-                //DeliveryRechargeEntity Entry = new DeliveryRechargeEntity();
-                //Entry.DeliveryManId = list[0].Id;
-                //Entry.RechargeMoney = price;
-                //Entry.PaySerialNo = Number;
-                //Entry.WechatSerialNo = "";
-                //Entry.State = 0;
-                //Entry.RechargeTime = System.DateTime.Now;
-                //Entry.ApplyTime = System.DateTime.Now;
+                string outTradeNumber = string.Format("{0}{1}", orderNo.ToString(), DateTime.Now.ToString("fff"));
 
+                    
 
-                //int d = deliveryrechargeAppService.InsertAndGetId(Entry);
+                UnifiedOrderRequest req = new UnifiedOrderRequest();
+                req.Body = "万韬财税课程购买";//商品描述-----------------------
+                req.Attach = openid.ToString();//附加信息，会原样返回,充值人员微信Openid
 
+                req.GoodTag = "Pay";
+                req.TradeType = "JSAPI";
+                req.OpenId = openid;
+                req.OutTradeNo = outTradeNumber;//---商户订单号----------------
+                req.TotalFee = 1;//测试总金额
+                //req.TotalFee = Convert.ToInt32(order.PayPrice * 100);//总金额
+                req.NotifyUrl = setting.NotifyUrl;//异步通知地址-------------------------
+                var resp = client.UnifiedOrder(req);
 
-                int d = 0;
-                if (d != 0)
-                {
-                    UnifiedOrderRequest req = new UnifiedOrderRequest();
-                    req.Body = "万韬财税课程购买";//商品描述-----------------------
-                    req.Attach = d.ToString();//附加信息，会原样返回,充值人员微信Openid
+                WxPayData jsApiParam = new WxPayData();
+                jsApiParam.SetValue("appId", resp.AppId);
+                jsApiParam.SetValue("timeStamp", WxPayApi.GenerateTimeStamp());
+                jsApiParam.SetValue("nonceStr", WxPayApi.GenerateNonceStr());
+                jsApiParam.SetValue("package", "prepay_id=" + resp.PrepayId);
+                jsApiParam.SetValue("signType", "MD5");
+                jsApiParam.SetValue("paySign", jsApiParam.MakeSign());
 
-                    req.GoodTag = "Recharge";
-                    req.TradeType = "JSAPI";
-                    req.OpenId = openId;
-                    req.OutTradeNo = orderNo;//---商户订单号----------------
-                    req.TotalFee = 1;//测试总金额
-                    //req.TotalFee = price*100;//总金额
-                    req.NotifyUrl = setting.NotifyUrl;//异步通知地址-------------------------
-                    var resp = client.UnifiedOrder(req);
+                bc.UpdatePayInfo(outTradeNumber, jsApiParam.ToJson(), orderNo);
 
-                    WxPayData jsApiParam = new WxPayData();
-                    jsApiParam.SetValue("appId", resp.AppId);
-                    jsApiParam.SetValue("timeStamp", WxPayApi.GenerateTimeStamp());
-                    jsApiParam.SetValue("nonceStr", WxPayApi.GenerateNonceStr());
-                    jsApiParam.SetValue("package", "prepay_id=" + resp.PrepayId);
-                    jsApiParam.SetValue("signType", "MD5");
-                    jsApiParam.SetValue("paySign", jsApiParam.MakeSign());
+                //--给Viewbag赋值，供前台页面jsapi调用
+                ViewBag.AppId = (string)jsApiParam.GetValue("appId");
+                ViewBag.Package = (string)jsApiParam.GetValue("package");
+                ViewBag.NonceStr = (string)jsApiParam.GetValue("nonceStr");
+                ViewBag.Paysign = (string)jsApiParam.GetValue("paySign");
+                ViewBag.TimeStamp = (string)jsApiParam.GetValue("timeStamp");
+                ViewBag.OpenId = openid;
+                ViewBag.OrderNo = orderNo;
+               
 
-                    //--给Viewbag赋值，供前台页面jsapi调用
-                    ViewBag.AppId = (string)jsApiParam.GetValue("appId");
-                    ViewBag.Package = (string)jsApiParam.GetValue("package");
-                    ViewBag.NonceStr = (string)jsApiParam.GetValue("nonceStr");
-                    ViewBag.Paysign = (string)jsApiParam.GetValue("paySign");
-                    ViewBag.TimeStamp = (string)jsApiParam.GetValue("timeStamp");
-                    ViewBag.OpenId = openId;
-                    ViewBag.OrderNo = orderNo;
-                }
-
-                ViewBag.OpenId = openId;
+                ViewBag.OpenId = openid;
                 ViewBag.OrderNo = orderNo;
             }
             catch (Exception ex)
@@ -351,7 +377,7 @@ namespace AccountTrain.Web.Controllers
                         var nowCount = nowCountEntity.NowCount;
                         var needCount = bc.GetGroupBuyConfigByClassId(item.ClassId).NeedCount;
 
-                        if (nowCount == needCount)
+                        if (nowCount == needCount)//团购人数已满，变更团购状态为已完成（2）
                         {
                             bc.UpdateGroupBuyStatus(nowCountEntity.GroupBuyId, 2);
                         }
@@ -372,7 +398,80 @@ namespace AccountTrain.Web.Controllers
         }
         #endregion
 
-       
+        #region 退款
+        public ActionResult Refund(string code,string orderNo)
+        {
+
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
+            {
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxClass%2fClassList"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }   
+
+            AppSetting setting = new AppSetting();
+            WxPayClient client = new WxPayClient();
+            WxPayData data = new WxPayData();
+
+            OrderBC bc = new OrderBC();
+
+            var order = bc.GetOrderByOrderNo(orderNo);
+
+
+            string outTradeNumber = string.Format("{0}{1}", orderNo.ToString(), DateTime.Now.ToString("fff"));
+
+
+
+            RefundOrderRequest req = new RefundOrderRequest();
+
+            data.SetValue("out_trade_no", order.WXPayOutTradeNumber);
+            data.SetValue("total_fee", 1);//订单总金额
+            data.SetValue("refund_fee", 1);//退款金额
+            data.SetValue("out_refund_no", WxPayApi.GenerateOutTradeNo());//随机生成商户退款单号
+            //data.SetValue("total_fee", Convert.ToInt32(order.PayPrice * 100));//订单总金额
+            //data.SetValue("refund_fee",  Convert.ToInt32(order.PayPrice * 100));//退款金额
+
+            var resp = client.Refund(data);
+
+            //WxPayData jsApiParam = new WxPayData();
+            //jsApiParam.SetValue("appId", resp.AppId);
+            //jsApiParam.SetValue("timeStamp", WxPayApi.GenerateTimeStamp());
+            //jsApiParam.SetValue("nonceStr", WxPayApi.GenerateNonceStr());
+            //jsApiParam.SetValue("package", "prepay_id=" + resp.PrepayId);
+            //jsApiParam.SetValue("signType", "MD5");
+            //jsApiParam.SetValue("paySign", jsApiParam.MakeSign());
+
+            return View();
+        }
+        #endregion
 
 
         public ActionResult UpdateOrderStatus(string orderNo,int status)

@@ -38,7 +38,7 @@
 <body>
   	<header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
 	  <div class="am-header-left am-header-nav">
-		  <a href="javascript:window.history.back(); " class="">
+		  <a  onclick="GoHome()"  class="">
 		  	<img class="am-header-icon-custom" src="~/Images/icon/返回.png" alt=""/>
 		  </a>
 	  </div>
@@ -51,39 +51,54 @@
             <div id="wxUser" model="data">
                 <div class="am-input-group" style="width: 100%; height: 180px;background-image:url(/Images/icon/myBack.png);background-size: 100% 100%; ">
                    	<!--<div style="margin: 65px 155px;">-->
-                   	<div id="main">	
+                   	<!--<div id="main">	
                    		<img v-if="data.Headimgurl!=''" :src="data.Headimgurl" style="width: 80px;height: 80px">
                    		<img v-if="data.Headimgurl==''" src="~/Images/icon/默认头像.png" style="width: 80px;height: 80px">   
-                   	</div>	
+                   	</div>	-->
+                   	<span id="main" style="display: table-cell; vertical-align: middle; ">
+                   		<img v-if="data.Headimgurl!=''" :src="data.Headimgurl" style="width: 80px;height: 80px">
+                   		<img v-if="data.Headimgurl==''" src="~/Images/icon/默认头像.png" style="width: 80px;height: 80px"> 
+                   	</span>
                 </div>
                 <hr style="margin-top: 0px;"/>
                 <div class="am-input-group" style="margin-bottom: 10px;width: 100%;">
                     <span class="key-span">
-                    	<img style="margin-right: 3px;width: 55px;" class="am-header-icon-custom" src="~/Images/icon/myPoint.png" alt=""/>
+                    	<img style="margin-right: 3px;width: 40px;" class="am-header-icon-custom" src="~/Images/icon/myPoint.png" alt=""/>
                     	我的积分
                     </span>
-                    <span class="value-span" style="margin-right: 10px;margin-top: 15px;">{{data.Points}}分</span>
+                    <span class="value-span" style="margin-right: 10px;margin-top: 10px;">{{data.Points}}分</span>
                 </div>
                 <hr style="margin-top: 0px;"/>
                 <div class="am-input-group" style="margin-bottom: 10px;width: 100%;">
                     <span class="key-span">
-                    	<img style="margin-right: 3px;width: 55px;" class="am-header-icon-custom" src="~/Images/icon/myClass.png" alt=""/>
+                    	<img style="margin-right: 3px;width: 40px;" class="am-header-icon-custom" src="~/Images/icon/myClass.png" alt=""/>
                     	我的课程
                     </span>
-                    <a href="/WxMy/MyClass?openid=@ViewBag.Openid&&code=null&&state=null" style="margin-top: 15px;float:right;font-size: 17px;color: #999;" >
-				  		<img src="~/Images/icon/前往.png" alt=""/>
+                    <a href="/WxMy/MyClass?openid=@ViewBag.Openid&&code=null&&state=null" style="margin-top: 10px;float:right;font-size: 17px;color: #999;" >
+				  		<img style="height: 25px;padding-right: 20px;" src="~/Images/icon/前往.png" alt=""/>
 				  	</a>
                 </div>
+                <hr style="margin-top: 0px;"/>
+                <div class="am-input-group" style="margin-bottom: 10px;width: 100%;">
+                    <span class="key-span">
+                    	<img style="margin-right: 3px;width: 40px;" class="am-header-icon-custom" src="~/Images/icon/myHistory.png" alt=""/>
+                    	我的历史
+                    </span>    
+                    <a href="/WxMy/MyHistory" style="margin-top: 10px;float:right;font-size: 17px;color: #999;" >
+				  		<img style="height: 25px;padding-right: 20px;" src="~/Images/icon/前往.png" alt=""/>
+				  	</a>
+                </div>  
 				<hr style="margin-top: 0px;"/>
                 <div class="am-input-group" style="margin-bottom: 10px;width: 100%;">
                     <span class="key-span">
-                    	<img style="margin-right: 3px;width: 55px;" class="am-header-icon-custom" src="~/Images/icon/myShop.png" alt=""/>
+                    	<img style="margin-right: 3px;width: 40px;" class="am-header-icon-custom" src="~/Images/icon/myShop.png" alt=""/>
                     	购物车
                     </span>    
-                    <a href="/WxMy/MyCar?openid=@ViewBag.Openid&&code=null&&state=null" style="margin-top: 15px;float:right;font-size: 17px;color: #999;" >
-				  		<img  src="~/Images/icon/前往.png" alt=""/>
+                    <a href="/WxMy/MyCar?openid=@ViewBag.Openid&&code=null&&state=null" style="margin-top: 10px;float:right;font-size: 17px;color: #999;" >
+				  		<img style="height: 25px;padding-right: 20px;" src="~/Images/icon/前往.png" alt=""/>
 				  	</a>
-                </div>             
+                </div>   
+                
             </div>
         </div>
     </form>
@@ -122,5 +137,10 @@
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+	 
+	 function GoHome()
+	 {
+	 	window.location.href = "/WxHome/Index?openid="+openid+"&&code=null&&state=null";
+	 }
 	
 </script>

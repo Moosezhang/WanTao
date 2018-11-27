@@ -81,6 +81,24 @@ namespace BusinessEntitys
         [EnitityMappingAttribute(ColumnName = "UpdateUser")]
         public string UpdateUser { get; set; }
 
+        /// <summary>
+        /// 创建人
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "WXPayOutTradeNumber")]
+        public string WXPayOutTradeNumber { get; set; }
+
+        /// <summary>
+        /// 更新时间
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "WXPayOutTradeTime")]
+        public DateTime WXPayOutTradeTime { get; set; }
+
+        /// <summary>
+        /// 更新人
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "WXPayUnifyInfo")]
+        public string WXPayUnifyInfo { get; set; }
+
       
 
     }

@@ -64,7 +64,7 @@ namespace AccountTrain.Web.Controllers
         }
 
         /// <summary>
-        /// 法规快递页面
+        /// 法规资讯页面
         /// </summary>
         /// <param name="openid"></param>
         /// <param name="code"></param>
@@ -106,6 +106,50 @@ namespace AccountTrain.Web.Controllers
                     Log.WriteLog(DateTime.Now + "LawsError:" + ex.Message);
                 }
             }    
+
+
+
+            ViewBag.Openid = openid;
+
+            return View();
+        }
+
+        public ActionResult Lives(string code, string state)
+        {
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
+            {
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxArticle%2fLives"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "LivesError:" + ex.Message);
+                }
+            }
 
 
 

@@ -455,6 +455,61 @@ namespace AccountTrain.Web.Controllers
                 return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult MyHistory(string code, string state)
+        {
+            string openid = "";
+            if (new AppSetting().IsDebug != null
+                && new AppSetting().IsDebug.ToLower() == "true")
+            {
+                openid = "123";
+            }
+            else
+            {
+                if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                    openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+
+                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                {
+                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fMyHistory"));
+                }
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(openid))
+                    {
+
+                        openid = GetOpenId(code).openid;
+
+
+                        // 合法用户，允许访问
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                        Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLog(DateTime.Now + "MyCar Error:" + ex.Message);
+                }
+            }
+
+            ViewBag.Openid = openid;
+
+            return View();
+        }
+
+
+        public ActionResult GetHistory(string openid)
+        {
+            try
+            {
+                return Json(new ClassBC().GetHistoryData(openid), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<VMWxHistory>(), JsonRequestBehavior.AllowGet);
+            }
+        }
 	}
 
     public class RegisterModel
