@@ -179,6 +179,12 @@ namespace BusinessComponent
             OrderDA da = new OrderDA();
             return da.GetHelpByOpenIdAndClassId(classid, openid);
         }
+
+        public HelpInfoEntity GetHelpByHelpInfoId(string helpId)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetHelpByHelpInfoId(helpId);
+        }
         public HelpConfigEntity GetHelpConfigByClassId(string classid)
         {
             OrderDA da = new OrderDA();

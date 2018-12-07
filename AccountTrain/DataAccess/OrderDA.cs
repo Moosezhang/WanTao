@@ -503,6 +503,18 @@ namespace DataAccess
             }
         }
 
+        public HelpInfoEntity GetHelpByHelpInfoId(string helpId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_HelpInfo
+                                            where status=1 and HelpInfoId='{0}' ", helpId);
+
+                return conn.Query<HelpInfoEntity>(query).FirstOrDefault();
+
+            }
+        }
+
         public HelpConfigEntity GetHelpConfigByClassId(string classid)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
@@ -542,7 +554,8 @@ namespace DataAccess
                                                ,CreateTime
                                                ,CreateUser
                                                ,UpdateTime
-                                               ,UpdateUser)
+                                               ,UpdateUser
+                                               ,imgUrl)
                                          VALUES
                                                ('{0}'
                                                ,'{1}'
@@ -552,8 +565,9 @@ namespace DataAccess
                                                ,getdate()
                                                ,'{5}'
                                                ,getdate()
-                                               ,'{6}')",
-                    Guid.NewGuid().ToString(), help.ClassId, help.OpenId, 1, 1, loginName, loginName);
+                                               ,'{6}'
+                                               ,'{7}')",
+                    help.HelpInfoId, help.ClassId, help.OpenId, 1, 1, loginName, loginName, help.imgUrl);
                 return conn.Execute(query);
             }
         }
@@ -591,9 +605,9 @@ namespace DataAccess
                                                ,'{2}'
                                                ,'{3}'
                                                ,getdate()
-                                               ,'{5}'
+                                               ,'{4}'
                                                ,getdate()
-                                               ,'{6}')",
+                                               ,'{5}')",
                     Guid.NewGuid().ToString(), member.HelpInfoId, member.OpenId,1, loginName, loginName);
                 return conn.Execute(query);
             }

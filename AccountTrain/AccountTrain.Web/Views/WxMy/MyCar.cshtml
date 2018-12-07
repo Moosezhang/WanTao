@@ -195,7 +195,7 @@
                     data:param,
                     success: function (result) {
                     	_self.orderNo=result;
-                    	window.location.href = "/WxOrder/Index?openid=" + openid+"&&orderNo="+_self.orderNo;
+                    	window.location.href = "/WxOrder/Index?orderNo="+_self.orderNo;
                     	
                     },
                     error: function (json) {

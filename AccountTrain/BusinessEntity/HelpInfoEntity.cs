@@ -68,6 +68,11 @@ namespace BusinessEntitys
         [EnitityMappingAttribute(ColumnName = "UpdateUser")]
         public string UpdateUser { get; set; }
 
+        /// <summary>
+        /// 课程ID
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "imgUrl")]
+        public string imgUrl { get; set; }
 
       
 

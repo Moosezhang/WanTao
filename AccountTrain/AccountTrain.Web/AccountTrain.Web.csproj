@@ -751,6 +751,8 @@
     <None Include="Properties\PublishProfiles\123.pubxml" />
     <Content Include="Views\WxArticle\Lives.cshtml" />
     <Content Include="Views\WxMy\MyHistory.cshtml" />
+    <Content Include="Views\WxOrder\CheckOut.cshtml" />
+    <Content Include="Views\WxOrder\HelpClass.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

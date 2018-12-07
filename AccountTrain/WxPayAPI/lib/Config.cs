@@ -22,30 +22,30 @@ namespace WxPayAPI
         //public const string MCHID = "1269013001";
         //public const string KEY = "5b3e2e7ab3d5448cb611283f52b1j382";
         //public const string APPSECRET = "e98bba74ca94397c4b8ccae6f566cdc7";
-        public const string APPID = "xxx";
-        public const string MCHID = "xxx";
-        public const string KEY = "xxx";
-        public const string APPSECRET = "xxx";
+        public const string APPID = "wx6f3ebf83d4ab1223";
+        public const string MCHID = "1518437731";
+        public const string KEY = "999e8b64e5341612cafb21f2afbf7099";
+        public const string APPSECRET = "7f92b7c43082c0b1268286a79f79c0d0";
 
         //=======【证书路径设置】===================================== 
         /* 证书路径,注意应该填写绝对路径（仅退款、撤销订单时需要）
         */
         public const string SSLCERT_PATH = "cert/apiclient_cert.p12";
-        public const string SSLCERT_PASSWORD = "1269013001";
+        public const string SSLCERT_PASSWORD = "1518437731";
 
 
 
         //=======【支付结果通知url】===================================== 
         /* 支付结果通知回调url，用于商户接收支付结果
         */
-        public const string NOTIFY_URL = "http://wechat.yixiang2016.com/wexinpay/notifyurl";
+        public const string NOTIFY_URL = "http://www.wantaocs.com/WxBase/PayNotifyUrl";
 
 
 
         //=======【商户系统后台机器IP】===================================== 
         /* 此参数可手动配置也可在程序中自动获取
         */
-        public const string IP = "121.40.75.193";
+        public const string IP = "47.101.153.162";
 
 
         //=======【代理服务器设置】===================================

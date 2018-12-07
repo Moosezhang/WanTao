@@ -49,6 +49,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -70,6 +71,7 @@
     <Compile Include="EnumHelper.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="HttpSend.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QrEncoder.cs" />
     <Compile Include="Session\UserAuthSession.cs" />
@@ -84,6 +86,10 @@
     <Content Include="WeChat\Readme.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusinessEntity\BusinessEntity.csproj">
+      <Project>{7ca1bebf-c9a0-46ba-91b7-20861107cef4}</Project>
+      <Name>BusinessEntity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WxPayAPI\WxPayAPI.csproj">
       <Project>{25911370-f06a-4956-8ee3-659a7ba14961}</Project>
       <Name>WxPayAPI</Name>

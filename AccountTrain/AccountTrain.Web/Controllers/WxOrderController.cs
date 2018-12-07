@@ -13,6 +13,11 @@ using System.Web;
 using System.Web.Mvc;
 using WxPayAPI;
 using Common;
+using System.Security.Cryptography;
+using Gma.QrCodeNet.Encoding;
+using Gma.QrCodeNet.Encoding.Windows.Render;
+using System.Drawing.Imaging;
+using System.Text.RegularExpressions;
 
 namespace AccountTrain.Web.Controllers
 {
@@ -41,6 +46,7 @@ namespace AccountTrain.Web.Controllers
                     Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
                 }
 
+                //var orderResult = new OrderBC().GetOrderByOpenIdandClassId(param.openid,);
 
                 string OrderNo = CommonHelper.CreateOrderNo();
                 OrderEntity order = new OrderEntity() 
@@ -272,7 +278,7 @@ namespace AccountTrain.Web.Controllers
             }
             catch (Exception ex)
             {
-                // Log.WriteLog("CheckOut Error:" + ex.Message);
+                
             }
             return View();
         }
@@ -590,10 +596,9 @@ namespace AccountTrain.Web.Controllers
             {
                 if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
                     openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
-
-                if (string.IsNullOrWhiteSpace(openid) && code == null)
+                if (string.IsNullOrEmpty(openid) && string.IsNullOrEmpty(code))
                 {
-                    Response.Redirect(CommonHelper.GetRedirect("WxOrder%2fBargain"));
+                    Response.Redirect(CommonHelper.GetRedirect("WxOrder%2fBargain?bargainid" + bargainid));
                 }
                 try
                 {
@@ -615,13 +620,32 @@ namespace AccountTrain.Web.Controllers
                 }
             }
 
-           
 
+            string jsapiTicket = Util.GetJSAPI_Ticket(WxPayConfig.APPID, WxPayConfig.APPSECRET); 
+            string link= Request.Url.ToString();
+
+
+            //--给Viewbag赋值，供前台页面jsapi调用
+            ViewBag.AppId = WxPayConfig.APPID;
+            ViewBag.TimeStamp = WxPayApi.GenerateTimeStamp();
+            ViewBag.NonceStr = WxPayApi.GenerateNonceStr();
+            string rawstring = "jsapi_ticket=" + jsapiTicket + "&noncestr=" + ViewBag.NonceStr + "&timestamp=" + ViewBag.TimeStamp + "&url=" + link + "";
+            ViewBag.Signature = SHA1_Hash(rawstring);
             ViewBag.Openid = openid;
             ViewBag.Bargainid = bargainid;
+            ViewBag.Link = link;
             return View();
         }
 
+        public string SHA1_Hash(string str_sha1_in)
+        {
+            SHA1 sha1 = new SHA1CryptoServiceProvider();
+            byte[] bytes_sha1_in = System.Text.UTF8Encoding.Default.GetBytes(str_sha1_in);
+            byte[] bytes_sha1_out = sha1.ComputeHash(bytes_sha1_in);
+            string str_sha1_out = BitConverter.ToString(bytes_sha1_out);
+            str_sha1_out = str_sha1_out.Replace("-", "").ToLower();
+            return str_sha1_out;
+        }
         
         /// <summary>
         /// 新增砍价数据
@@ -645,27 +669,35 @@ namespace AccountTrain.Web.Controllers
                     Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
                 }
 
-
-                string bargainId=Guid.NewGuid().ToString();
-
-                BargainEntity entity = new BargainEntity()
+                var result = new OrderBC().GetBargainByOpenIdAndClassId(classid, openid);
+                if (result != null)
                 {
-                    BargainId = bargainId,
-                    OpenId = openid,
-                    ClassId = classid,
-                    PrePrice = Convert.ToDecimal(price),
-                    NowPrice = Convert.ToDecimal(price),  
-                };
-
-                var result = new OrderBC().AddBargain(entity, openid);
-                if (result > 0)
-                {
-                    return Json(bargainId, JsonRequestBehavior.AllowGet);
+                    return Json(result.BargainId, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return Json(string.Empty, JsonRequestBehavior.AllowGet);
+                    string bargainId = Guid.NewGuid().ToString();
+
+                    BargainEntity entity = new BargainEntity()
+                    {
+                        BargainId = bargainId,
+                        OpenId = openid,
+                        ClassId = classid,
+                        PrePrice = Convert.ToDecimal(price),
+                        NowPrice = Convert.ToDecimal(price),
+                    };
+
+                    var addResult = new OrderBC().AddBargain(entity, openid);
+                    if (addResult > 0)
+                    {
+                        return Json(bargainId, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(string.Empty, JsonRequestBehavior.AllowGet);
+                    }
                 }
+                
             }
             catch (Exception ex)
             {
@@ -685,8 +717,9 @@ namespace AccountTrain.Web.Controllers
                 var result = new OrderBC().GetBargainClass(bargainId);
                 if (result == null)
                 {
-                    Response.Redirect(CommonHelper.GetRedirect("WxHome%2fIndex"));
+                   return Json(new VMBargainClass(), JsonRequestBehavior.AllowGet);
                 }
+                LogHelp.WriteLog("ClassPrice:::"+result.ClassPrice.ToString());
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -704,7 +737,9 @@ namespace AccountTrain.Web.Controllers
         {
             try
             {
-                return Json(new OrderBC().GetBargainLogs(bargainId), JsonRequestBehavior.AllowGet);
+                var result = new OrderBC().GetBargainLogs(bargainId);
+               
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -724,12 +759,12 @@ namespace AccountTrain.Web.Controllers
             {
                 OrderBC bc = new OrderBC();
                 var result = "success";
-                
+                LogHelp.WriteLog("ownOpenid:::"+ownOpenid +"openid::: "+ openid +"classid::: "+ classid);
                 //获取砍价上下限                
                 var config = bc.GetBargainConfigByClassId(classid);
                 var top = config.BargainTop;
                 var floor = config.BargainFloor;
-                decimal cutPrce = CommonHelper.GetRandNum(floor*100,top*100)/100;
+                decimal cutPrce = Convert.ToDecimal(CommonHelper.GetRandNum(floor*100,top*100)*0.01);
                 var floorPrice = config.FloorPrice;
                 //更新最新价格，插入砍价记录表
                 var bargainEntity = bc.GetBargainByOpenIdAndClassId(classid, ownOpenid);
@@ -752,6 +787,7 @@ namespace AccountTrain.Web.Controllers
             }
             catch (Exception ex)
             {
+                LogHelp.WriteLog(ex.Message);
                 return Json("false", JsonRequestBehavior.AllowGet);
             }
         }
@@ -782,6 +818,7 @@ namespace AccountTrain.Web.Controllers
                 {
                     result = new BargainEntity();
                 }
+                
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -803,102 +840,245 @@ namespace AccountTrain.Web.Controllers
         /// <param name="openid"></param>
         /// <param name="classid"></param>
         /// <returns></returns>
-        public ActionResult HelpClass(string openid,string code, string state, string classid,string ownOpenid)
+        public ActionResult HelpClass(string code, string state, string classid,string ownOpenid,string helpId)
         {
-            if (string.IsNullOrEmpty(openid))
-            {
-                openid = GetOpenId(code).openid;
-
-                if (string.IsNullOrEmpty(openid))
-                {
-                    Response.Redirect(CommonHelper.GetRedirect("WxOrder%2fHelpClass"));
-                }
-            }
-
             string msg = string.Empty;
-
-            OrderBC bc = new OrderBC();
-            var config= bc.GetHelpConfigByClassId(classid);
-            var entity = bc.GetHelpByOpenIdAndClassId(classid, ownOpenid);
-            if (ownOpenid != openid)//非发起用户进入
+            string link = string.Empty;
+            try
             {
-                var helpinfo = bc.GetHelpMemberByOpenid(openid);
-                if (helpinfo != null)
+                string openid = "";
+                if (new AppSetting().IsDebug != null
+                    && new AppSetting().IsDebug.ToLower() == "true")
                 {
-                    msg = "该用户已助力";
-                    return Json(msg, JsonRequestBehavior.AllowGet);
-                }
-
-                HelpInfoEntity help = new HelpInfoEntity()
-                {
-                    ClassId = classid,
-                    OpenId = openid,
-                    NowCount = 0,
-                };
-                var addResult = bc.AddHelpInfo(help, openid);
-                HelpMemberEntity member = new HelpMemberEntity() 
-                {
-                    HelpInfoId=entity.HelpInfoId,
-                    OpenId=openid,
-                };
-                var addMember = bc.AddHelpMember(member,openid);
-                var updateInfo = bc.UpdateHelpNowCount(entity.HelpInfoId, entity.NowCount+1);
-                entity = bc.GetHelpByOpenIdAndClassId(classid, ownOpenid);
-                int diff = config.HelpCount - entity.NowCount;
-                var wxUser=new WxUserBC().GetWxUserByOpenid(openid);
-                if (diff <= 0)
-                {
-                    string OrderNo = CommonHelper.CreateOrderNo();
-                    OrderEntity order = new OrderEntity()
-                    {
-                        OrderNo = OrderNo,
-                        Openid = openid,
-                        PayPrice = 0,
-                        OrderSource = "4",
-                        Nickname = wxUser.Nickname
-                    };
-
-                    AddTextToImg(wxUser.Nickname);
-
-                    List<OrderGoodsEntity> goods = new List<OrderGoodsEntity>();
-
-                    var classEntity = new ClassBC().GetClassByKey(classid);
-                    OrderGoodsEntity good = new OrderGoodsEntity()
-                    {
-                        ClassId = classEntity.ClassId,
-                        ClassName = classEntity.ClassName,
-                        Price = 0
-                    };
-                    goods.Add(good);
-
-                    var result = new OrderBC().SaveOrder(order, goods, openid);
-
-
-                    msg = "助力成功";
-                    return Json(msg, JsonRequestBehavior.AllowGet);
-                }
-            }
-            else//发起用户进入
-            {
-                int diff = config.HelpCount - entity.NowCount;
-                if (diff > 0)
-                {
-                    msg = string.Format("还差 {0} 人助力成功", diff);
-                    return Json(msg, JsonRequestBehavior.AllowGet);
+                    openid = "123";
                 }
                 else
                 {
-                    msg = string.Format("已助力成功", diff);
-                    return Json(msg, JsonRequestBehavior.AllowGet);
+                    if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
+                        openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
+                    if (string.IsNullOrEmpty(openid) && string.IsNullOrEmpty(code))
+                    {
+                        Response.Redirect(CommonHelper.GetRedirect("WxClass%2fClassDeatil?classId" + classid));
+                    }
+                    try
+                    {
+                        if (string.IsNullOrWhiteSpace(openid))
+                        {
+
+                            openid = GetOpenId(code).openid;
+
+
+                            // 合法用户，允许访问
+                            Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;
+                            Response.Cookies[SystemConfig.WXOpenIDCookieKey].Path = "/";
+                            Response.Cookies[SystemConfig.WXOpenIDCookieKey].Expires = DateTime.Now.AddDays(1);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+
+
+                
+
+                OrderBC bc = new OrderBC();
+               
+                HelpInfoEntity entity = new HelpInfoEntity();
+                if (!string.IsNullOrEmpty(helpId))
+                {
+                    entity = bc.GetHelpByHelpInfoId(helpId);
+                    ownOpenid = entity.OpenId;
+                    classid = entity.ClassId;
+                }
+                var config = bc.GetHelpConfigByClassId(classid);
+                if (!string.IsNullOrEmpty(ownOpenid) && !string.IsNullOrEmpty(classid))
+                {
+                    entity = bc.GetHelpByOpenIdAndClassId(classid, ownOpenid);              
+                }
+                
+                
+                if (ownOpenid != openid)//非发起用户进入
+                {
+                    
+                    var helpinfo = bc.GetHelpMemberByOpenid(openid);
+                    if (helpinfo != null)
+                    {
+                        msg = "该用户已助力";
+                        return Json(msg, JsonRequestBehavior.AllowGet);
+                    }
+
+                    helpId = Guid.NewGuid().ToString();
+
+                    //生成二维码
+                    SaveIamge QR = CreateQR(helpId);
+                    //添加文字水印
+                    string WxName = new WxUserBC().GetWxUserByOpenid(openid).Nickname;
+                  
+                    string path = HttpContext.Server.MapPath("/Images/");
+               
+                    string[] sArray = Regex.Split(config.ImageUrl, "Images/", RegexOptions.IgnoreCase);
+                   
+                    string filename = sArray[1].ToString();
+                    SaveIamge WordsPic = new WaterImageManager().DrawWordsForSaveIamge(filename, path, WxName, 1, FontFamilys.宋体, FontStyle.Bold, ImagePosition.TopMiddle);
+                    //添加二维码水印
+                    string QrPic = new WaterImageManager().DrawImage(WordsPic.filename, WordsPic.showImg, QR.filename, QR.showImg, 1, ImagePosition.BottomMiddle);
+
+                    link = CommonHelper.LinkImageUrl("/Images/" + QrPic);
+
+                    HelpInfoEntity help = new HelpInfoEntity()
+                    {
+                        HelpInfoId=helpId,
+                        ClassId = classid,
+                        OpenId = openid,
+                        NowCount = 0,
+                        imgUrl = link
+                    };
+
+                    var addResult = bc.AddHelpInfo(help, openid);
+                    //增加助力记录
+                    HelpMemberEntity member = new HelpMemberEntity()
+                    {
+                        HelpInfoId = entity.HelpInfoId,
+                        OpenId = openid,
+                    };
+                    var addMember = bc.AddHelpMember(member, openid);
+                    //更新助力信息人数
+                    var updateInfo = bc.UpdateHelpNowCount(entity.HelpInfoId, entity.NowCount + 1);
+                  
+                    entity = bc.GetHelpByHelpInfoId(entity.HelpInfoId);
+                    
+                    int diff = config.HelpCount - entity.NowCount;
+                    var wxUser = new WxUserBC().GetWxUserByOpenid(entity.OpenId);
+                    if (diff <= 0)
+                    {
+                        
+                        string OrderNo = CommonHelper.CreateOrderNo();
+                        OrderEntity order = new OrderEntity()
+                        {
+                            OrderNo = OrderNo,
+                            Openid = entity.OpenId,
+                            PayPrice = 0,
+                            OrderSource = "4",
+                            Nickname = wxUser.Nickname
+                        };
+                        List<OrderGoodsEntity> goods = new List<OrderGoodsEntity>();
+
+                        var classEntity = new ClassBC().GetClassByKey(classid);
+                        OrderGoodsEntity good = new OrderGoodsEntity()
+                        {
+                            ClassId = classEntity.ClassId,
+                            ClassName = classEntity.ClassName,
+                            Price = 0
+                        };
+                        goods.Add(good);
+
+                        var result = new OrderBC().SaveOrder(order, goods, entity.OpenId);
+
+
+                        msg = "助力成功";
+                        
+                    }
+                }
+                else//发起用户进入
+                {
+                    LogHelp.WriteLog("HelpClass:::22222");
+                    if (entity != null)//如果主力已存在，展示助力情况
+                    {
+                        link = entity.imgUrl;
+                        int diff = config.HelpCount - entity.NowCount;
+                        if (diff > 0)
+                        {
+                            msg = string.Format("还差 {0} 人助力成功", diff);
+                            //return Json(msg, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            msg = string.Format("已助力成功");
+                            //return Json(msg, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else //如果助力不存在，新增助力
+                    {
+                        helpId = Guid.NewGuid().ToString();
+                        //生成二维码
+                        SaveIamge QR = CreateQR(helpId);
+                        //添加文字水印
+                        string WxName = new WxUserBC().GetWxUserByOpenid(ownOpenid).Nickname;
+                        string path = HttpContext.Server.MapPath("/Images/");
+
+                        string[] sArray = Regex.Split(config.ImageUrl, "Images/", RegexOptions.IgnoreCase);
+                        string filename = sArray[1].ToString();
+                        SaveIamge WordsPic = new WaterImageManager().DrawWordsForSaveIamge(filename, path, WxName, 1, FontFamilys.宋体, FontStyle.Bold, ImagePosition.TopMiddle);
+                        //添加二维码水印
+                        string QrPic = new WaterImageManager().DrawImage(WordsPic.filename, WordsPic.showImg, QR.filename, QR.showImg, 1, ImagePosition.BottomMiddle);
+
+                        link = CommonHelper.LinkImageUrl("/Images/" + QrPic);
+
+                        HelpInfoEntity help = new HelpInfoEntity()
+                        {
+                            HelpInfoId = helpId,
+                            ClassId = classid,
+                            OpenId = ownOpenid,
+                            NowCount = 0,
+                            imgUrl = link
+                        };
+                        var addResult = bc.AddHelpInfo(help, ownOpenid);
+
+                        msg = "分享图片，请好友帮忙助力吧";
+                    }
+
                 }
             }
+            catch (Exception ex)
+            {
+
+                LogHelp.WriteLog("HelpClass:::" + ex.Message);
+            }
+            
+
+            ViewBag.Message = msg;
+            ViewBag.Link = link;
 
             return View();
-
-
-
-
             
+        }
+
+        public SaveIamge CreateQR(string helpId)
+        {
+          
+          
+            QrEncoder qrEncoder = new QrEncoder(ErrorCorrectionLevel.H);
+            QrCode qrCode = new QrCode();
+            LogHelp.WriteLog("HelpClass:::4444");
+            string url = CommonHelper.GetRedirect("WxOrder%2fHelpClass?helpId=" + helpId);
+                  
+            qrEncoder.TryEncode(url, out qrCode);
+
+            GraphicsRenderer renderer = new GraphicsRenderer(new FixedModuleSize(2, QuietZoneModules.Two), Brushes.Black, Brushes.White);
+
+
+            string filename = string.Format("{0}.png", helpId);
+            string saveUrl = "/Images/QR/";
+            string filePath = Path.Combine(HttpContext.Server.MapPath(saveUrl), filename);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                renderer.WriteToStream(qrCode.Matrix, ImageFormat.Png, ms);
+                Image img = Image.FromStream(ms);
+
+                img.Save(filePath);
+            }
+
+            string showImg = CommonHelper.LinkImageUrl(saveUrl);
+
+            SaveIamge model = new SaveIamge() 
+            {
+                filename = filename,
+                showImg = HttpContext.Server.MapPath(saveUrl)
+            };
+
+            return model;
         }
 
 
@@ -959,6 +1139,66 @@ namespace AccountTrain.Web.Controllers
 
         }
 
+
+        /// <summary>
+        /// 添加水印
+        /// </summary>
+        /// <param name="imgPath">原图片地址</param>
+        /// <param name="sImgPath">水印图片地址</param>
+        /// <returns>resMsg[0] 成功,失败 </returns>
+        public static string[] AddWaterMark(string imgPath, string sImgPath)
+        {
+            string[] resMsg = new[] { "成功", sImgPath };
+            using (Image image = Image.FromFile(imgPath))
+            {
+                try
+                {
+                    Bitmap bitmap = new Bitmap(image);
+
+                    int width = bitmap.Width, height = bitmap.Height;
+                    //水印文字
+                    string text = "版权保密";
+
+                    Graphics g = Graphics.FromImage(bitmap);
+
+                    g.DrawImage(bitmap, 0, 0);
+
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+                    g.DrawImage(image, new Rectangle(0, 0, width, height), 0, 0, width, height, GraphicsUnit.Pixel);
+
+                    Font crFont = new Font("微软雅黑", 120, FontStyle.Bold);
+                    SizeF crSize = new SizeF();
+                    crSize = g.MeasureString(text, crFont);
+
+                    //背景位置(去掉了. 如果想用可以自己调一调 位置.)
+                    //graphics.FillRectangle(new SolidBrush(Color.FromArgb(200, 255, 255, 255)), (width - crSize.Width) / 2, (height - crSize.Height) / 2, crSize.Width, crSize.Height);
+
+                    SolidBrush semiTransBrush = new SolidBrush(Color.FromArgb(120, 177, 171, 171));
+
+                    //将原点移动 到图片中点
+                    g.TranslateTransform(width/ 2, height / 2);
+                    //以原点为中心 转 -45度
+                    g.RotateTransform(-45);
+
+                    g.DrawString(text, crFont, semiTransBrush, new PointF(0, 0));
+
+                    //保存文件
+                    bitmap.Save(sImgPath, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+                }
+                catch (Exception e)
+                {
+
+                    resMsg[0] = "失败";
+                    resMsg[1] = e.Message;
+                }
+            }
+
+            return resMsg;
+        }
 
         public ActionResult GetHelpConfigByClassId(string classid)
         {

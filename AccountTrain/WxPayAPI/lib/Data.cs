@@ -211,7 +211,7 @@ namespace WxPayAPI
             string str = ToUrl();
             //在string后加入API KEY
             //str += "&key=" + "5b3e2e7ab3d5448cb611283f52b1j382";
-            str += "&key=" + ConfigurationManager.AppSettings["KEY"];
+            str += "&key=" + WxPayConfig.KEY;
             //MD5加密
             var md5 = MD5.Create();
             var bs = md5.ComputeHash(Encoding.UTF8.GetBytes(str));

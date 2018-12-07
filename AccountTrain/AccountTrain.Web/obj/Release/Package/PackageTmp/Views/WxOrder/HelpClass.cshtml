@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "课程详情";
+}
+
+
+<style>
+    .div-inline {
+        display: inline;
+        float: left;
+        text-align: center;
+        line-height: 35px;
+    }
+
+    ul li {
+        list-style-type: none;
+    }
+
+    .zoomImage {
+        width: 100%;
+        
+        padding-bottom: 45%;
+        overflow: hidden;
+        background-position: center center;
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+    }
+</style>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta charset="UTF-8" />
+    <title>助力</title>
+</head>
+<body>
+    <header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
+	 
+	   <h3 class="am-header-title" style="color: black;padding-top: 15px;font-size: 18px;">
+          助力
+     </h3>      
+	</header>
+	<hr style="margin-top: 0px;margin-bottom: 5px;"/>
+      <div id="help">
+      		<div>
+      			<img v-bind:src="imgUrl" style="width: auto;  height: auto;  max-width: 100%; max-height: 100%;"/>
+      			<!--<img <img src="{{ imgUrl }}"/> style="height:450px">-->
+      		</div>
+  		 	<!--<div  class="zoomImage" style="height:450px" v-bind:style="{backgroundImage:'url(' + imgUrl + ')'}"></div>-->
+  		 	<h4>{{message}}</h4>
+  	  </div>
+</body>
+
+<script>
+	var helpVue=new Vue({
+		el:"#help",
+		data:{
+			imgUrl:'@ViewBag.Link',
+			message:'@ViewBag.Message'
+		}
+	});
+</script>

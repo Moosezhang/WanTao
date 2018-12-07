@@ -50,7 +50,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "WxMy-Index Error:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "WxMy-Index Error:" + ex.Message);
                 }
             }  
            
@@ -99,6 +99,8 @@ namespace AccountTrain.Web.Controllers
                 if (Request.Cookies[SystemConfig.WXOpenIDCookieKey] != null)
                     openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
 
+                LogHelp.WriteLog(DateTime.Now + "Registered:" + openid + ";" + code);
+
                 if (string.IsNullOrWhiteSpace(openid) && code == null)
                 {
                     Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
@@ -119,7 +121,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "Registered Error:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "Registered Error:" + ex.Message);
                 }
             }             
 
@@ -160,7 +162,7 @@ namespace AccountTrain.Web.Controllers
             }
             catch (Exception ex)
             {
-                Log.WriteLog("getValidSMS:" + ex.Message);
+                LogHelp.WriteLog("getValidSMS:" + ex.Message);
             }
             return Json("Error", JsonRequestBehavior.AllowGet); 
         }
@@ -214,11 +216,14 @@ namespace AccountTrain.Web.Controllers
                             }
                             else
                             {
-                                string access_token = "";
+                                //string access_token = "";
 
-                                access_token = Util.GetAccessTokenOpen();
-                                var userInfo = GetUserInfo(model.openid, access_token);
+                                //access_token = Util.GetAccessTokenOpen();
+                                //LogHelp.WriteLog(DateTime.Now + "GetAccessTokenOpen:" +model.openid+ access_token);
+                                //var userInfo = GetUserInfo(model.openid, access_token);
 
+                                var userInfo = new WxUserBC().GetWxUserByOpenid(model.openid);
+                                LogHelp.WriteLog(DateTime.Now + "GetWxUserByOpenid:" + model.openid);
                                 //实体赋值
                                 WxUserEntity Entry = new WxUserEntity();
 
@@ -233,18 +238,17 @@ namespace AccountTrain.Web.Controllers
                                 else
                                 {
 
-
-                                    Entry.Subscribe = userInfo.subscribe;
-                                    Entry.Openid = userInfo.openid;
-                                    Entry.Nickname = userInfo.nickname;
-                                    Entry.Sex = userInfo.sex;
-                                    Entry.City = userInfo.city;
-                                    Entry.Country = userInfo.country;
-                                    Entry.Province = userInfo.province;
-                                    Entry.UserLanguage = userInfo.language;
-                                    Entry.Headimgurl = userInfo.headimgurl;
+                                    Entry.WxUserId = userInfo.WxUserId;
+                                    Entry.Openid = userInfo.Openid;
+                                    Entry.Nickname = userInfo.Nickname;
+                                    Entry.Sex = userInfo.Sex;
+                                    Entry.City = userInfo.City;
+                                    Entry.Country = userInfo.Country;
+                                    Entry.Province = userInfo.Province;
+                                    Entry.UserLanguage = userInfo.UserLanguage;
+                                    Entry.Headimgurl = userInfo.Headimgurl;
                                     Entry.Phone = model.phone;
-                                    int d = new WxUserBC().SaveWxUser(Entry, userInfo.openid);
+                                    int d = new WxUserBC().SaveWxUser(Entry, userInfo.Openid);
 
                                     if (d == 0)
                                     {
@@ -312,7 +316,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "MyClass Error:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "MyClass Error:" + ex.Message);
                 }
             }  
           
@@ -362,7 +366,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "MyCar Error:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "MyCar Error:" + ex.Message);
                 }
             }             
 
@@ -489,7 +493,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "MyCar Error:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "MyCar Error:" + ex.Message);
                 }
             }
 

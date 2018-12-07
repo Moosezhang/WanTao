@@ -96,7 +96,9 @@ namespace Common
         public static string GetRedirect(string RedirectUrl) 
         {
             AppSetting setting = new AppSetting();
-            return string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri=http%3a%2f%2f{1}%2f{2}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect", setting.WeiXinAppId, setting.AppDomainName.Replace("http://", ""), RedirectUrl);
+            string Url=string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri=http%3a%2f%2f{1}%2f{2}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect", setting.WeiXinAppId, setting.AppDomainName.Replace("http://", ""), RedirectUrl);
+            
+            return Url;
         }
 
         /// <summary>  

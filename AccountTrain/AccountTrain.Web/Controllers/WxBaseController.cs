@@ -15,6 +15,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Xml;
+using WxPayAPI;
 
 namespace AccountTrain.Web.Controllers
 {
@@ -55,16 +56,17 @@ namespace AccountTrain.Web.Controllers
             request.AddUrlSegment("code", code);
 
             var response = client.Execute(request);
-
             var data = JsonConvert.DeserializeObject<OpenId>(response.Content);
+
+            
 
             if (data != null)
             {
                 var userInfo = GetUserInfo(data.openid,data.access_token);
+                
                 if (userInfo != null)
                 {
                     WxUserEntity Entry = new WxUserEntity();
-                    Entry.Subscribe = userInfo.subscribe;
                     Entry.Openid = userInfo.openid;
                     Entry.Nickname = userInfo.nickname;
                     Entry.Sex = userInfo.sex;
@@ -90,7 +92,6 @@ namespace AccountTrain.Web.Controllers
             request.AddUrlSegment("accessToken", accessToken);
 
             var response = client.Execute(request);
-
             var data = JsonConvert.DeserializeObject<UserInfo>(response.Content);
 
             return data;
@@ -169,7 +170,7 @@ namespace AccountTrain.Web.Controllers
         public ActionResult VerifyUrl()
         {
             //_logger.Debug("OneBoxService Verify Start");
-            Log.WriteLog("BaseController_VerifyUrl start:");
+            
             string echostr = Request.QueryString["echoStr"];
             string signature = Request.QueryString["signature"];
             string timestamp = Request.QueryString["timestamp"];
@@ -241,6 +242,79 @@ namespace AccountTrain.Web.Controllers
             }
             return Content(returnString);
         }
+
+        [HttpPost]
+        public ActionResult PayNotifyUrl()
+        {
+
+            try
+            {
+                //接收从微信后台POST过来的数据
+                
+                System.IO.Stream s = HttpContext.Request.InputStream;
+                int count = 0;
+                byte[] buffer = new byte[1024];
+                StringBuilder builder = new StringBuilder();
+                while ((count = s.Read(buffer, 0, 1024)) > 0)
+                {
+                    builder.Append(Encoding.UTF8.GetString(buffer, 0, count));
+                }
+                s.Flush();
+                s.Close();
+                s.Dispose();
+                //Log.Info(this.GetType().ToString(), "Receive data from WeChat : " + builder.ToString());
+                WxPayData res = new WxPayData();
+
+                //转换数据格式并验证签名
+                WxPayData data = new WxPayData();
+                try
+                {
+                    
+                    data.FromXml(builder.ToString());
+                }
+                catch (WxPayException ex)
+                {
+                    //若签名错误，则立即返回结果给微信支付后台
+                    res.SetValue("return_code", "FAIL");
+                    res.SetValue("return_msg", ex.Message);
+                    //Log.Error(this.GetType().ToString(), "Sign check error : " + res.ToXml());
+                    //page.Response.Write(res.ToXml());
+                    //page.Response.End();
+                    
+                    return Content(res.ToXml());
+                }
+
+                //检查支付结果中transaction_id是否存在
+                if (!data.IsSet("transaction_id"))
+                {
+                    //若transaction_id不存在，则立即返回结果给微信支付后台
+                    res.SetValue("return_code", "FAIL");
+                    res.SetValue("return_msg", "支付结果中微信订单号不存在");
+                    //Log.Error(this.GetType().ToString(), "The Pay result is error : " + res.ToXml());
+                    //page.Response.Write(res.ToXml());
+                    //page.Response.End();
+                    return Content(res.ToXml());
+
+                }
+
+                string transaction_id = data.GetValue("transaction_id").ToString();
+                
+                string attach = data.GetValue("attach").ToString();
+
+                int id = int.Parse(attach);
+
+
+                res.SetValue("return_code", "SUCCESS");
+                res.SetValue("return_msg", "OK");
+                return Content(res.ToXml());
+
+            }
+            catch (Exception ex)
+            {
+            }
+            return Content("");
+        }
+
 
         #region 回复纯文本消息
         private string Msg_Text(string FromUserName, string ToUserName, string Content)

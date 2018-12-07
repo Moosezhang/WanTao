@@ -102,6 +102,7 @@ namespace DataAccess
                                                    ,'{14}')",
                         Guid.NewGuid().ToString(), wxUser.Subscribe, wxUser.Openid, wxUser.Nickname, wxUser.Sex, wxUser.City, wxUser.Country,
                         wxUser.Province, wxUser.UserLanguage, wxUser.Headimgurl, 1, wxUser.Phone, loginName, loginName, wxUser.Name);
+                    
                     return conn.Execute(query);
                 }
             }
@@ -125,6 +126,7 @@ namespace DataAccess
                                                  WHERE WxUserId='{11}'",
                                                 wxUser.Subscribe, wxUser.Nickname, wxUser.Sex, wxUser.City, wxUser.Country,
                                                 wxUser.Province, wxUser.UserLanguage, wxUser.Headimgurl, wxUser.Phone, wxUser.Name, loginName, wxUser.WxUserId);
+                    
                     return conn.Execute(query);
                 }
             }

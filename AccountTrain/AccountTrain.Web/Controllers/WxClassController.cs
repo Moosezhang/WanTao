@@ -55,7 +55,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "ClassListError:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "ClassListError:" + ex.Message);
                 }
             }    
 
@@ -73,7 +73,7 @@ namespace AccountTrain.Web.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult ClassDetail(string code,string classId)
+        public ActionResult ClassDetail(string code, string state, string classId)
         {
             string openid = "";
             if (new AppSetting().IsDebug != null
@@ -106,7 +106,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "ClassDetailError:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "ClassDetailError:" + ex.Message);
                 }
             }  
             
@@ -293,7 +293,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "ExpertViewList Error:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "ExpertViewList Error:" + ex.Message);
                 }
             } 
 
@@ -344,7 +344,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "ExpertViewDetail Error:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "ExpertViewDetail Error:" + ex.Message);
                 }
             }            
 

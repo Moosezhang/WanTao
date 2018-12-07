@@ -49,6 +49,7 @@
     <Compile Include="GroupBuyEntity.cs" />
     <Compile Include="HelpInfoEntity.cs" />
     <Compile Include="HelpMemberEntity.cs" />
+    <Compile Include="Model\SaveIamge.cs" />
     <Compile Include="Model\VMClassLike.cs" />
     <Compile Include="Model\VMUpLoad.cs" />
     <Compile Include="Model\VMWxHistory.cs" />

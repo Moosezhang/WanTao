@@ -50,7 +50,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "IndexError:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "IndexError:" + ex.Message);
                 }
             }    
 
@@ -132,7 +132,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "CompanyInfoError:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "CompanyInfoError:" + ex.Message);
                 }
             }             
 
@@ -188,7 +188,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "JobInfoError:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "JobInfoError:" + ex.Message);
                 }
             }              
 

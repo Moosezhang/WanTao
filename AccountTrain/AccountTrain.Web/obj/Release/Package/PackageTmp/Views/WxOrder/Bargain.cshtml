@@ -7,9 +7,7 @@
 <style>
  .content {
  	  height:200px;
- 	  width:335px;
  	  margin-top: 70px;
- 	  margin-left: 20px;
  	  background-color: #ECF5FF;
  	  border-radius: 10px;
  	  position: relative;
@@ -17,24 +15,23 @@
  }
  
  .button{
- 	width:130px;
- 	height:45px;
- 	margin-left: 130px;
  	border-radius: 10px;
  	background-color: yellow;
  	color: black;
  	font-size: 15px;
  	text-align:center;
  	line-height: 40px;
+ 	margin-left: 100px;
+ 	margin-right: 100px;
  }
  
  .logList{
  	background-color: #66A8CC;
  	margin-top: 50px;
  	position: relative;
- 	padding: 5px;
- 	margin-left: 20px;
- 	width:335px;
+ 	padding: 5px; 	
+ 	margin-left: 20px; 	  
+ 	margin-right: 20px;
  	border:1px solid white;
  	height: 210px;
  	overflow:auto;
@@ -67,12 +64,12 @@ ul,li{ list-style:none}
   	
     <form class="am-form" style="background-image: url(/Images/icon/bargainImage.jpg);background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;height: 900px;">
         <fieldset style="height: 100%;">
-            <div id="bargain" model="data" style="height: 100%;">
+            <div id="bargain" model="data" style="height: 100%;text-align: center;">
             	<div class="content">            		
-               		<h4 v-if="isOwner" style="text-indent:65px;color: red;">邀请你的好友帮忙砍一刀</h4>
-               		<h4 v-if="!isOwner" style="text-indent:65px;color: red;">您的好友邀请你帮他砍一刀</h4>
+               		<h4 v-if="isOwner" style="color: red;">邀请你的好友帮忙砍一刀</h4>
+               		<h4 v-if="!isOwner" style="color: red;">您的好友邀请你帮他砍一刀</h4>
                		<h5 style="text-indent:20px;">我在万韬财税发现一个课程,帮我砍到最低价吧</h5>
-               		<div v-on:click="GoClassDetail(data)" style="height: 55%;background-color: white;border-radius: 10px;position: relative;margin: 20px;">
+               		<div v-on:click="GoClassDetail(data)" style="height: 55%;background-color: white;border-radius: 10px;position: relative;">
                			<div class="am-u-sm-4 am-list-thumb" style="height: 100%;width: 20%;padding-right: 0px;">
 				        	<img style="height: 100%;width: 170%;" :src="data.ClassImages"/>
 				        </div>
@@ -87,32 +84,35 @@ ul,li{ list-style:none}
 									<span style="color: red;">¥{{data.ClassPrice}}</span>
 								</td>
 								<td>
-									{{data.HotCount}}人已购买
+									{{data.HotCount}} 人已购买
 								</td>
 							</tr>
 						</table>
                		</div>               		
                	</div> 
-	            <div style="margin-left: 100px;">
-	              	<h4 style="color: white;">已砍 <span style="color: yellow;font-size: 30px;">{{data.PrePrice-data.NowPrice}}</span> 元，还差 <span style="color: yellow;font-size: 30px;">{{data.NowPrice-data.FloorPrice}}</span> 元</h4>
+	            <div >
+	              	<h4 style="color: white;">已砍 <span style="color: yellow;font-size: 30px;">{{(data.PrePrice*100-data.NowPrice*100)*0.01}}</span> 元，还差 <span style="color: yellow;font-size: 30px;">{{(data.NowPrice*100-data.FloorPrice*100)*0.01}}</span> 元</h4>
 	            </div>
-	            <div style="margin-left: 70px;">
+	            <div >
 	              	<h5 style="color: white;">还剩
 	              		<span style="color: red;" id="_d">00</span>  
 			         	<span style="color: red;" id="_h">00</span>  
-			         	<span style="color: red;" id="_m">00</span>  
+			         	<span style="color: red;" id="_m">00</span>  	
 			        	<span style="color: red;" id="_s">00</span> 
 			        	结束，快来砍价！</h5>
 	            </div>
-	            <div v-if="isOwner" v-on:click="Share()" class="button">邀请好友砍价</div>
-	            <div v-if="!isOwner&&!isBargain" v-on:click="GoBargain()" class="button">帮他砍一刀</div>
-	            <div v-if="!isOwner&&isBargain" v-on:click="AddBargain()" class="button">我也要发起砍价</div>
+	            <div style="text-align: center;">
+	            	<div v-if="isOwner" v-on:click="GoShare()" class="button">邀请好友砍价</div>
+		            <div v-if="!isOwner&&!isBargain" v-on:click="GoBargain()" class="button">帮他砍一刀</div>
+		            <div v-if="!isOwner&&isBargain" v-on:click="AddBargain()" class="button">我也要发起砍价</div>
+	            </div>
+	            
 	            <div class="logList">
 	            	<ul style="margin-top: 5px;" v-for="item in logList">
 	            		<li>            			
-	            			<div class="div-inline" style="width: 40%;"><img style="height: 25px;margin-left: -20px;" :src="item.Headimgurl">&nbsp;&nbsp;&nbsp;{{item.Nickname}}</div>
-	            			<div v-if="isOwner" class="div-inline" style="width: 60%;">帮你猛地一刀，砍了  {{item.BargainPrice}} 元</div>	
-	            			<div v-if="!isOwner" class="div-inline" style="width: 60%;">帮他猛地一刀，砍了  {{item.BargainPrice}} 元</div>
+	            			<div class="div-inline" style="width: 40%;white-space: nowrap;"><img style="height: 25px;margin-left: -20px;" :src="item.Headimgurl">&nbsp;&nbsp;&nbsp;{{item.Nickname}}</div>
+	            			<div v-if="isOwner" class="div-inline" style="width: 60%;">帮你砍了  {{item.BargainPrice}} 元</div>	
+	            			<div v-if="!isOwner" class="div-inline" style="width: 60%;">帮他砍了  {{item.BargainPrice}} 元</div>
 	            		</li>
 	            	</ul>
 	            </div>
@@ -123,10 +123,12 @@ ul,li{ list-style:none}
 </div>
 </body>
 
-
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
+	
 	var openid = '@ViewBag.Openid';
 	var bargainid='@ViewBag.Bargainid';
+	
 	var bargainVue=new Vue({
 		el:"#bargain",
 		data:{
@@ -140,7 +142,8 @@ ul,li{ list-style:none}
 			classPrice:"",
 		},
 		created: function () {
-                this.Query();
+            this.Query();
+            this.Share();
          },
          methods:{
          	Query:function(){
@@ -154,13 +157,12 @@ ul,li{ list-style:none}
                     	bargainId:bargainid
                     },
                     success: function (result) {
-//                  	if(result.ClassId==null)
-//                  	{
-//                  		_self.$message.error('砍价已结束');
-//                  		window.location.href = "../WxHome/Index?openid=" + openid+"&&code=null&&state=null";
-//                  	}
-//                  	else
-//                  	{
+                    	if(result.ClassId==null || bargainid==null)
+                    	{
+                    		window.location.href = "../WxHome/Index";
+                    	}
+                    	else
+                    	{
                     		_self.data = result;
 	                        _self.ownerOpenid=result.ownerOpenid;
 	                        _self.endTime=_self.ChangeDateFormat(result.EndTime);
@@ -172,7 +174,7 @@ ul,li{ list-style:none}
 	                        }
 	                        countTime();
 	                        _self.GetLog();
-//                  	}
+	                  	}
                         
                     }
                 });
@@ -180,6 +182,7 @@ ul,li{ list-style:none}
          	},
          	GetLog:function()
          	{
+         		var _self = this;
          		$.ajax({
                     type: "get",
                     dataType: "json",
@@ -202,6 +205,69 @@ ul,li{ list-style:none}
                     }
                 });
          	},
+         	GoShare:function(){
+         		var _self = this;
+         		_self.$message({
+                                type: 'success',
+                                message: '点击右上角，请好友帮忙砍价吧!'
+                           });
+         	},
+         	Share:function(){
+         		var _self = this;
+         		
+         		wx.config({  
+		            debug: false,  
+		            appId: '@ViewBag.AppId',  
+		            timestamp: '@ViewBag.TimeStamp',  
+		            nonceStr: '@ViewBag.NonceStr',  
+		            signature: '@ViewBag.Signature',  
+		            jsApiList: [  
+		                'checkJsApi',  
+		                'onMenuShareTimeline',  
+		                'onMenuShareAppMessage'  
+		            ]  
+		        });  
+		        wx.checkJsApi({
+			        jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'], // 需要检测的JS接口列表
+			        success: function(res) {
+			            // 以键值对的形式返回，可用的api值true，不可用为false
+			            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+			        }
+			    });
+		        wx.ready(function () { 
+//		                <%--分享给朋友接口--%>  
+		            wx.onMenuShareTimeline({
+			           	title: _self.data.ClassName,  
+		                desc: _self.data.ClassAbstract,  
+		                link: '@ViewBag.Link',  
+		                imgUrl: _self.data.ClassImages,  
+		                success: function (res) {  
+		                    //alert('已分享');  
+		                    
+		                },  
+		                cancel: function (res) { 
+		                }  
+			        });
+			
+			        //分享给朋友
+			        wx.onMenuShareAppMessage({
+			            title: _self.data.ClassName,  
+		                desc: _self.data.ClassAbstract,  
+		                link: '@ViewBag.Link',  
+		                imgUrl: _self.data.ClassImages,  
+		                success: function (res) {  
+		                    //alert('已分享');  
+		                    
+		                },  
+		                cancel: function (res) { 
+		                }  
+			        });
+		        });  
+//		          <%--处理失败验证--%>  
+		        wx.error(function (res) {  
+		            alert("error: " + res.errMsg);  
+		        }); 
+         	},
          	ChangeDateFormat:function(timeSpan) {
 				    var timeSpan = timeSpan.replace('Date','').replace('(','').replace(')','').replace(/\//g,'');
 				    var d = new Date(parseInt(timeSpan));
@@ -221,7 +287,6 @@ ul,li{ list-style:none}
                     },
                     success: function (result) {
                     	_self.Query();
-                    	//微信分享接口
                     }
                 });
 			},
@@ -239,15 +304,12 @@ ul,li{ list-style:none}
                     },
                     success: function (result) { 
                         _self.bargainId = result; 
-                        window.location.href = "../WxOrder/Bargain?openid=" + openid+"&&code=null&&state=null&&bargainid="+_self.bargainId;
+                        window.location.href = "../WxOrder/Bargain?bargainid="+_self.bargainId;
                     },
                     error: function (json) {
                         _self.$message.error('查询失败');
                     }
                 });  
-			},
-			Share:function(){
-				
 			},
 			GoClassDetail:function(item){
 				var type="1";
@@ -305,6 +367,7 @@ ul,li{ list-style:none}
              //递归每秒调用countTime方法，显示动态时间效果  
              setTimeout(countTime,1000);  
    
-         }  
-	
+         } 
+         
+
 </script>

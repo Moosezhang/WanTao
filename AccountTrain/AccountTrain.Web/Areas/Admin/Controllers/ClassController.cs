@@ -181,7 +181,7 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
         {
             QrEncoder qrEncoder = new QrEncoder(ErrorCorrectionLevel.H);
             QrCode qrCode = new QrCode();
-            string url = CommonHelper.GetRedirect("WxClass%ClassDetail");
+            string url = CommonHelper.GetRedirect("WxClass%2fClassDetail?classId=" + classid);
             qrEncoder.TryEncode(url, out qrCode);
 
             GraphicsRenderer renderer = new GraphicsRenderer(new FixedModuleSize(5, QuietZoneModules.Two), Brushes.Black, Brushes.White);

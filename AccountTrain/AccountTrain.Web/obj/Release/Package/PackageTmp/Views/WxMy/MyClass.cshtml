@@ -108,7 +108,7 @@
 								</td>
 								<td>
 									<div v-if="item.OrderStatus==1">
-										<button class="am-btn-this am-btn-default" type="button" v-on:click="GoPay(item.ClassId,item.ClassPrice)" style="font-size: 10px;border-radius:60px;color: red;background-color: #FAFAFA;border-color: red;margin-right: 10px;float: right;">去付款</button>
+										<button class="am-btn-this am-btn-default" type="button" v-on:click="GoPay(item.OrderNo)" style="font-size: 10px;border-radius:60px;color: red;background-color: #FAFAFA;border-color: red;margin-right: 10px;float: right;">去付款</button>
 									</div>
 									<div v-if="item.OrderStatus==2">
 										<button class="am-btn-this am-btn-default" type="button" v-on:click="GoStudy(item.ClassId)" style="font-size: 10px;border-radius:60px;color: #4395ff;background-color: #FAFAFA;border-color: #4395ff;margin-right: 10px;float: right;">去学习</button>
@@ -160,30 +160,30 @@
                     }
                 });
 			},
-			GoPay:function(classId,price){
+			GoPay:function(orderNo){
 				var _self = this;	
-				var param={
-					classids:"",
-					openid:openid,
-					source:"1",
-					price:price
-				}
-				
-				param.classids=classId+"|";
-				
-				$.ajax({
-                    type: "post",
-                    dataType: "json",
-                    url: "/WxOrder/AddOrder?pGuid=" + guid(),
-                    data:param,
-                    success: function (result) {
-                    	_self.orderNo=result;
-                    },
-                    error: function (json) {
-                        
-                    }
-                });
-				window.location.href = "/WxOrder/Index?openid=" + openid+"&&orderNo="+_self.orderNo;
+//				var param={
+//					classids:"",
+//					openid:openid,
+//					source:"1",
+//					price:price
+//				}
+//				
+//				param.classids=classId+"|";
+//				
+//				$.ajax({
+//                  type: "post",
+//                  dataType: "json",
+//                  url: "/WxOrder/AddOrder?pGuid=" + guid(),
+//                  data:param,
+//                  success: function (result) {
+//                  	_self.orderNo=result;
+//                  },
+//                  error: function (json) {
+//                      
+//                  }
+//              });
+				window.location.href = "/WxOrder/Index?openid=" + openid+"&&orderNo="+orderNo;
 			},
 			GoStudy:function(classId){				
 				window.location.href = "/WxClass/ClassDetail?openid=" + openid+"&&classId="+classId;

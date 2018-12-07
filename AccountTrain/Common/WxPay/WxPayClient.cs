@@ -45,14 +45,14 @@ namespace Common.WxPay
                 data.SetValue("sign", data.MakeSign());
 
                 string xml = data.ToXml();
-
+                LogHelp.WriteLog(DateTime.Now + "payInxml:" + xml);
                 RestClient client = new RestClient("https://api.mch.weixin.qq.com/pay/unifiedorder");
                 RestRequest req = new RestRequest(Method.POST);
                 req.RequestFormat = DataFormat.Xml;
                 req.AddParameter("text/xml", xml, ParameterType.RequestBody);
 
                 var content = client.Execute(req).Content;
-                //_logger.Debug("exPay:in"+ content);
+                LogHelp.WriteLog(DateTime.Now + "payIn:" + content);
                 WxPayData result = new WxPayData();
                 result.FromXml(content);
 
@@ -87,7 +87,7 @@ namespace Common.WxPay
             }
             catch (Exception ex)
             {
-               // _logger.Debug("exPay:" +ex.Message.ToString());
+                LogHelp.WriteLog(DateTime.Now + "UnifiedOrderError:" + ex.Message);
             }
 
             return resp;
@@ -189,9 +189,9 @@ namespace Common.WxPay
             string xml = inputObj.ToXml();
             var start = DateTime.Now;
 
-            Log.WriteLog("Refund request : " + xml);
+            LogHelp.WriteLog("Refund request : " + xml);
             string response = HttpService.Post(xml, url, true, timeOut);//调用HTTP通信接口提交数据到API
-            Log.WriteLog("Refund response : " + response);
+            LogHelp.WriteLog("Refund response : " + response);
 
             var end = DateTime.Now;
             int timeCost = (int)((end - start).TotalMilliseconds);//获得接口耗时

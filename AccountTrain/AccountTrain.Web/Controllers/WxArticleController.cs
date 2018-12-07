@@ -54,7 +54,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "ActivistsError:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "ActivistsError:" + ex.Message);
                 }
             }            
 
@@ -103,7 +103,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "LawsError:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "LawsError:" + ex.Message);
                 }
             }    
 
@@ -147,7 +147,7 @@ namespace AccountTrain.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLog(DateTime.Now + "LivesError:" + ex.Message);
+                    LogHelp.WriteLog(DateTime.Now + "LivesError:" + ex.Message);
                 }
             }
 
