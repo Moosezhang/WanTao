@@ -19,7 +19,7 @@ namespace BusinessComponent
             return da.GetAllClass();
         }
 
-        public List<ClassEntity> GetClassByCondition(string name, string classType, string startDate, string endDate, string classGroup, string order)
+        public List<VMClassLike> GetClassByCondition(string name, string classType, string startDate, string endDate, string classGroup, string order)
         {
             ClassDA da = new ClassDA();
 
@@ -29,18 +29,54 @@ namespace BusinessComponent
                 foreach (var item in result)
                 {
                     item.ClassType = new BaseSetBC().GetDicItemValueByKey(item.ClassType, DictionaryConstant.ClassKey).ItemValue;
+                    var groupResult = new OrderBC().GetGroupBuyConfigByClassId(item.ClassId);
+                    var now = DateTime.Now;
+                    if (groupResult != null && groupResult.StartTime < now && groupResult.EndTime > now)
+                    {
+                        item.GroupPrice = groupResult.GroupPrice;
+                    }
+                    else
+                    {
+                        item.GroupPrice = 0;
+                    }
                 }
             }
 
             return result;
         }
 
-        public List<ClassEntity> GetClassByType(string type)
+        public List<VMClassLike> GetClassByType(string type)
         {
             ClassDA da = new ClassDA();
 
             var result = da.GetClassByType(type);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    var likeResult = new BaseSetDA().GetLikeById(item.ClassId);
+                    if (likeResult != null && likeResult.Count > 0)
+                    {
+                        item.likeCount = likeResult.Count;
+                    }
+                    else
+                    {
+                        item.likeCount = 0;
+                    }
 
+                    var groupResult = new OrderBC().GetGroupBuyConfigByClassId(item.ClassId);
+                    var now = DateTime.Now;
+                    if (groupResult != null && groupResult.StartTime < now && groupResult.EndTime > now)
+                    {
+                        item.GroupPrice = groupResult.GroupPrice;
+                    }
+                    else
+                    {
+                        item.GroupPrice = 0;
+                    }
+
+                }
+            }
             return result;
         }
 
@@ -61,6 +97,17 @@ namespace BusinessComponent
                     else
                     {
                         item.likeCount = 0;
+                    }
+
+                    var groupResult = new OrderBC().GetGroupBuyConfigByClassId(item.ClassId);
+                    var now=DateTime.Now;
+                    if (groupResult != null && groupResult.StartTime < now && groupResult.EndTime > now)
+                    {
+                        item.GroupPrice = groupResult.GroupPrice;
+                    }
+                    else
+                    {
+                        item.GroupPrice = 0;
                     }
                        
                 }

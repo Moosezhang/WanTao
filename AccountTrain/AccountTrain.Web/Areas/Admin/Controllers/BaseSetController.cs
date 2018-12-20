@@ -315,7 +315,16 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
         {
             try
             {
-                var result = new BaseSetBC().SaveBargainConfig(entity, CurrentUserInfo.Account);
+                BaseSetBC bc= new BaseSetBC();
+                //校验该课程是否已经有配置过
+                var vaild = bc.GetBargainConfigByClassId(entity.ClassId);
+
+                if (vaild != null && string.IsNullOrEmpty(entity.BargainConfigId))
+                {
+                    return Json("该课程已存在配置，无需配置");
+                }
+
+                var result = bc.SaveBargainConfig(entity, CurrentUserInfo.Account);
                 if (result == 0)
                     return Json(string.Empty);
                 return Json("保存成功");
@@ -384,7 +393,16 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
         {
             try
             {
-                var result = new BaseSetBC().SaveGroupBuyConfig(entity, CurrentUserInfo.Account);
+                BaseSetBC bc = new BaseSetBC();
+                //校验该课程是否已经有配置过
+                var vaild = bc.GetGroupBuyConfigByClassId(entity.ClassId);
+
+                if (vaild != null && string.IsNullOrEmpty(entity.GroupBuyConfigId))
+                {
+                    return Json("该课程已存在配置，无需配置");
+                }
+
+                var result = bc.SaveGroupBuyConfig(entity, CurrentUserInfo.Account);
                 if (result == 0)
                     return Json(string.Empty);
                 return Json("保存成功");
@@ -509,7 +527,16 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
                 //    entity.ImageUrl = Session["HelpImgUrl"].ToString();
                 //}
 
-                var result = new BaseSetBC().SaveHelpConfig(entity, CurrentUserInfo.Account);
+                BaseSetBC bc = new BaseSetBC();
+                //校验该课程是否已经有配置过
+                var vaild = bc.GetHelpConfigByClassId(entity.ClassId);
+
+                if (vaild != null && string.IsNullOrEmpty(entity.HelpConfigId))
+                {
+                    return Json("该课程已存在配置，无需配置");
+                }
+
+                var result = bc.SaveHelpConfig(entity, CurrentUserInfo.Account);
                 if (result == 0)
                     return Json(string.Empty);
                 return Json("保存成功");
@@ -586,8 +613,10 @@ namespace AccountTrain.Web.Areas.Admin.Controllers
             }
         }
 
+        
 
-        public ActionResult SavePublicFunds(PublicFundsEntity entity, string loginName)
+
+        public ActionResult SavePublicFunds(PublicFundsEntity entity)
         {
             try
             {

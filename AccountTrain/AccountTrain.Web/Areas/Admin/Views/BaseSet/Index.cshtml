@@ -41,6 +41,7 @@
                                  width="auto" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini"
+                        		   type="primary"
                                    v-on:click="handleEdit(scope.row.ImageId)">编辑</el-button>
                         <el-button v-if="scope.row.Status==1" size="mini"
                                    type="danger"
@@ -69,31 +70,31 @@
                         <el-input v-model="form.ImageId" style="width:220px;" clearable></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col span="12">
+                <el-col span="24">
                     <el-form-item label="图片标题">
-                        <el-input v-model="form.ImageTitle" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.ImageTitle"  clearable></el-input>
                     </el-form-item>
                 </el-col>                           
                 
             </el-row>
-            <el-row>
+            <!--<el-row>
                 <el-col span="12">
                     <el-form-item label="备  注">
                         <el-input v-model="form.Remark" style="width: 540px;" clearable></el-input>
                     </el-form-item>
                 </el-col>
-            </el-row>
+            </el-row>-->
             <el-row>
-                <el-col span="12">
+                <el-col span="24">
                     <el-form-item label="跳转地址">
-                        <el-input v-model="form.ImageLink" style="width:540px;" clearable></el-input>
+                        <el-input v-model="form.ImageLink"  clearable></el-input>
                     </el-form-item>
                 </el-col>     
             </el-row>
             <el-row>
-                 <el-col span="12">
+                 <el-col span="24">
                     <el-form-item label="图片地址">
-                        <el-input v-model="form.ImageUrl" style="width: 540px;" clearable></el-input>
+                        <el-input v-model="form.ImageUrl" clearable></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>

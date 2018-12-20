@@ -20,48 +20,75 @@
                     <el-input v-model="form.ClassId" style="width:180px;" clearable></el-input>
                 </el-form-item>
             </el-col>
-            <el-col span="6">
+            <el-col span="12">
                 <el-form-item label="课程名称">
                     <el-input v-model="form.ClassName" style="width:465px;" clearable></el-input>
                 </el-form-item>
             </el-col>
-            
+            <el-col span="6">
+                <el-form-item label="课程类别">
+                    <el-cascader
+				    expand-trigger="click"
+				    :options="nodeList"
+				    v-model="selectedOptions"
+				    :show-all-levels="false">
+				  	</el-cascader>
+                </el-form-item>
+        	</el-col>
             
             
         </el-row>	        
         <el-row>
         	<el-col span="6">
-	                <el-form-item label="课程价格">
+	                <el-form-item label="实际价格">
 	                    <el-input v-model="form.ClassPrice" style="width:180px;" clearable></el-input>
 	                </el-form-item>
-	            </el-col>
-	            <el-col span="6">
-	                <el-form-item label="课程讲师">
-	                    <el-input v-model="form.ClassTeacher" style="width:180px;" clearable></el-input>
+            </el-col>
+            <el-col span="6">
+	                <el-form-item label="虚拟价格">
+	                    <el-input v-model="form.VirPrice" style="width:180px;" clearable></el-input>
 	                </el-form-item>
-	            </el-col>
-	            <el-col span="6">
-	                <el-form-item label="课程类别">
-	                    <el-cascader
-					    expand-trigger="click"
-					    :options="nodeList"
-					    v-model="selectedOptions"
-					    :show-all-levels="false">
-					  	</el-cascader>
-	                </el-form-item>
-            	</el-col>
-	            <el-col span="6">
-	                <el-form-item label="课程类型">
-	                    <el-select v-model="form.ClassType" placeholder="请选择课程类型" style="width:210px;">
-	                        <el-option v-for="item in DicData"
-	                                   v-bind:key="item.ItemKey"
-	                                   v-bind:label="item.ItemValue"
-	                                   v-bind:value="item.ItemKey">
-	                        </el-option>
-	                    </el-select>
-	                </el-form-item>
-	            </el-col>
+            </el-col>
+            <el-col span="6">
+                <el-form-item label="课程讲师">
+                    <el-input v-model="form.ClassTeacher" style="width:180px;" clearable></el-input>
+                </el-form-item>
+            </el-col>
+        </el-row> 
+        <el-row>   
+            <el-col span="6">
+                <el-form-item label="课程类型">
+                    <el-select v-model="form.ClassType" placeholder="请选择课程类型" >
+                        <el-option v-for="item in DicData"
+                                   v-bind:key="item.ItemKey"
+                                   v-bind:label="item.ItemValue"
+                                   v-bind:value="item.ItemKey">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-col>
+            <el-col span="6">
+                <el-form-item label="开始时间">
+                	<el-date-picker
+				      v-model="form.StartTime"
+				      type="datetime"
+				      format="yyyy-MM-dd HH:mm:ss"
+				      value-format="yyyy-MM-dd HH:mm:ss">
+				    </el-date-picker>
+                </el-form-item>
+            </el-col>
+            <el-col span="6">
+                <el-form-item label="截止时间">
+                	<el-date-picker
+				      v-model="form.EndTime"
+				      type="datetime"
+				      format="yyyy-MM-dd HH:mm:ss"
+				      value-format="yyyy-MM-dd HH:mm:ss">
+				    </el-date-picker>
+                </el-form-item>
+            </el-col>
         </el-row>
+        
         <!--<el-row>
         	<el-col span="6">
                 <el-form-item label="是否团购">                	
@@ -99,23 +126,23 @@
             </el-col>
         </el-row>-->
         <el-row>
-        	<el-col>
+        	<el-col  span="18">
                 <el-form-item label="课程简介">
-                    <el-input v-model="form.ClassAbstract" style="width:750px;" clearable></el-input>
+                    <el-input v-model="form.ClassAbstract"  clearable></el-input>
                 </el-form-item>
             </el-col>
         </el-row>     
-        <el-row>
+        <!--<el-row>
         	<el-col span="12">
                 <el-form-item label="备  注">
                     <el-input v-model="form.Remark" style="width: 750px;" clearable></el-input>
                 </el-form-item>
             </el-col>
-        </el-row>   
+        </el-row>   -->
         <el-row>
-             <el-col >
+             <el-col span="18">
                 <el-form-item label="图片地址">
-                    <el-input v-model="form.ClassImages" style="width:750px;" clearable></el-input>
+                    <el-input v-model="form.ClassImages"  clearable></el-input>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -182,6 +209,24 @@
             _self.GetNodes();	
         },
         methods: {
+        	 dateFormat: function (row, column) {
+                    var date = row[column.property];
+                    if (date == undefined) {
+                        return "";
+                    }
+                    return new Date(parseInt(date.substr(6, 13))).toLocaleDateString();
+                    //return moment(date).format("YYYY-MM-DD HH:mm:ss");
+                    //return new Date(parseInt(date.substr(6, 13))).toLocaleDateString();
+                },
+                ChangeDateFormat:function(timeSpan) {
+				    var timeSpan = timeSpan.replace('Date','').replace('(','').replace(')','').replace(/\//g,'');
+				    var d = new Date(parseInt(timeSpan));
+				    return d;
+				},
+				GetNeedDateFormat:function(datetime){
+					var d = new Date(datetime);  
+					return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + 					':' + d.getMinutes() + ':' + d.getSeconds(); 
+				},
         	LoadData:function(){
         		var _self = this;
 	            $.ajax({
@@ -193,6 +238,8 @@
 	                    id: ClassId
 	                },
 	                success: function (result) { 
+	                	result.StartTime = _self.ChangeDateFormat(result.StartTime);
+                        result.EndTime = _self.ChangeDateFormat(result.EndTime);
 	                    _self.form = result;
 	                    if(result.ClassGroup!=null){
 	                    	 _self.selectedOptions=result.ClassGroup.split('-'); 
@@ -200,17 +247,20 @@
 	                   
 
 						_self.editor = UE.getEditor('editor');
-						_self.editor.setContent(_self.form.ClassContent);
-//			            _self.editor.addListener("ready", function () {
-//			            	_self.editor.setContent(_self.form.ClassContent); // 确保UE加载完成后，放入内容。
-//			            });
+//						_self.editor.setContent(_self.form.ClassContent);
+			            _self.editor.addListener("ready", function () {
+			            	_self.editor.setContent(_self.form.ClassContent); // 确保UE加载完成后，放入内容。
+			            });
 	                }
 	            });
 	            
         	},
            SaveClass: function (classInfo) {
                 var _self = this;
+                classInfo.StartTime= _self.GetNeedDateFormat(classInfo.StartTime);
+                classInfo.EndTime= _self.GetNeedDateFormat(classInfo.EndTime);
                 var content = this.editor.getContent();
+                
                 classInfo.ClassContent= content;                
                 classInfo.ClassGroup=_self.selectedOptions.join('-');
                 
@@ -255,6 +305,9 @@
         }
 	})
 	
+	
+	
+	
 	function getQueryStringByName(name) {
         var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
         if (result == null || result.length < 1) {
@@ -271,9 +324,22 @@
     }
 	
 	
-$(document).ready(function(){
+	$(document).ready(function(){
+		if(ClassId=="")
+		{	
 			detailVue.editor = new UE.ui.Editor(5);  
-			detailVue.editor.render("editor");            
+				detailVue.editor.render("editor");       
+		}
+				     
+	})
+//
+//	detailVue.editor = UE.getEditor('editor');
+//	detailVue.editor.addListener("ready", function () {
+//  	detailVue.editor.setContent(detailVue.form.ClassContent); // 确保UE加载完成后，放入内容。
+//  });
+
+$(function () {
+        NProgress.done();
 })
 
 </script>

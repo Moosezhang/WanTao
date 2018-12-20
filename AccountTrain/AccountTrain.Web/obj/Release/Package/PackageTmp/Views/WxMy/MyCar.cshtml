@@ -194,8 +194,8 @@
                     url: "/WxOrder/AddOrder?pGuid=" + guid(),
                     data:param,
                     success: function (result) {
-                    	_self.orderNo=result;
-                    	window.location.href = "/WxOrder/Index?orderNo="+_self.orderNo;
+                    	//_self.orderNo=result;
+                    	window.location.href = result;
                     	
                     },
                     error: function (json) {

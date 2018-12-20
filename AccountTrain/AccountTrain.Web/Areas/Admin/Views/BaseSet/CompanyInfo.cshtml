@@ -8,28 +8,28 @@
 <div id="company" style="margin-top:30px;margin-left:30px">
     <el-form model="form">
         <el-form-item label="CompanyId" style="display: none;">
-            <el-input v-model="form.CompanyId" style="width:220px;margin-left: 20px;" clearable></el-input>
+            <el-input v-model="form.CompanyId" style="width:400px;margin-left: 20px;" clearable></el-input>
         </el-form-item>
         <el-form-item label="公司名称：">
-            <el-input v-model="form.CompanyName" style="width:220px;margin-left: 20px;" clearable></el-input>
+            <el-input v-model="form.CompanyName" style="width:400px;margin-left: 20px;" clearable></el-input>
         </el-form-item>
         <el-form-item label="公司地址：">
-            <el-input v-model="form.CompanyAddress" style="width:220px;margin-left: 20px;" clearable></el-input>
+            <el-input v-model="form.CompanyAddress" style="width:400px;margin-left: 20px;" clearable></el-input>
         </el-form-item>
         <el-form-item label="公司电话：">
-            <el-input v-model="form.CompanyTelephone" style="width:220px;margin-left: 20px;" clearable></el-input>
+            <el-input v-model="form.CompanyTelephone" style="width:400px;margin-left: 20px;" clearable></el-input>
         </el-form-item>
         <el-form-item label="公司邮箱：">
-            <el-input v-model="form.CompanyEmail" style="width:220px;margin-left: 20px;" clearable></el-input>
+            <el-input v-model="form.CompanyEmail" style="width:400px;margin-left: 20px;" clearable></el-input>
         </el-form-item>
         <el-form-item label="联系人名称：">
-            <el-input v-model="form.ContactName" style="width:220px;margin-left: 6px;" clearable></el-input>
+            <el-input v-model="form.ContactName" style="width:400px;margin-left: 6px;" clearable></el-input>
         </el-form-item>
         <el-form-item label="联系人电话：">
-            <el-input v-model="form.ContactPhone" style="width:220px;margin-left: 6px;" clearable></el-input>
+            <el-input v-model="form.ContactPhone" style="width:400px;margin-left: 6px;" clearable></el-input>
         </el-form-item>
         <el-form-item label="备注：">
-            <el-input v-model="form.Remark" style="width:220px;margin-left: 48px;" clearable></el-input>
+            <el-input type="textarea" v-model="form.Remark" style="width:400px;margin-left: 48px;" clearable></el-input>
         </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -79,6 +79,10 @@
             },
         }
 
+    })
+    
+    $(function () {
+        NProgress.done();
     })
 </script>
 

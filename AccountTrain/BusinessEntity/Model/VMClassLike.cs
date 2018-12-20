@@ -57,7 +57,7 @@ namespace BusinessEntitys
         /// </summary>
     
         public decimal ClassPrice { get; set; }
-
+        public decimal VirPrice { get; set; }
         /// <summary>
         /// 课程讲师
         /// </summary>
@@ -127,7 +127,11 @@ namespace BusinessEntitys
 
         public int likeCount { get; set; }
 
+        public decimal GroupPrice { get; set; }
 
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
       
 
     }

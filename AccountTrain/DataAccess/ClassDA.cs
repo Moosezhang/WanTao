@@ -27,13 +27,13 @@ namespace DataAccess
             }
         }
 
-        public List<ClassEntity> GetClassByType(string type)
+        public List<VMClassLike> GetClassByType(string type)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
                 string query = string.Format(@"select * from Train_Class
-                                            where status=1 and ClassType = '{0}' order by createtime desc", type);
-                return conn.Query<ClassEntity>(query).ToList();
+                                            where status=1 and ClassType = '{0}' and getdate() between StartTime and EndTime  order by createtime desc", type);
+                return conn.Query<VMClassLike>(query).ToList();
             }
         }
 
@@ -42,17 +42,17 @@ namespace DataAccess
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
                 string query = string.Format(@"select * from Train_Class
-                                            where status=1 and ClassType in ('1','2')  order by createtime desc");
+                                            where status=1 and ClassType in ('1','2')  and getdate() between StartTime and EndTime  order by createtime desc");
                 return conn.Query<VMClassLike>(query).ToList();
             }
         }
 
-        public List<ClassEntity> GetClassByCondition(string name, string classType, string startDate, string endDate,string classGroup,string order)
+        public List<VMClassLike> GetClassByCondition(string name, string classType, string startDate, string endDate, string classGroup, string order)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
                 string query = string.Format(@"select * from Train_Class
-                                where 1=1");
+                                where status!=0");
                 if (!string.IsNullOrEmpty(name))
                 {
                     string sql = string.Format(" and ClassName like '%{0}%'", name);
@@ -76,7 +76,7 @@ namespace DataAccess
                 if (!string.IsNullOrEmpty(order))
                 {
                     string sql = string.Empty;
-                    switch(order)
+                    switch (order)
                     {
                         case "TimeDesc":
                             sql = string.Format(" order by CreateTime desc", order);
@@ -89,10 +89,14 @@ namespace DataAccess
 
                     }
 
-                   
+
+                }
+                else
+                {
+                    query = query + " order by CreateTime desc";
                 }
 
-                return conn.Query<ClassEntity>(query).ToList();
+                return conn.Query<VMClassLike>(query).ToList();
 
             }
         }
@@ -132,7 +136,8 @@ namespace DataAccess
                                                    ,CreateUser
                                                    ,UpdateTime
                                                    ,UpdateUser
-                                                   ,ClassAbstract,ClassGroup)
+                                                   ,ClassAbstract,ClassGroup,StartTime
+                                                   ,EndTime,VirPrice)
                                              VALUES
                                                     ('{0}'
                                                     ,'{1}'
@@ -151,9 +156,9 @@ namespace DataAccess
                                                     ,'{13}'
                                                     ,getdate()
                                                     ,'{14}'
-                                                    ,'{15}','{16}')",
+                                                    ,'{15}','{16}','{17}','{18}','{19}')",
                         Guid.NewGuid().ToString(), Class.ClassName, Class.ClassType, Class.ClassContent, Class.ClassImages, Class.ClassPrice,
-                        Class.ClassTeacher, Class.HotCount, Class.IsGroupBuy, Class.IsBargain, Class.IsHelp, Class.Remark, 1, loginName, loginName, Class.ClassAbstract,Class.ClassGroup);
+                        Class.ClassTeacher, Class.HotCount, Class.IsGroupBuy, Class.IsBargain, Class.IsHelp, Class.Remark, 1, loginName, loginName, Class.ClassAbstract, Class.ClassGroup, Class.StartTime, Class.EndTime, Class.VirPrice);
                     return conn.Execute(query);
                 }
             }
@@ -175,10 +180,10 @@ namespace DataAccess
                                                        ,Remark = '{10}'                                                             
                                                        ,UpdateTime = getdate()
                                                        ,UpdateUser = '{11}'
-                                                       ,ClassAbstract = '{12}',ClassGroup='{13}'
+                                                       ,ClassAbstract = '{12}',ClassGroup='{13}',StartTime='{15}',EndTime='{16}',VirPrice='{17}'
                                                     WHERE ClassId='{14}'",
                                               Class.ClassName, Class.ClassType, Class.ClassContent, Class.ClassImages, Class.ClassPrice, Class.ClassTeacher, Class.HotCount, Class.IsGroupBuy,
-                                              Class.IsBargain, Class.IsHelp, Class.Remark, loginName, Class.ClassAbstract,Class.ClassGroup, Class.ClassId);
+                                              Class.IsBargain, Class.IsHelp, Class.Remark, loginName, Class.ClassAbstract, Class.ClassGroup, Class.ClassId, Class.StartTime, Class.EndTime, Class.VirPrice);
                     return conn.Execute(query);
                 }
             }
@@ -371,6 +376,9 @@ namespace DataAccess
                                             from Train_ClickCount t
                                             inner join Train_Class t1 on t.ObjectId=t1.ClassId) tt
                                             where tt.OpenId='{0}'", openid);
+
+
+
                 return conn.Query<VMWxHistory>(query).ToList();
             }
         }

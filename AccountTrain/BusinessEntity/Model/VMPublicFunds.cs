@@ -57,6 +57,8 @@ namespace BusinessEntity.Model
        
         public string UpdateUser { get; set; }
 
+        public string FundsText { get; set; }
+
       
     }
 }

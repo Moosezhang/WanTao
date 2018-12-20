@@ -18,6 +18,7 @@ using Gma.QrCodeNet.Encoding;
 using Gma.QrCodeNet.Encoding.Windows.Render;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
+using System.Configuration;
 
 namespace AccountTrain.Web.Controllers
 {
@@ -41,59 +42,70 @@ namespace AccountTrain.Web.Controllers
 
                 //判断是否注册
                 var userInfo = new WxUserBC().GetWxUserByOpenid(param.openid);
+
                 if (string.IsNullOrEmpty(userInfo.Phone))
                 {
-                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
-                }
-
-                //var orderResult = new OrderBC().GetOrderByOpenIdandClassId(param.openid,);
-
-                string OrderNo = CommonHelper.CreateOrderNo();
-                OrderEntity order = new OrderEntity() 
-                {
-                    OrderNo = OrderNo,
-                    Openid = param.openid,
-                    PayPrice=param.price,
-                    OrderSource=param.source,
-                    Nickname = new WxUserBC().GetWxUserByOpenid(param.openid).Nickname
-                };
-
-                List<OrderGoodsEntity> goods = new List<OrderGoodsEntity>();
-
-                var paramList = param.classids.ToString().Split('|').ToList();
-                if (paramList != null && paramList.Count > 0)
-                {
-                    foreach (var item in paramList)
-                    {
-                        if (!string.IsNullOrEmpty(item))
-                        {
-                            var entity = new ClassBC().GetClassByKey(item);
-                            OrderGoodsEntity good = new OrderGoodsEntity() {
-                                ClassId = entity.ClassId,
-                                ClassName=entity.ClassName,
-                                Price = param.source != "1" ? param.price : entity.ClassPrice
-                            };
-                            goods.Add(good);
-                        }
-
-                    }
-                }
-                
-                
-
-
-                var result = new OrderBC().SaveOrder(order, goods, param.openid);
-                if (result == "true")
-                {
-                    return Json(OrderNo, JsonRequestBehavior.AllowGet);
+                    string url = CommonHelper.GetRedirect("WxMy%2fRegistered");
+                    //Response.Redirect(url);
+                    return Json(url, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return Json(string.Empty, JsonRequestBehavior.AllowGet);
+                    string OrderNo = CommonHelper.CreateOrderNo();
+                    OrderEntity order = new OrderEntity()
+                    {
+                        OrderNo = OrderNo,
+                        Openid = param.openid,
+                        PayPrice = param.price,
+                        OrderSource = param.source,
+                        Nickname = new WxUserBC().GetWxUserByOpenid(param.openid).Nickname
+                    };
+
+                    List<OrderGoodsEntity> goods = new List<OrderGoodsEntity>();
+
+                    var paramList = param.classids.ToString().Split('|').ToList();
+                    if (paramList != null && paramList.Count > 0)
+                    {
+                        foreach (var item in paramList)
+                        {
+                            if (!string.IsNullOrEmpty(item))
+                            {
+                                var entity = new ClassBC().GetClassByKey(item);
+                                OrderGoodsEntity good = new OrderGoodsEntity()
+                                {
+                                    ClassId = entity.ClassId,
+                                    ClassName = entity.ClassName,
+                                    Price = param.source != "1" ? param.price : entity.ClassPrice
+                                };
+                                goods.Add(good);
+                            }
+
+                        }
+                    }
+
+                    var result = new OrderBC().SaveOrder(order, goods, param.openid);
+                    if (result == "true")
+                    {
+                        string okUrl = "/WxOrder/Index?orderNo=" + OrderNo;
+                        return Json(okUrl, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(string.Empty, JsonRequestBehavior.AllowGet);
+                    }
                 }
+
+                //var orderResult = new OrderBC().GetOrderByOpenIdandClassId(param.openid,);
+                
+                
+                
+
+
+                
             }
             catch (Exception ex)
             {
+                LogHelp.WriteLog(DateTime.Now + ":::AddOrderError:::" + ex.Message);
                 return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
@@ -353,6 +365,8 @@ namespace AccountTrain.Web.Controllers
                     }
                     break;
                 case "3"://团购
+                    UpdateOrderStatus(orderNo, 3);//1
+
                     foreach (var item in goods)
                     {
                         var gbEntity = bc.GetGroupBuyByClassId(item.ClassId);
@@ -386,6 +400,13 @@ namespace AccountTrain.Web.Controllers
                         if (nowCount == needCount)//团购人数已满，变更团购状态为已完成（2）
                         {
                             bc.UpdateGroupBuyStatus(nowCountEntity.GroupBuyId, 2);
+                            //更新成员表中所有成员的订单状态
+                            var members = bc.GetGroupBuyMember(nowCountEntity.GroupBuyId);
+                            foreach (var i in members)
+                            {
+                                var order = bc.GetOrderByOpenIdandClassId(i.openId,item.ClassId);
+                                UpdateOrderStatus(order.OrderNo, 2);//1
+                            }
                         }
                     }
 
@@ -666,13 +687,15 @@ namespace AccountTrain.Web.Controllers
                 var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
                 if (string.IsNullOrEmpty(userInfo.Phone))
                 {
-                    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
+                    string url = CommonHelper.GetRedirect("WxMy%2fRegistered");
+                    //Response.Redirect(url);
+                    return Json(url, JsonRequestBehavior.AllowGet);
                 }
 
                 var result = new OrderBC().GetBargainByOpenIdAndClassId(classid, openid);
                 if (result != null)
                 {
-                    return Json(result.BargainId, JsonRequestBehavior.AllowGet);
+                    return Json("/WxOrder/Bargain?bargainid="+result.BargainId, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -688,9 +711,10 @@ namespace AccountTrain.Web.Controllers
                     };
 
                     var addResult = new OrderBC().AddBargain(entity, openid);
-                    if (addResult > 0)
+                     if (addResult > 0)
                     {
-                        return Json(bargainId, JsonRequestBehavior.AllowGet);
+                        string okUrl = "/WxOrder/Bargain?bargainid=" + bargainId;
+                        return Json(okUrl, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
@@ -915,17 +939,17 @@ namespace AccountTrain.Web.Controllers
                     SaveIamge QR = CreateQR(helpId);
                     //添加文字水印
                     string WxName = new WxUserBC().GetWxUserByOpenid(openid).Nickname;
-                  
-                    string path = HttpContext.Server.MapPath("/Images/");
-               
-                    string[] sArray = Regex.Split(config.ImageUrl, "Images/", RegexOptions.IgnoreCase);
+
+                    string path = HttpContext.Server.MapPath("/Images/upload/");
+
+                    string[] sArray = Regex.Split(config.ImageUrl, "Images/upload/", RegexOptions.IgnoreCase);
                    
                     string filename = sArray[1].ToString();
                     SaveIamge WordsPic = new WaterImageManager().DrawWordsForSaveIamge(filename, path, WxName, 1, FontFamilys.宋体, FontStyle.Bold, ImagePosition.TopMiddle);
                     //添加二维码水印
                     string QrPic = new WaterImageManager().DrawImage(WordsPic.filename, WordsPic.showImg, QR.filename, QR.showImg, 1, ImagePosition.BottomMiddle);
 
-                    link = CommonHelper.LinkImageUrl("/Images/" + QrPic);
+                    link = CommonHelper.LinkImageUrl("/Images/upload/" + QrPic);
 
                     HelpInfoEntity help = new HelpInfoEntity()
                     {
@@ -1006,15 +1030,15 @@ namespace AccountTrain.Web.Controllers
                         SaveIamge QR = CreateQR(helpId);
                         //添加文字水印
                         string WxName = new WxUserBC().GetWxUserByOpenid(ownOpenid).Nickname;
-                        string path = HttpContext.Server.MapPath("/Images/");
+                        string path = HttpContext.Server.MapPath("/Images/upload/");
 
-                        string[] sArray = Regex.Split(config.ImageUrl, "Images/", RegexOptions.IgnoreCase);
+                        string[] sArray = Regex.Split(config.ImageUrl, "Images/upload/", RegexOptions.IgnoreCase);
                         string filename = sArray[1].ToString();
                         SaveIamge WordsPic = new WaterImageManager().DrawWordsForSaveIamge(filename, path, WxName, 1, FontFamilys.宋体, FontStyle.Bold, ImagePosition.TopMiddle);
                         //添加二维码水印
                         string QrPic = new WaterImageManager().DrawImage(WordsPic.filename, WordsPic.showImg, QR.filename, QR.showImg, 1, ImagePosition.BottomMiddle);
 
-                        link = CommonHelper.LinkImageUrl("/Images/" + QrPic);
+                        link = CommonHelper.LinkImageUrl("/Images/upload/" + QrPic);
 
                         HelpInfoEntity help = new HelpInfoEntity()
                         {
@@ -1051,8 +1075,8 @@ namespace AccountTrain.Web.Controllers
           
             QrEncoder qrEncoder = new QrEncoder(ErrorCorrectionLevel.H);
             QrCode qrCode = new QrCode();
-            LogHelp.WriteLog("HelpClass:::4444");
-            string url = CommonHelper.GetRedirect("WxOrder%2fHelpClass?helpId=" + helpId);
+            string url = ConfigurationManager.AppSettings["imgMapPath"] + "WxOrder/HelpClass?helpId=" + helpId;
+            //string url = CommonHelper.GetRedirect("WxOrder%2fHelpClass?helpId=" + helpId);
                   
             qrEncoder.TryEncode(url, out qrCode);
 
@@ -1214,6 +1238,21 @@ namespace AccountTrain.Web.Controllers
             catch (Exception ex)
             {
                 return Json(new HelpConfigEntity(), JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
+
+        #region 公益金
+
+        public ActionResult GetFundsConfigByClassId(string classid)
+        {
+            try
+            {
+                return Json(new BaseSetBC().GetFundsConfigByClassId(classid), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new VMPublicFunds(), JsonRequestBehavior.AllowGet);
             }
         }
         #endregion

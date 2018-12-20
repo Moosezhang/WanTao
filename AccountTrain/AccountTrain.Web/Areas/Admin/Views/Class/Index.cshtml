@@ -45,32 +45,44 @@
                       v-bind:default-sort="{prop: 'CreateTime', order: 'descending'}"
                       style="width: 100%">
                 <el-table-column prop="ClassName"
-                                 label="课程名称">
+                                 label="课程名称"
+                                 >
                 </el-table-column>
                  <el-table-column prop="ClassType"
-                                 label="课程类型">
+                                 label="课程类型"
+                                 width="100">
                 </el-table-column>
                 <el-table-column  prop="ClassTeacher" 
-                				 label="课程讲师">                 	
+                				 label="课程讲师"
+                				 width="100">                 	
                 </el-table-column>
                 <el-table-column  prop="ClassPrice" 
-                				 label="课程价格"> 
+                				 label="课程价格"
+                				 width="100"> 
                 </el-table-column>
-                <el-table-column  prop="HotCount" 
-                				 label="课程热度"> 
+	            <el-table-column prop="StartTime"
+                                 label="开始时间"
+                                 :formatter="dateFormat"
+                                 width="100">
+                </el-table-column>
+                <el-table-column prop="EndTime"
+                                 label="截止时间"
+                                 :formatter="dateFormat"
+                                 width="100">
                 </el-table-column>
                 <el-table-column fixed="right"
                                  label="操作"
                                  width="300" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini"
+                        		   type="primary"
                                    v-on:click="handleEdit(scope.row.ClassId)">编辑</el-button>
-                        <el-button v-if="scope.row.Status==0" size="mini"
+                        <!--<el-button v-if="scope.row.Status==0" size="mini"
                                    type="danger"
-                                   v-on:click="handleDisable(scope.row.ClassId,1)">上架</el-button>
+                                   v-on:click="handleDisable(scope.row.ClassId,1)">上架</el-button>-->
                         <el-button v-if="scope.row.Status==1" size="mini"
                                    type="danger"
-                                   v-on:click="handleDisable(scope.row.ClassId,0)">下架</el-button>
+                                   v-on:click="handleDisable(scope.row.ClassId,0)">删除</el-button>
                         <el-button v-if="scope.row.Status==1" size="mini"
                                    type="danger"
                                    v-on:click="handleCreateQR(scope.row.ClassId)">生成二维码</el-button>
@@ -91,7 +103,12 @@
     </div>
 
     <el-dialog title="二维码" v-bind:visible.sync="dialogClassFormVisible" v-model="dialogClassFormVisible" style=" height:500px;">
-        <img style="height:200px;width: 200px;margin-left: 225px;" :src="QRUrl"/>
+		<el-form>   
+		    <el-form-item label="二维码地址：">
+		        <el-input type="textarea" v-model="QrUrl" style="width:80%;height: 30%;" clearable></el-input>
+		    </el-form-item>
+		    <img style="height:100px;width: 100px;margin-left: 225px;" :src="QrImg"/>
+		</el-form>     
     </el-dialog>
 
 <script>
@@ -107,14 +124,22 @@
                 stratDate:'',
                 endDate:'',
                 dialogClassFormVisible: false,
+                dialogDetailFormVisible: false,
                 form: {},
                 uploadActionUrl:"/Class/ClassUpload",
                 fileList2: [],
                 DicData:[],
                 editor: null,
                 currentPage:1,
-        		pagesize:8,
-        		QRUrl:"",
+        		pagesize:10,
+        		
+        		form: {},
+        		DicData:[],
+	            editor: null,
+	            nodeList:[],
+	            selectedOptions:[],
+	            QrUrl:"",
+	            QrImg:"",
             },
             beforeCreate:function (){
             	var _self = this;
@@ -135,8 +160,29 @@
                 this.QueryData();
             },
             methods: {
+            	dateFormat: function (row, column) {
+                    var date = row[column.property];
+                    if (date == undefined) {
+                        return "";
+                    }
+                    return new Date(parseInt(date.substr(6, 13))).toLocaleDateString();
+                    //return moment(date).format("YYYY-MM-DD HH:mm:ss");
+                    //return new Date(parseInt(date.substr(6, 13))).toLocaleDateString();
+                },
+                ChangeDateFormat:function(timeSpan) {
+				    var timeSpan = timeSpan.replace('Date','').replace('(','').replace(')','').replace(/\//g,'');
+				    var d = new Date(parseInt(timeSpan));
+				    return d;
+				},
+				GetNeedDateFormat:function(datetime){
+					var d = new Date(datetime);  
+					return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + 					':' + d.getMinutes() + ':' + d.getSeconds(); 
+				},
                 handleAdd: function () {
-                    window.location.href = "Detail?id=null";
+//              	var _self = this;
+//                  _self.form = {};                   
+//                  this.dialogDetailFormVisible = true;
+                    window.location.href = "Detail";
                 },
                 handleEdit: function (ClassId) {
                 	window.location.href = "Detail?id=" + ClassId;
@@ -212,21 +258,59 @@
                             classid: ClassId
                         },
                         success: function (result) {
-                        	_self.QRUrl=result;
-//                          if (result) {
-//                              //
-//                              
-//                              //this.dialogQRCode=true;
-//                          } else {
-//                              _self.$message({
-//                                  type: 'info',
-//                                  message: '生成失败!'
-//                              });
-//                          }
+                        	_self.QrUrl=result.url;
+                        	_self.QrImg=result.showImg;
                         }
                     });
                     this.dialogClassFormVisible = true;
-			    }
+			    },
+			    SaveClass: function (classInfo) {
+	                var _self = this;
+	                classInfo.StartTime= _self.GetNeedDateFormat(classInfo.StartTime);
+	                classInfo.EndTime= _self.GetNeedDateFormat(classInfo.EndTime);
+	                var content = this.editor.getContent();
+	                
+	                classInfo.ClassContent= content;                
+	                classInfo.ClassGroup=_self.selectedOptions.join('-');
+                
+	                $.ajax({
+	                    type: "post",
+	                    dataType: "json",
+	                    url: "/Class/SaveClass",
+	                    data: classInfo,
+	                    success: function (result) {
+	                        if (result) {
+	                            _self.$message({
+	                                type: 'success',
+	                                message: '保存成功!'
+	                            });
+	                            window.location.href = "Index";
+	                        } else {
+	                            _self.$message.error('保存课程信息失败');
+	                        }
+	                    },
+	                    error: function (json) {
+	                        _self.$message.error('保存课程信息失败');
+	                    }
+	                });
+	            },
+	            GetNodes:function(){
+					var _self=this;
+					$.ajax({
+	                    type: "post",
+	                    dataType: "json",
+	                    url: "/WxClass/GetDicInfoList?pGuid=" + guid(),
+	                    data:{
+	                    	key:"33e9c5ee-3358-4ff8-86cc-6807b98273ce"
+	                    },
+	                    success: function (result) {
+	                    	_self.nodeList=result
+	                    },
+	                    error: function (json) {
+	                        
+	                    }
+	                });
+				},
             }
 
         });
@@ -238,6 +322,5 @@
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
-
 
 </script>

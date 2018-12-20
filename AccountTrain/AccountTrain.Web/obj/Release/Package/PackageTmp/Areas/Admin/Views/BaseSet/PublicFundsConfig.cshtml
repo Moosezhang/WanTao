@@ -7,10 +7,7 @@
         您当前所在的位置：公益金规则
 </div>
 <div id="tabs" style="margin: 10px;">
-    <el-tabs v-model="activeName" type="border-card">
-
-       <el-tab-pane label="公益金规则" name="PublicFunds">           
-			<el-row style="margin-top:10px;margin-left:10px">
+    <el-row style="margin-top:10px;margin-left:10px">
 		        <el-col span="24">
 		            <div>
 		                <el-input v-model="PublicFundsName" id="PublicFundsName" placeholder="请输入课程名称" clearable 						style="width:200px;"></el-input>
@@ -31,20 +28,25 @@ v-bind:data="PublicFundsData.slice((PublicFundscurrentPage-1)*PublicFundspagesiz
 		                <el-table-column prop="ClassName"
 		                                 label="课程名称">
 		                </el-table-column>
-		
+						<el-table-column prop="FundsText"
+		                                 label="公益事业"
+		                                 width="100">
+		                </el-table-column>	
 		                <el-table-column prop="FundsPrice"
-		                                 label="公益金">
+		                                 label="公益金"
+		                                 width="100">
 		                </el-table-column>		               
 		                <el-table-column fixed="right"
 		                                 label="操作"
-		                                 width="auto" header-align="center" align="center">
+		                                 width="100" header-align="center" align="center">
 		                    <template slot-scope="scope">
 		
 		                        <el-button size="mini"
+		                        	type="primary"
 		                                   v-on:click="handlePublicFundsEdit(scope.row.PublicFundsId)">编辑</el-button>
-		                        <el-button v-if="scope.row.Status==1" size="mini"
+		                        <!--<el-button v-if="scope.row.Status==1" size="mini"
 		                                   type="danger"
-		                                   v-on:click="handlePublicFundsDisable(scope.row.PublicFundsId,0)">禁用</el-button>
+		                                   v-on:click="handlePublicFundsDisable(scope.row.PublicFundsId,0)">禁用</el-button>-->
 		                    </template>
 		                </el-table-column>
 		            </el-table> 
@@ -66,17 +68,22 @@ v-bind:data="PublicFundsData.slice((PublicFundscurrentPage-1)*PublicFundspagesiz
 		            <el-row>
 		                <el-col span="12" style="display: none;">
 		                    <el-form-item label="Id">
-		                        <el-input v-model="PublicFundsform.PublicFundsId" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="PublicFundsform.PublicFundsId"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		                <el-col span="12">
+		                    <el-form-item label="公益事业">
+		                        <el-input v-model="PublicFundsform.FundsText"  clearable></el-input>
+		                    </el-form-item>
+		                </el-col>	
+		                <el-col span="12">
 		                    <el-form-item label="公益金 ">
-		                        <el-input v-model="PublicFundsform.FundsPrice" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="PublicFundsform.FundsPrice"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>		                
 		                <el-col span="12">
 		                    <el-form-item label="所属课程">
-		                        <el-select v-model="PublicFundsform.ClassId" placeholder="请选择课程" style="width:220px;">
+		                        <el-select v-model="PublicFundsform.ClassId" filterable placeholder="请选择课程" >
 		                            <el-option v-for="item in ClassData"
 		                                       v-bind:key="item.ClassId"
 		                                       v-bind:label="item.ClassName"
@@ -92,10 +99,6 @@ v-bind:data="PublicFundsData.slice((PublicFundscurrentPage-1)*PublicFundspagesiz
 		            <el-button type="primary" size="small" v-on:click="SavePublicFunds(PublicFundsform)">确 定</el-button>
 		        </div>
 		    </el-dialog>
-
-
-        </el-tab-pane>
-    </el-tabs>
 </div>
 
 <script>
@@ -111,7 +114,7 @@ v-bind:data="PublicFundsData.slice((PublicFundscurrentPage-1)*PublicFundspagesiz
                 dialogPublicFundsFormVisible: false,
                 PublicFundsform: {},
                 PublicFundscurrentPage:1,
-        		PublicFundspagesize:8,
+        		PublicFundspagesize:10,
             },
             beforeCreate: function () {
                 var _self = this;
@@ -206,11 +209,11 @@ v-bind:data="PublicFundsData.slice((PublicFundscurrentPage-1)*PublicFundspagesiz
                                     message: '保存成功!'
                                 });
                             } else {
-                                _self.$message.error('保存团购配置息失败');
+                                _self.$message.error('保存公益金配置息失败');
                             }
                         },
                         error: function (json) {
-                            _self.$message.error('保存团购配置失败');
+                            _self.$message.error('保存公益金配置失败');
                         }
                     });
                 },
@@ -258,4 +261,9 @@ v-bind:data="PublicFundsData.slice((PublicFundscurrentPage-1)*PublicFundspagesiz
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+    
+    $(function () {
+        NProgress.done();
+})
+
 </script>

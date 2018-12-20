@@ -19,7 +19,7 @@
     <title>法规资讯</title>
 </head>
 <body>
-  	<header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
+  	<!--<header data-am-widget="header" class="am-header am-header-default" style="background-color: white;">
 	  <div class="am-header-left am-header-nav">
 		    <a href="javascript:window.history.back(); " class="">
 		  	<img class="am-header-icon-custom" src="~/Images/icon/返回.png" alt=""/>
@@ -32,14 +32,14 @@
       <div class="am-input-group">	
 	      <span class="am-input-group-btn" >
 	      	<button class="am-btn" type="button" onclick="GoHome()" 
-	        	style="background-color: white;border-color:white;margin-left: 45px;">
+	        	style="background-color: white;border-color:white;margin-left: 40px;">
 	        	<div><img class="am-header-icon-custom" src="~/Images/icon/主页.png" style="height: 20px;" alt=""/></div>
 	        </button>
 	        
 	      </span>
 	    </div>
-	</header>
-  	<hr style="margin-top: 0px;"/>
+	</header>-->
+  	<!--<hr style="margin-top: 0px;"/>-->
   	<div id="activity">
   		<div data-am-widget="tabs" class="am-tabs am-tabs-d2" style="margin: 0px;">
 			  <ul class="am-tabs-nav am-cf" >
@@ -67,7 +67,7 @@
 										</tr>
 										<tr>
 											<td>
-												<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
+												<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;height: 18px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
 												<div style="color: #999999;float: right;padding-top: 5px;margin-right: 10px;"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>	
 											</td>
 											
@@ -80,6 +80,25 @@
 						</div>
 			      </div>
 			      <div data-tab-panel-1 class="am-tab-panel " style="overflow-y: auto;">
+			      	<div class="am-u-lg-6" style="float: none;padding-right: 0px;padding-left: 0px;">
+			  			<div  style="width: 100%;" >	
+						    <el-cascader
+						    	expand-trigger="hover"
+						    	:options="nodeList"
+						    	v-model="selectedOptions"
+						    	:show-all-levels="false"			    	
+						    	clearable
+						    	placeholder="全部"
+						    	style="width: 80%;float: left;appearance: none;-webkit-appearance: none;border-radius: 0 !important;">
+						  	</el-cascader>
+				  			
+							<!--<input type="text" v-model="txtTitle" autocomplete="off" placeholder="搜索" class="am-form-field" 
+						  		style="float:left;width:50%;margin-top: 1px;height: 40px;border-top-left-radius:5px;border-bottom-left-radius:5px;">			  	-->
+						  	<span class="am-input-group-btn" style="width: 20%;">
+						        <button style="margin-top: 1px;height: 40px;width: 100%;border-top-right-radius:5px;border-bottom-right-radius:5px;" class="am-btn am-btn-default" type="button" v-on:click="Query()" ><span class="am-icon-search"></span> </button>
+						    </span>	 
+			  			</div>	
+			  		</div>  
 			        <div data-am-widget="list_news" class="am-list-news am-list-news-default" >
 						  <!--列表标题-->		
 						  <div class="am-list-news-bd">
@@ -99,7 +118,7 @@
 										</tr>
 										<tr>
 											<td>
-												<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
+												<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;height: 18px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
 												<div style="color: #999999;float: right;padding-top: 5px;margin-right: 10px;"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>	
 											</td>
 											
@@ -124,21 +143,39 @@
 		el:"#activity",
 		data:{
 			activityList:[],
+			txtTitle:"",
 			lawsList:[],
+			nodeList:[],
+			selectedOptions: [],
+			orderList:[				
+				{
+	              value: 'CreateTime',
+	              label: '上架时间'
+	            },
+	            {
+	              value: 'ClassPrice',
+	              label: '价格'
+	            }
+			],
+			selectedOptions1: [],
 		},
 		created: function () {
-                this.Query()
+                this.Query();                
+                this.GetNodes();
          },
          methods:{
          	Query:function () {  
 			    var _self = this;
+			    var title = this.txtTitle;
+			    var group=_self.selectedOptions.join('-');
                 $.ajax({
                     type: "get",
                     dataType: "json",
                     contentType: "application/json",
                     url: "/WxArticle/GetAllArticlesByType?pGuid=" + guid(),
                     data: {
-                    	type:"4"
+                    	type:"4",
+                    	group:group
                     },
                     success: function (result) {
                         $.each(result, function(index,value) {
@@ -163,7 +200,8 @@
                     contentType: "application/json",
                     url: "/WxArticle/GetAllArticlesByType?pGuid=" + guid(),
                     data: {
-                    	type:"5"
+                    	type:"5",
+                    	group:group
                     },
                     success: function (result) {
                         $.each(result, function(index,value) {
@@ -202,7 +240,24 @@
                     }
                 });
 				window.location.href = model.ImageLink;
-			}
+			},
+			GetNodes:function(){
+				var _self=this;
+				$.ajax({
+                    type: "post",
+                    dataType: "json",
+                    url: "/WxClass/GetDicInfoList?pGuid=" + guid(),
+                    data:{
+                    	key:"f964fe9e-d74e-4b51-a988-bfdcce0d9c01"
+                    },
+                    success: function (result) {
+                    	_self.nodeList=result
+                    },
+                    error: function (json) {
+                        
+                    }
+                });
+			},
          }
 	});
 	

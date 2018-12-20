@@ -49,7 +49,7 @@
 	      </span>
 	    </div>
 	</header>
-  	<hr style="margin-top: 0px;"/>
+  	<!--<hr style="margin-top: 0px;"/>-->
   	<div id="myClass">
   		<div class="am-u-lg-6" style="float: none;padding-right: 0px;padding-left: 0px;">
   			<div  style="width: 100%;" >	
@@ -60,7 +60,7 @@
 			    	:show-all-levels="false"			    	
 			    	clearable
 			    	placeholder="全部"
-			    	style="width: 28%;float: left;">
+			    	style="width: 28%;float: left;appearance: none;-webkit-appearance: none;border-radius: 0 !important;">
 			  	</el-cascader>
 	  
 			    <el-cascader
@@ -70,7 +70,7 @@
 				    :show-all-levels="false"
 				    clearable
 				    placeholder="排序"
-				    style="width: 28%;float:left;">
+				    style="width: 28%;float:left;appearance: none;">
 				</el-cascader>
 	  			
 	  			
@@ -79,47 +79,14 @@
 			  	<span class="am-input-group-btn" style="width: 15%;">
 			        <button style="margin-top: 1px;height: 40px;width: 100%;border-top-right-radius:5px;border-bottom-right-radius:5px;" class="am-btn am-btn-default" type="button" v-on:click="Query()" ><span class="am-icon-search"></span> </button>
 			    </span>	 
-  			</div>
-<!--	    	
-			<div class="am-btn-group" style="width: 100%;" >	    	  
-			  <div class="am-dropdown" style="width: 28%;" data-am-dropdown >
-			  	<el-cascader
-				    expand-trigger="hover"
-				    :options="nodeList"
-				    v-model="selectedOptions"
-				    :show-all-levels="false"
-				    clearable>
-				  </el-cascader>			    
-			  </div>
-			  
-			  <div class="am-dropdown" style="width: 28%;" data-am-dropdown>
-			  	<el-cascader
-				    expand-trigger="hover"
-				    :options="orderList"
-				    v-model="selectedOptions1"
-				    :show-all-levels="false"
-				    clearable>
-				  </el-cascader>			    
-			  </div>
-			  
-			  <div class="am-dropdown" style="width: 44%;" data-am-dropdown>
-			  	<input type="text" v-model="txtTitle" autocomplete="off" placeholder="搜索" class="el-input__inner" 
-			  		style="float:left;width: 117px;">			  	
-			  	<span class="am-input-group-btn" >
-			        <button class="am-btn am-btn-default" type="button" v-on:click="Query()" style="border-top-right-radius:5px;border-bottom-right-radius:5px;"><span class="am-icon-search"></span> </button>
-			     </span>	  	
-			  	
-			  </div>	 
-				    	
-		    </div>
-	  	-->
+  			</div>	
   		</div>  	
         <div data-am-widget="list_news" class="am-list-news am-list-news-default" style="margin-left:0px;margin-right:0px;">		
 			  <div class="am-list-news-bd">
 				  <ul class="am-list" v-for="item in myClassList">
 				     <!--缩略图在标题左边-->
 				      <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" 
-				      	style="padding-top: 5px;padding-bottom: 5px;height: 110px;">
+				      	style="padding-top: 0px;padding-bottom: 5px;height: 110px;">
 				        <div class="am-u-sm-4 am-list-thumb" style="width: 49%;height: 100%;padding-right: 0px;max-height: 100px;">
 				        	<div class="zoomImage" style="height: 100px;" v-bind:style="{backgroundImage:'url(' + item.ClassImages + ')'}"></div>
 				        </div>
@@ -138,7 +105,8 @@
 							</tr>
 							<tr>
 								<td style="width: 50%;">
-									<div style="color: red;padding-top: 10px;">¥{{item.ClassPrice}}</div>
+									<div v-if="item.GroupPrice!=0" style="color: red;padding-top: 10px;">团购价:¥{{item.GroupPrice}}</div>
+									<div v-if="item.GroupPrice==0" style="color: red;padding-top: 10px;">¥{{item.ClassPrice}}</div>
 								</td>
 								<td>
 									<div style="font-size: 12px;color:#0084C7;padding-top: 10px;">{{item.ClassTeacher}}</div>

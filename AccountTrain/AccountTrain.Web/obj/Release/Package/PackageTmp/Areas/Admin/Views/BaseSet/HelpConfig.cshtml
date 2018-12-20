@@ -7,10 +7,7 @@
         您当前所在的位置：助力规则
 </div>
 <div id="tabs" style="margin: 10px;">
-    <el-tabs v-model="activeName" type="border-card">
-   
-       <el-tab-pane label="助力规则" name="HelpConfig">           
-			<el-row style="margin-top:10px;margin-left:10px">
+<el-row style="margin-top:10px;margin-left:10px">
 		        <el-col span="24">
 		            <div>
 		                <el-input v-model="HelpName" id="HelpName" placeholder="请输入课程名称" clearable 						style="width:200px;"></el-input>
@@ -33,29 +30,34 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
 		                </el-table-column>
 		
 		                <el-table-column prop="HelpPrice"
-		                                 label="助力价">
+		                                 label="助力价"
+		                                 width="100" >
 		                </el-table-column>
 		                <el-table-column prop="HelpCount"
-		                                 label="成功人数">
+		                                 label="成功人数"
+		                                 width="100" >
 		                </el-table-column>
 		                <el-table-column prop="StartTime"
 		                                 label="开始时间"
-		                                 :formatter="dateFormat">
+		                                 :formatter="dateFormat"
+		                                 width="100" >
 		                </el-table-column>
 		                <el-table-column prop="EndTime"
 		                                 label="截止时间"
-		                                 :formatter="dateFormat">
+		                                 :formatter="dateFormat"
+		                                 width="100" >
 		                </el-table-column>
 		                <el-table-column fixed="right"
 		                                 label="操作"
-		                                 width="auto" header-align="center" align="center">
+		                                 width="100" header-align="center" align="center">
 		                    <template slot-scope="scope">
 		
 		                        <el-button size="mini"
+		                        	type="primary"
 		                                   v-on:click="handleHelpEdit(scope.row.HelpConfigId)">编辑</el-button>
-		                        <el-button v-if="scope.row.Status==1" size="mini"
+		                        <!--<el-button v-if="scope.row.Status==1" size="mini"
 		                                   type="danger"
-		                                   v-on:click="handleHelpDisable(scope.row.HelpConfigId,0)">禁用</el-button>
+		                                   v-on:click="handleHelpDisable(scope.row.HelpConfigId,0)">禁用</el-button>-->
 		                    </template>
 		                </el-table-column>
 		            </el-table> 
@@ -78,17 +80,17 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
 		            <el-row>
 		                <el-col span="12" style="display: none;">
 		                    <el-form-item label="Id">
-		                        <el-input v-model="Helpform.HelpConfigId" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="Helpform.HelpConfigId"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		                <el-col span="12">
 		                    <el-form-item label="成功人数 ">
-		                        <el-input v-model="Helpform.HelpCount" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="Helpform.HelpCount"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		                <el-col span="12">
 		                    <el-form-item label="助力价">
-		                        <el-input v-model="Helpform.HelpPrice" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="Helpform.HelpPrice"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>                
 		                <el-col span="12">
@@ -113,7 +115,7 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
 		                </el-col>
 		                <el-col span="12">
 		                    <el-form-item label="所属课程">
-		                        <el-select v-model="Helpform.ClassId" placeholder="请选择课程" style="width:220px;">
+		                        <el-select v-model="Helpform.ClassId" filterable placeholder="请选择课程" >
 		                            <el-option v-for="item in ClassData"
 		                                       v-bind:key="item.ClassId"
 		                                       v-bind:label="item.ClassName"
@@ -122,16 +124,16 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
 		                        </el-select>
 		                    </el-form-item>
 		                </el-col>
-		                <el-col span="12">
+		                <!--<el-col span="12">
 		                    <el-form-item label="备  注">
 		                        <el-input v-model="Helpform.Remark" style="width:220px;" clearable></el-input>
 		                    </el-form-item>
-		                </el-col>
+		                </el-col>-->
 		            </el-row>
 		            <el-row>
-		                 <el-col span="12">
+		                 <el-col span="24">
 		                    <el-form-item label="助力图片">
-		                        <el-input v-model="Helpform.ImageUrl" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="Helpform.ImageUrl" clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		            </el-row>
@@ -141,10 +143,6 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
 		            <el-button type="primary" size="small" v-on:click="SaveHelp(Helpform)">确 定</el-button>
 		        </div>
 		    </el-dialog>
-
-        </el-tab-pane>
-
-    </el-tabs>
 </div>
 
 <script>
@@ -271,7 +269,7 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
                                 _self.QueryHelpData();
                                 _self.$message({
                                     type: 'success',
-                                    message: '保存成功!'
+                                    message: result
                                 });
                             } else {
                                 _self.$message.error('保存团购配置息失败');
@@ -324,4 +322,9 @@ v-bind:data="HelpData.slice((HelpcurrentPage-1)*Helppagesize,HelpcurrentPage*Hel
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+    
+    $(function () {
+        NProgress.done();
+})
+
 </script>

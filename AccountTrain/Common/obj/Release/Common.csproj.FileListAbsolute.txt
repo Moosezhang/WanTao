@@ -12,3 +12,5 @@ E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\bin\Release\WxPayA
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\obj\Release\Common.csprojResolveAssemblyReference.cache
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\obj\Release\Common.dll
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\obj\Release\Common.pdb
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\bin\Release\BusinessEntity.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\bin\Release\BusinessEntity.pdb

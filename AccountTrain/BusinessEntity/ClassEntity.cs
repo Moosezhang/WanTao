@@ -58,6 +58,14 @@ namespace BusinessEntitys
         [EnitityMappingAttribute(ColumnName = "ClassPrice")]
         public decimal ClassPrice { get; set; }
 
+
+        /// <summary>
+        /// 虚拟价格
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "VirPrice")]
+        public decimal VirPrice { get; set; }
+        
+
         /// <summary>
         /// 课程讲师
         /// </summary>
@@ -126,7 +134,17 @@ namespace BusinessEntitys
         public string UpdateUser { get; set; }
 
 
-      
+        /// <summary>
+        /// 开始时间
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "StartTime")]
+        public DateTime StartTime { get; set; }
+
+        /// <summary>
+        /// 结束时间
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "EndTime")]
+        public DateTime EndTime { get; set; }
 
     }
 }

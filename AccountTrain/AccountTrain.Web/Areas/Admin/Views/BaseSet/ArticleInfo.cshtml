@@ -31,22 +31,25 @@
                                  label="文章标题">
                 </el-table-column>
                  <el-table-column prop="ArticleType"
-                                 label="文章类型">
+                                 label="文章类型"
+                                 width="100">
                 </el-table-column>
-                <el-table-column label="图片缩略图">
+                <el-table-column label="缩略图"
+                	width="100">
                  	<template slot-scope="scope">
 			        	<img v-bind:src="scope.row.ImageUrl" width="50px" height="50px">			        	
 			      	</template>
                 </el-table-column>
                 <el-table-column fixed="right"
                                  label="操作"
-                                 width="auto" header-align="center" align="center">
+                                 width="200" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini"
+                        			type="primary"
                                    v-on:click="handleEdit(scope.row.ArticleId)">编辑</el-button>
                         <el-button v-if="scope.row.Status==1" size="mini"
                                    type="danger"
-                                   v-on:click="handleDisable(scope.row.ArticleId,0)">禁用</el-button>
+                                   v-on:click="handleDisable(scope.row.ArticleId,0)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -66,22 +69,31 @@
     <el-dialog title="文章信息" v-bind:visible.sync="dialogArticleFormVisible" v-model="dialogArticleFormVisible" style="height:600px;">
         <el-form model="form" style="margin-top:-20px;height:auto" label-width="80px">
             <el-row>
-            	<el-col span="12">
+            	<el-col span="24">
                     <el-form-item label="文章标题">
-                        <el-input v-model="form.ArticleTitle" style="width:540px;" clearable></el-input>
+                        <el-input v-model="form.ArticleTitle"  clearable></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col span="12" style="display: none;">
                     <el-form-item label="Id">
-                        <el-input v-model="form.ArticleId" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.ArticleId"  clearable></el-input>
                     </el-form-item>
                 </el-col>
-                
                 <el-col span="12">
+	                <el-form-item label="文章类别">
+	                    <el-cascader
+					    expand-trigger="click"
+					    :options="nodeList"
+					    v-model="selectedOptions"
+					    :show-all-levels="false">
+					  	</el-cascader>
+	                </el-form-item>
+        		</el-col>
+                <el-col span="24">
                     <el-form-item label="文章类型">
-                        <el-select v-model="form.ArticleType" placeholder="请选择文章类型" style="width:220px;">
+                        <el-select v-model="form.ArticleType" placeholder="请选择文章类型" >
                             <el-option v-for="item in DicData"
                                        v-bind:key="item.ItemKey"
                                        v-bind:label="item.ItemValue"
@@ -91,23 +103,43 @@
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
+                    <el-form-item label="开始时间">
+                    	<el-date-picker
+					      v-model="form.StartTime"
+					      type="datetime"
+					      format="yyyy-MM-dd HH:mm:ss"
+					      value-format="yyyy-MM-dd HH:mm:ss">
+					    </el-date-picker>
+                    </el-form-item>
+                </el-col>
+                <el-col span="12">
+                    <el-form-item label="截止时间">
+                    	<el-date-picker
+					      v-model="form.EndTime"
+					      type="datetime"
+					      format="yyyy-MM-dd HH:mm:ss"
+					      value-format="yyyy-MM-dd HH:mm:ss">
+					    </el-date-picker>
+                    </el-form-item>
+                </el-col>
+                <el-col span="24">
                     <el-form-item label="文章链接">
-                        <el-input v-model="form.ImageLink" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.ImageLink" clearable></el-input>
                     </el-form-item>
                 </el-col>                
                 
             </el-row>
-            <el-row>
+            <!--<el-row>
             	<el-col span="12">
                     <el-form-item label="备  注">
                         <el-input v-model="form.Remark" style="width: 540px;" clearable></el-input>
                     </el-form-item>
                 </el-col>
-            </el-row>
+            </el-row>-->
             <el-row>
-                 <el-col span="12">
+                 <el-col span="24">
                     <el-form-item label="图片地址">
-                        <el-input v-model="form.ImageUrl" style="width:540px;" clearable></el-input>
+                        <el-input v-model="form.ImageUrl"  clearable></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -134,7 +166,9 @@
                 //fileList2: [],
                 DicData:[],
                 currentPage:1,
-        		pagesize:8,
+        		pagesize:10,
+        		nodeList:[],
+            	selectedOptions:[]
             },
             beforeCreate:function (){
             	var _self = this;
@@ -153,8 +187,27 @@
             },
             created: function () {
                 this.QueryData();
+                this.GetNodes();
             },
             methods: {
+            	dateFormat: function (row, column) {
+                    var date = row[column.property];
+                    if (date == undefined) {
+                        return "";
+                    }
+                    return new Date(parseInt(date.substr(6, 13))).toLocaleDateString();
+                    //return moment(date).format("YYYY-MM-DD HH:mm:ss");
+                    //return new Date(parseInt(date.substr(6, 13))).toLocaleDateString();
+                },
+                ChangeDateFormat:function(timeSpan) {
+				    var timeSpan = timeSpan.replace('Date','').replace('(','').replace(')','').replace(/\//g,'');
+				    var d = new Date(parseInt(timeSpan));
+				    return d;
+				},
+				GetNeedDateFormat:function(datetime){
+					var d = new Date(datetime);  
+					return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + 					':' + d.getMinutes() + ':' + d.getSeconds(); 
+				},
                 handleAdd: function () {
                     var _self = this;
                     _self.form = {};
@@ -170,8 +223,13 @@
                         data: {
                             id: ArticleId
                         },
-                        success: function (result) { 
+                        success: function (result) {
+                        	result.StartTime = _self.ChangeDateFormat(result.StartTime);
+                        	result.EndTime = _self.ChangeDateFormat(result.EndTime);
                             _self.form = result;
+                            if(result.ArticleGroup!=null){
+	                    	 	_self.selectedOptions=result.ArticleGroup.split('-'); 
+	                    	}
                         }
                     });
                    
@@ -189,7 +247,7 @@
                             KeyName: title
                         },
                         success: function (result) {
-                            ArticleVue.tableData = result;
+                            ArticleVue.tableData = result;                            
                         },
                         error: function (json) {
                             _self.$message.error('加载图片信息失败');
@@ -198,6 +256,9 @@
                 },
                 SaveArticle: function (Article) {
                     var _self = this;
+                    Article.StartTime= _self.GetNeedDateFormat(Article.StartTime);
+                    Article.EndTime= _self.GetNeedDateFormat(Article.EndTime);
+                    Article.ArticleGroup=_self.selectedOptions.join('-');
                     $.ajax({
                         type: "post",
                         dataType: "json",
@@ -262,7 +323,24 @@
 			    },
 			    handleCurrentChange: function(currentPage){
 			        this.currentPage = currentPage;
-			    }
+			    },
+			    GetNodes:function(){
+					var _self=this;
+					$.ajax({
+	                    type: "post",
+	                    dataType: "json",
+	                    url: "/WxClass/GetDicInfoList?pGuid=" + guid(),
+	                    data:{
+	                    	key:"f964fe9e-d74e-4b51-a988-bfdcce0d9c01"
+	                    },
+	                    success: function (result) {
+	                    	_self.nodeList=result
+	                    },
+	                    error: function (json) {
+	                        
+	                    }
+	                });
+				},
             }
 
         });

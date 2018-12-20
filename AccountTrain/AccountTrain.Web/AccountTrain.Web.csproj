@@ -39,7 +39,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gma.QrCodeNet.Encoding">
+    <Reference Include="Gma.QrCodeNet.Encoding, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Gma.QrCodeNet.0.4.1.2\lib\net40\Gma.QrCodeNet.Encoding.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AI.Web">
@@ -215,6 +216,7 @@
     <Content Include="Images\icon\add\ic_message.png" />
     <Content Include="Images\icon\b.png" />
     <Content Include="Images\icon\bargainImage.jpg" />
+    <Content Include="Images\icon\funds.png" />
     <Content Include="Images\icon\home_class.png" />
     <Content Include="Images\icon\home_gif.png" />
     <Content Include="Images\icon\home_my.png" />
@@ -223,6 +225,7 @@
     <Content Include="Images\icon\logo.png" />
     <Content Include="Images\icon\myBack.png" />
     <Content Include="Images\icon\myClass.png" />
+    <Content Include="Images\icon\myHistory.png" />
     <Content Include="Images\icon\myPoint.png" />
     <Content Include="Images\icon\myShop.png" />
     <Content Include="Images\icon\my_delete.png" />

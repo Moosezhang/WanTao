@@ -69,59 +69,59 @@
 
     </div>
 
-    <el-dialog title="招聘信息" v-bind:visible.sync="dialogjobFormVisible" v-model="dialogjobFormVisible" style="height:600px;">
+    <el-dialog title="招聘信息" v-bind:visible.sync="dialogjobFormVisible" v-model="dialogjobFormVisible" style="height:800px;">
         <el-form model="form" style="margin-top:-20px;height:auto" label-width="80px">
             <el-row>
                 <el-col span="12" style="display: none;">
                     <el-form-item label="Id">
-                        <el-input v-model="form.JobId" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.JobId"  clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="职位标题">
-                        <el-input v-model="form.JobTitle" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.JobTitle" clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="职位薪资">
-                        <el-input v-model="form.JobSalary" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.JobSalary"  clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="工龄要求">
-                        <el-input v-model="form.JobYear" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.JobYear"  clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="学历要求">
-                        <el-input v-model="form.JobEducation" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.JobEducation" clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="职位描述">
-                        <el-input type="textarea" v-model="form.JobDesc" style="width:220px;" clearable></el-input>
+                        <el-input type="textarea" v-model="form.JobDesc" clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="任职要求">
-                        <el-input type="textarea"  v-model="form.JobRequirements" style="width:220px;" clearable></el-input>
+                        <el-input type="textarea"  v-model="form.JobRequirements"  clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="所属公司">
-                        <el-input v-model="form.JobCompany" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.JobCompany"  clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="联系方式">
-                        <el-input v-model="form.JobEmail" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.JobEmail"  clearable></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col span="12">
+                <!--<el-col span="12">
                     <el-form-item label="备  注">
                         <el-input v-model="form.Remark" style="width: 540px;" clearable></el-input>
                     </el-form-item>
-                </el-col>
+                </el-col>-->
             </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer" style="margin-top:-30px;">

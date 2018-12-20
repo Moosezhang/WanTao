@@ -178,7 +178,6 @@ namespace Common.WxPay
                 throw new WxPayException("退款申请接口中，缺少必填参数refund_fee！");
             }
 
-
             inputObj.SetValue("op_user_id", WxPayConfig.MCHID);
             inputObj.SetValue("appid", WxPayConfig.APPID);//公众账号ID
             inputObj.SetValue("mch_id", WxPayConfig.MCHID);//商户号
@@ -189,9 +188,9 @@ namespace Common.WxPay
             string xml = inputObj.ToXml();
             var start = DateTime.Now;
 
-            LogHelp.WriteLog("Refund request : " + xml);
+            LogHelp.WriteLog(DateTime.Now + "Refund request:" + xml);
             string response = HttpService.Post(xml, url, true, timeOut);//调用HTTP通信接口提交数据到API
-            LogHelp.WriteLog("Refund response : " + response);
+            LogHelp.WriteLog(DateTime.Now + "Refund response:" + response);
 
             var end = DateTime.Now;
             int timeCost = (int)((end - start).TotalMilliseconds);//获得接口耗时

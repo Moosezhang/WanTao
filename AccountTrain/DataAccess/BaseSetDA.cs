@@ -100,6 +100,8 @@ namespace DataAccess
                     query = query + sql;
                 }
 
+                query = query + " order by CreateTime desc";
+
                 return conn.Query<JobEntity>(query).ToList();
 
             }
@@ -215,6 +217,7 @@ namespace DataAccess
                     string sql = string.Format(" and ItemValue='{0}'", iv);
                     query = query + sql;
                 }
+                query = query + " order by CreateTime desc";
 
                 return conn.Query<DictionaryItemEntity>(query).ToList();
 
@@ -363,6 +366,8 @@ namespace DataAccess
                     query = query + sql;
                 }
 
+                query = query + " order by t.CreateTime desc";
+
                 return conn.Query<VMBargainConfig>(query).ToList();
 
             }
@@ -377,6 +382,17 @@ namespace DataAccess
                 return conn.Query<BargainConfigEntity>(query).FirstOrDefault();
             }
         }
+
+        public BargainConfigEntity GetBargainConfigByClassId(string classId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_BargainConfig
+                                            where ClassId='{0}'", classId);
+                return conn.Query<BargainConfigEntity>(query).FirstOrDefault();
+            }
+        }
+
 
 
         public int SaveBargainConfig(BargainConfigEntity entity, string loginName)
@@ -459,6 +475,8 @@ namespace DataAccess
                     query = query + sql;
                 }
 
+                query = query + " order by t.CreateTime desc";
+
                 return conn.Query<VMGroupBuyConfig>(query).ToList();
 
             }
@@ -470,6 +488,16 @@ namespace DataAccess
             {
                 string query = string.Format(@"select * from Train_GroupBuyConfig
                                             where GroupBuyConfigId='{0}'", id);
+                return conn.Query<GroupBuyConfigEntity>(query).FirstOrDefault();
+            }
+        }
+
+        public GroupBuyConfigEntity GetGroupBuyConfigByClassId(string classId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_GroupBuyConfig
+                                            where ClassId='{0}'", classId);
                 return conn.Query<GroupBuyConfigEntity>(query).FirstOrDefault();
             }
         }
@@ -554,6 +582,8 @@ namespace DataAccess
                     query = query + sql;
                 }
 
+                query = query + " order by t.CreateTime desc";
+
                 return conn.Query<VMHelpConfig>(query).ToList();
 
             }
@@ -568,7 +598,15 @@ namespace DataAccess
                 return conn.Query<HelpConfigEntity>(query).FirstOrDefault();
             }
         }
-
+        public HelpConfigEntity GetHelpConfigByClassId(string classId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_HelpConfig
+                                            where ClassId='{0}'", classId);
+                return conn.Query<HelpConfigEntity>(query).FirstOrDefault();
+            }
+        }
 
         public int SaveHelpConfig(HelpConfigEntity entity, string loginName)
         {
@@ -651,6 +689,8 @@ namespace DataAccess
                     query = query + sql;
                 }
 
+                query = query + " order by t.CreateTime desc";
+
                 return conn.Query<VMPublicFunds>(query).ToList();
 
             }
@@ -663,6 +703,16 @@ namespace DataAccess
                 string query = string.Format(@"select * from Train_PublicFunds
                                             where PublicFundsId='{0}'", id);
                 return conn.Query<PublicFundsEntity>(query).FirstOrDefault();
+            }
+        }
+
+        public VMPublicFunds GetFundsConfigByClassId(string classId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_PublicFunds
+                                            where ClassId='{0}'", classId);
+                return conn.Query<VMPublicFunds>(query).FirstOrDefault();
             }
         }
 
@@ -681,7 +731,7 @@ namespace DataAccess
                                                    ,CreateTime
                                                    ,CreateUser
                                                    ,UpdateTime
-                                                   ,UpdateUser)
+                                                   ,UpdateUser,FundsText)
                                              VALUES
                                                    ('{0}'
                                                    ,'{1}'
@@ -690,8 +740,8 @@ namespace DataAccess
                                                    ,GETDATE()
                                                    ,'{4}'
                                                    ,GETDATE()
-                                                   ,'{5}')",
-                        Guid.NewGuid().ToString(), entity.ClassId, entity.FundsPrice, 1, loginName, loginName);
+                                                   ,'{5}','{6}')",
+                        Guid.NewGuid().ToString(), entity.ClassId, entity.FundsPrice, 1, loginName, loginName, entity.FundsText);
                     return conn.Execute(query);
                 }
             }
@@ -704,7 +754,8 @@ namespace DataAccess
                                                       ,FundsPrice ='{1}'                                                      
                                                       ,UpdateTime =GETDATE()
                                                       ,UpdateUser = '{2}'
-                                                 WHERE PublicFundsId='{3}'", entity.ClassId, entity.FundsPrice,loginName, entity.PublicFundsId);
+                                                      ,FundsText='{4}'
+                                                 WHERE PublicFundsId='{3}'", entity.ClassId, entity.FundsPrice, loginName, entity.PublicFundsId, entity.FundsText);
                     return conn.Execute(query);
                 }
             }
@@ -733,6 +784,9 @@ namespace DataAccess
                     string sql = string.Format(" and t.ImageTitle like '%{0}%'", KeyName);
                     query = query + sql;
                 }
+
+
+                query = query + " order by CreateTime desc";
 
                 return conn.Query<IndexImageEntity>(query).ToList();
 
@@ -838,6 +892,7 @@ namespace DataAccess
                     string sql = string.Format(" and t.ArticleTitl like '%{0}%'", KeyName);
                     query = query + sql;
                 }
+                query = query + " order by t.CreateTime desc";
 
                 return conn.Query<ArticleEntity>(query).ToList();
 
@@ -862,13 +917,19 @@ namespace DataAccess
         /// 获取所有文章
         /// </summary>
         /// <returns></returns>
-        public List<VMWxArticle> GetAllArticlesByType(string type)
+        public List<VMWxArticle> GetAllArticlesByType(string type, string group)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
             {
                 string query = string.Format(@"select t.*,isnull(tt.cc,0) as ClickCount from Train_Article t
                                                left join (select count(1) as cc,t1.ObjectId from Train_ClickCount t1 group by  t1.ObjectId) tt on t.ArticleId=tt.ObjectId
-                                               where t.status=1 and t.ArticleType='{0}' order by t.createTime desc", type);
+                                               where t.status=1 and t.ArticleType='{0}' and getdate() between t.StartTime and t.EndTime", type);
+
+                if (!string.IsNullOrEmpty(group))
+                {
+                    query = query + string.Format(" and t.ArticleGroup='{0}'", group);
+                }
+                query = query + " order by t.createTime desc";
                 return conn.Query<VMWxArticle>(query).ToList();
             }
         }
@@ -901,7 +962,8 @@ namespace DataAccess
                                                    ,CreateTime
                                                    ,CreateUser
                                                    ,UpdateTime
-                                                   ,UpdateUser)
+                                                   ,UpdateUser,StartTime
+                                                   ,EndTime,ArticleGroup)
                                              VALUES
                                                    ('{0}'
                                                    ,'{1}'
@@ -913,9 +975,9 @@ namespace DataAccess
                                                    ,getdate()
                                                    ,'{7}'
                                                    ,getdate()
-                                                   ,'{8}')",
+                                                   ,'{8}','{9}','{10}','{11}')",
                         Guid.NewGuid().ToString(), Article.ArticleType,Article.ArticleTitle, Article.ImageUrl, Article.ImageLink,
-                        Article.Remark, 1, loginName, loginName);
+                        Article.Remark, 1, loginName, loginName, Article.StartTime, Article.EndTime, Article.ArticleGroup);
                     return conn.Execute(query);
                 }
             }
@@ -930,9 +992,9 @@ namespace DataAccess
                                                       ,ImageLink = '{3}'
                                                       ,Remark = '{4}'                                                      
                                                       ,UpdateTime = getdate()
-                                                      ,UpdateUser = '{5}'
+                                                      ,UpdateUser = '{5}',StartTime='{7}',EndTime='{8}',ArticleGroup='{9}'
                                                     WHERE ArticleId='{6}'",
-                                              Article.ArticleType, Article.ArticleTitle, Article.ImageUrl, Article.ImageLink, Article.Remark, loginName, Article.ArticleId);
+                                              Article.ArticleType, Article.ArticleTitle, Article.ImageUrl, Article.ImageLink, Article.Remark, loginName, Article.ArticleId, Article.StartTime, Article.EndTime, Article.ArticleGroup);
                     return conn.Execute(query);
                 }
             }
@@ -1089,6 +1151,8 @@ namespace DataAccess
                     string sql = string.Format(" and t.UpLoadTitle='{0}'", title);
                     query = query + sql;
                 }
+
+                query = query + " order by t.CreateTime desc";
 
                 return conn.Query<VMUpLoad>(query).ToList();
 

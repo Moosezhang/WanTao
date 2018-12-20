@@ -263,6 +263,8 @@ namespace DataAccess
             }
         }
 
+
+
         public GroupBuyConfigEntity GetGroupBuyConfigByClassId(string classid)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
@@ -271,6 +273,23 @@ namespace DataAccess
                                             where status=1 and ClassId='{0}'", classid);
 
                 return conn.Query<GroupBuyConfigEntity>(query).FirstOrDefault();
+
+            }
+        }
+
+        /// <summary>
+        /// 获取当前时间应该截止的团购活动
+        /// </summary>
+        /// <param name="classid"></param>
+        /// <returns></returns>
+        public List<GroupBuyConfigEntity> GetGroupBuyConfig()
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_GroupBuyConfig
+                                            where EndTime<getdate()");
+
+                return conn.Query<GroupBuyConfigEntity>(query).ToList();
 
             }
         }
@@ -329,6 +348,18 @@ namespace DataAccess
                                                ,'{6}')",
                     Guid.NewGuid().ToString(), entity.GroupBuyId, entity.GroupPrice, entity.openId, 1, loginName, loginName);
                 return conn.Execute(query);
+            }
+        }
+
+        public List<GroupBuyMemberEntity> GetGroupBuyMember(string groupBuyId)
+        {
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@"select * from Train_GroupBuyMember
+                                            where groupBuyId='{0}'", groupBuyId);
+
+                return conn.Query<GroupBuyMemberEntity>(query).ToList();
+
             }
         }
 

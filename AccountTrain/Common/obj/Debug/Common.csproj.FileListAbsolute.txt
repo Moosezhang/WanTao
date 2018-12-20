@@ -26,3 +26,5 @@ E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\bin\Debug\WxPayAPI
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\obj\Debug\Common.dll
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\obj\Debug\Common.pdb
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\bin\Debug\BusinessEntity.dll
+E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\Common\bin\Debug\BusinessEntity.pdb

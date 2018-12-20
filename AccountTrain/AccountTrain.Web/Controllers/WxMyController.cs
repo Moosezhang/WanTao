@@ -439,11 +439,11 @@ namespace AccountTrain.Web.Controllers
         {
 
             //判断是否注册
-            var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
-            if (userInfo==null ||string.IsNullOrEmpty(userInfo.Phone))
-            {
-                Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
-            }
+            //var userInfo = new WxUserBC().GetWxUserByOpenid(openid);
+            //if (userInfo==null ||string.IsNullOrEmpty(userInfo.Phone))
+            //{
+            //    Response.Redirect(CommonHelper.GetRedirect("WxMy%2fRegistered"));
+            //}
 
             ShopCarEntity entity=new ShopCarEntity(){
                 Openid=openid,

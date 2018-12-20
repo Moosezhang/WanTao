@@ -48,6 +48,7 @@
 	                    <template slot-scope="scope">                    	
 	                        
 	                        <el-button size="mini"
+	                        		   type="primary"
 	                                   v-on:click="handleEdit(scope.row.ItemId)">编辑</el-button>
 	                        <el-button v-if="scope.row.Status==1" size="mini"
 	                                   type="danger"
@@ -73,27 +74,27 @@
             <el-row>
             	<el-col span="12" style="display: none;">
                     <el-form-item label="Id">
-                        <el-input v-model="form.ItemId" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.ItemId"  clearable></el-input>
                     </el-form-item>
                </el-col>            	
             	<el-col span="12">
                     <el-form-item label="字典值">
-                        <el-input v-model="form.ItemKey" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.ItemKey"  clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="字典名称">
-                        <el-input v-model="form.ItemValue" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.ItemValue"  clearable></el-input>
                     </el-form-item>
                 </el-col>    
                 <el-col span="12">
                     <el-form-item label="排序">
-                        <el-input v-model="form.OrderNum" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.OrderNum"  clearable></el-input>
                     </el-form-item>
                 </el-col> 
                 <el-col span="12">
 	                <el-form-item label="字典分类">
-	                    <el-select v-model="form.DictionaryKey" placeholder="请选择课程类型" style="width:180px;">
+	                    <el-select v-model="form.DictionaryKey" filterable placeholder="请选择课程类型" >
 	                        <el-option v-for="item in DicData"
 	                                   v-bind:key="item.ItemId"
 	                                   v-bind:label="item.ItemValue"
@@ -252,4 +253,8 @@
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+	 
+	  $(function () {
+        NProgress.done();
+    })
 </script>

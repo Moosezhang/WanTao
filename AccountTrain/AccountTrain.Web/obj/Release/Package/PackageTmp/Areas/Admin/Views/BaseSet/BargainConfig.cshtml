@@ -7,9 +7,7 @@
         您当前所在的位置：砍价规则
 </div>
 <div id="tabs" style="margin: 10px;">
-    <el-tabs v-model="activeName" type="border-card">
-        <el-tab-pane label="砍价规则" name="BargainConfig">
- 			<el-row style="margin-top:10px;margin-left:10px">
+    <el-row style="margin-top:10px;margin-left:10px">
 		        <el-col span="24">
 		            <div>
 		                <el-input v-model="BargainName" id="BargainName" placeholder="请输入课程名称" clearable 						style="width:200px;"></el-input>
@@ -32,24 +30,28 @@ v-bind:data="BargainData.slice((BargaincurrentPage-1)*Bargainpagesize,Bargaincur
 		                </el-table-column>
 		
 		                <el-table-column prop="FloorPrice"
-		                                 label="底价">
+		                                 label="底价"
+		                                 width="100">
 		                </el-table-column>
 		                <el-table-column prop="BargainTop"
-		                                 label="砍价上限">
+		                                 label="砍价上限"
+		                                 width="100">
 		                </el-table-column>
 		                <el-table-column prop="BargainFloor"
-		                                 label="砍价下限">
+		                                 label="砍价下限"
+		                                 width="100">
 		                </el-table-column>
 		                <el-table-column fixed="right"
 		                                 label="操作"
-		                                 width="auto" header-align="center" align="center">
+		                                 width="100" header-align="center" align="center">
 		                    <template slot-scope="scope">
 		
 		                        <el-button size="mini"
+		                        	type="primary"
 		                                   v-on:click="handleBargainEdit(scope.row.BargainConfigId)">编辑</el-button>
-		                        <el-button v-if="scope.row.Status==1" size="mini"
+		                        <!--<el-button v-if="scope.row.Status==1" size="mini"
 		                                   type="danger"
-		                                   v-on:click="handleBargainDisable(scope.row.BargainConfigId,0)">禁用</el-button>
+		                                   v-on:click="handleBargainDisable(scope.row.BargainConfigId,0)">禁用</el-button>-->
 		                    </template>
 		                </el-table-column>
 		            </el-table> 
@@ -71,27 +73,27 @@ v-bind:data="BargainData.slice((BargaincurrentPage-1)*Bargainpagesize,Bargaincur
 		            <el-row>
 		                <el-col span="12" style="display: none;">
 		                    <el-form-item label="Id">
-		                        <el-input v-model="Bargainform.BargainConfigId" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="Bargainform.BargainConfigId"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		                <el-col span="12">
 		                    <el-form-item label="底  价">
-		                        <el-input v-model="Bargainform.FloorPrice" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="Bargainform.FloorPrice"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		                <el-col span="12">
 		                    <el-form-item label="砍价上限">
-		                        <el-input v-model="Bargainform.BargainTop" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="Bargainform.BargainTop" clearable></el-input>
 		                    </el-form-item>
 		                </el-col>                
 		                <el-col span="12">
 		                    <el-form-item label="砍价下限">
-		                        <el-input v-model="Bargainform.BargainFloor" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="Bargainform.BargainFloor"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		                <el-col span="12">
 		                    <el-form-item label="所属课程">
-		                        <el-select v-model="Bargainform.ClassId" placeholder="请选择课程" 								style="width:220px;">
+		                        <el-select v-model="Bargainform.ClassId" filterable  placeholder="请选择课程" 								style="width:220px;">
 		                            <el-option v-for="item in ClassData"
 		                                       v-bind:key="item.ClassId"
 		                                       v-bind:label="item.ClassName"
@@ -120,21 +122,18 @@ v-bind:data="BargainData.slice((BargaincurrentPage-1)*Bargainpagesize,Bargaincur
 							    </el-date-picker>
 		                    </el-form-item>
 		                </el-col>
-		                <el-col span="12">
+		                <!--<el-col span="12">
 		                    <el-form-item label="备  注">
 		                        <el-input v-model="Bargainform.Remark" style="width:220px;" clearable></el-input>
 		                    </el-form-item>
-		                </el-col>
+		                </el-col>-->
 		            </el-row>
 		        </el-form>
 		        <div slot="footer" class="dialog-footer" style="margin-top:-30px;">
 		            <el-button size="small" v-on:click="dialogBargainFormVisible = false">取 消</el-button>
 		            <el-button type="primary" size="small" v-on:click="SaveBargain(Bargainform)">确 定</el-button>
 		        </div>
-		    </el-dialog>          
-        </el-tab-pane>
-
-    </el-tabs>
+		    </el-dialog> 
 </div>
 
 <script>
@@ -149,7 +148,7 @@ v-bind:data="BargainData.slice((BargaincurrentPage-1)*Bargainpagesize,Bargaincur
                 dialogBargainFormVisible: false,
                 Bargainform: {},
                 BargaincurrentPage:1,
-        		Bargainpagesize:8,
+        		Bargainpagesize:10,
         		
         		
             },
@@ -246,7 +245,7 @@ v-bind:data="BargainData.slice((BargaincurrentPage-1)*Bargainpagesize,Bargaincur
                                 _self.QueryBargainData();
                                 _self.$message({
                                     type: 'success',
-                                    message: '保存成功!'
+                                    message: result
                                 });
                             } else {
                                 _self.$message.error('保存砍价配置息失败');
@@ -298,4 +297,9 @@ v-bind:data="BargainData.slice((BargaincurrentPage-1)*Bargainpagesize,Bargaincur
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+    
+    $(function () {
+        NProgress.done();
+})
+
 </script>

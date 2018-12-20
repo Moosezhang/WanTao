@@ -20,6 +20,8 @@ namespace BusinessEntity.Model
        
         public string ArticleType { get; set; }
 
+        public string ArticleGroup { get; set; }
+
         /// <summary>
         /// 文章标题
         /// </summary>
@@ -55,6 +57,9 @@ namespace BusinessEntity.Model
         /// </summary>
      
         public DateTime CreateTime { get; set; }
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
 
         /// <summary>
         /// 创建人

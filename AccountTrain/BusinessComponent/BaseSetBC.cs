@@ -128,6 +128,12 @@ namespace BusinessComponent
             return da.GetBargainConfigByKey(id);
         }
 
+        public BargainConfigEntity GetBargainConfigByClassId(string classId)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.GetBargainConfigByClassId(classId);
+        }
+
 
         public int SaveBargainConfig(BargainConfigEntity entity, string loginName)
         {
@@ -156,6 +162,12 @@ namespace BusinessComponent
         }
 
 
+        public GroupBuyConfigEntity GetGroupBuyConfigByClassId(string classId)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.GetGroupBuyConfigByClassId(classId);
+        }
+
         public int SaveGroupBuyConfig(GroupBuyConfigEntity entity, string loginName)
         {
             BaseSetDA da = new BaseSetDA();
@@ -174,6 +186,12 @@ namespace BusinessComponent
         {
             BaseSetDA da = new BaseSetDA();
             return da.GetHelpConfigsByCondition(className);
+        }
+
+        public HelpConfigEntity GetHelpConfigByClassId(string classId)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.GetHelpConfigByClassId(classId);
         }
 
         public HelpConfigEntity GetHelpConfigByKey(string id)
@@ -241,6 +259,15 @@ namespace BusinessComponent
             return da.GetPublicFundsByKey(id);
         }
 
+        public VMPublicFunds GetFundsConfigByClassId(string classId)
+        {
+            BaseSetDA da = new BaseSetDA();
+            return da.GetFundsConfigByClassId(classId);
+            //var result=da.GetFundsConfigByClassId(classId);
+            //var hotCount=new ClassBC().GetClassByKey(classId).HotCount;
+            //string fundsText = string.Format("每笔成交将为 {0} 捐赠 {1} 元，已累计捐赠 {2} 笔", result.FundsText, result.FundsPrice, hotCount);
+            //return fundsText;
+        }
 
         public int SavePublicFunds(PublicFundsEntity entity, string loginName)
         {
@@ -380,10 +407,10 @@ namespace BusinessComponent
             return result;
         }
 
-        public List<VMWxArticle> GetAllArticlesByType(string type)
+        public List<VMWxArticle> GetAllArticlesByType(string type, string group)
         {
             BaseSetDA da = new BaseSetDA();
-            var result = da.GetAllArticlesByType(type);
+            var result = da.GetAllArticlesByType(type, group);
             if (result != null && result.Count > 0)
             {
                 foreach (var item in result)

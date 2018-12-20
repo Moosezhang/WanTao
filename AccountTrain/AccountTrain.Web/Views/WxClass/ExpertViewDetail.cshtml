@@ -219,7 +219,7 @@ list-style-type:none;
                     url: "/WxOrder/AddOrder?pGuid=" + guid(),
                     data:param,
                     success: function (result) {                    	
-                    	window.location.href = "ExpertViewDetail?openid=" + openid+"&&classId="+classid;
+                    	window.location.href = result;
                     },
                     error: function (json) {
                         

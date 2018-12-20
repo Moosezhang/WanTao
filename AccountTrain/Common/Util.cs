@@ -1617,7 +1617,7 @@ namespace Common
             //
             // 目标图片名称及全路径
             //
-            TargetPicName = "HelpName_" + sourcePictureName;
+            TargetPicName = "HelpName_" + DateTime.Now.ToString("fff") + sourcePictureName;
             //string targetImage = TargetPicPath == string.Empty ?
             //    _sourcePictureName.Replace(System.IO.Path.GetExtension(_sourcePictureName), "") + TargetPicName + "." + PicFormat.ToString().ToLower() :
             //    TargetPicPath + TargetPicName + "." + PicFormat.ToString().ToLower();

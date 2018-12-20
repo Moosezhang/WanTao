@@ -158,11 +158,11 @@ namespace AccountTrain.Web.Controllers
             return View();
         }
 
-        public ActionResult GetAllArticlesByType(string type)
+        public ActionResult GetAllArticlesByType(string type,string group)
         {
             try
             {
-                return Json(new BaseSetBC().GetAllArticlesByType(type), JsonRequestBehavior.AllowGet);
+                return Json(new BaseSetBC().GetAllArticlesByType(type, group), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

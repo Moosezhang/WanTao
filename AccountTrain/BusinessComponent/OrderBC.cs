@@ -82,6 +82,18 @@ namespace BusinessComponent
             return da.AddGroupBuy(entity, loginName);
         }
 
+        public List<GroupBuyConfigEntity> GetGroupBuyConfig()
+        {
+            OrderDA da = new OrderDA();
+            return da.GetGroupBuyConfig();
+        }
+
+        public List<GroupBuyMemberEntity> GetGroupBuyMember(string groupBuyId)
+        {
+            OrderDA da = new OrderDA();
+            return da.GetGroupBuyMember(groupBuyId);
+        }
+
         public int AddGroupBuyMember(GroupBuyMemberEntity entity, string loginName)
         {
             OrderDA da = new OrderDA();

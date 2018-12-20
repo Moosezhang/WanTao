@@ -7,10 +7,7 @@
         您当前所在的位置：团购规则
 </div>
 <div id="tabs" style="margin: 10px;">
-    <el-tabs v-model="activeName" type="border-card">
-    
-       <el-tab-pane label="团购规则" name="GroupBuyConfig">           
-			<el-row style="margin-top:10px;margin-left:10px">
+    <el-row style="margin-top:10px;margin-left:10px">
 		        <el-col span="24">
 		            <div>
 		                <el-input v-model="GroupBuyName" id="GroupBuyName" placeholder="请输入课程名称" clearable 						style="width:200px;"></el-input>
@@ -33,29 +30,34 @@ v-bind:data="GroupBuyData.slice((GroupBuycurrentPage-1)*GroupBuypagesize,GroupBu
 		                </el-table-column>
 		
 		                <el-table-column prop="GroupPrice"
-		                                 label="团购价">
+		                                 label="团购价"
+		                                 width="100">
 		                </el-table-column>
 		                <el-table-column prop="NeedCount"
-		                                 label="成团人数">
+		                                 label="成团人数"
+		                                 width="100">
 		                </el-table-column>
 		                <el-table-column prop="StartTime"
 		                                 label="开始时间"
-		                                 :formatter="dateFormat">
+		                                 :formatter="dateFormat"
+		                                 width="100">
 		                </el-table-column>
 		                <el-table-column prop="EndTime"
 		                                 label="截止时间"
-		                                 :formatter="dateFormat">
+		                                 :formatter="dateFormat"
+		                                 width="100">
 		                </el-table-column>
 		                <el-table-column fixed="right"
 		                                 label="操作"
-		                                 width="auto" header-align="center" align="center">
+		                                 width="100" header-align="center" align="center">
 		                    <template slot-scope="scope">
 		
 		                        <el-button size="mini"
+		                        	type="primary"
 		                                   v-on:click="handleGroupBuyEdit(scope.row.GroupBuyConfigId)">编辑</el-button>
-		                        <el-button v-if="scope.row.Status==1" size="mini"
+		                        <!--<el-button v-if="scope.row.Status==1" size="mini"
 		                                   type="danger"
-		                                   v-on:click="handleGroupBuyDisable(scope.row.GroupBuyConfigId,0)">禁用</el-button>
+		                                   v-on:click="handleGroupBuyDisable(scope.row.GroupBuyConfigId,0)">禁用</el-button>-->
 		                    </template>
 		                </el-table-column>
 		            </el-table> 
@@ -72,22 +74,22 @@ v-bind:data="GroupBuyData.slice((GroupBuycurrentPage-1)*GroupBuypagesize,GroupBu
 		
 		    </div>
 
-		    <el-dialog title="团购规则" v-bind:visible.sync="dialogGroupBuyFormVisible" v-model="dialogGroupBuyFormVisible" 			style="height:500px;">
+		    <el-dialog title="团购规则" v-bind:visible.sync="dialogGroupBuyFormVisible" v-model="dialogGroupBuyFormVisible" 	style="height:500px;width: 100%;">
 		        <el-form model="GroupBuyform" style="margin-top:-20px;height:auto" label-width="80px">
 		            <el-row>
 		                <el-col span="12" style="display: none;">
 		                    <el-form-item label="Id">
-		                        <el-input v-model="GroupBuyform.GroupBuyConfigId" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="GroupBuyform.GroupBuyConfigId"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		                <el-col span="12">
 		                    <el-form-item label="团购价 ">
-		                        <el-input v-model="GroupBuyform.GroupPrice" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="GroupBuyform.GroupPrice"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>
 		                <el-col span="12">
 		                    <el-form-item label="成团人数">
-		                        <el-input v-model="GroupBuyform.NeedCount" style="width:220px;" clearable></el-input>
+		                        <el-input v-model="GroupBuyform.NeedCount"  clearable></el-input>
 		                    </el-form-item>
 		                </el-col>                
 		                <el-col span="12">
@@ -112,7 +114,7 @@ v-bind:data="GroupBuyData.slice((GroupBuycurrentPage-1)*GroupBuypagesize,GroupBu
 		                </el-col>
 		                <el-col span="12">
 		                    <el-form-item label="所属课程">
-		                        <el-select v-model="GroupBuyform.ClassId" placeholder="请选择课程" style="width:220px;">
+		                        <el-select v-model="GroupBuyform.ClassId" filterable placeholder="请选择课程" >
 		                            <el-option v-for="item in ClassData"
 		                                       v-bind:key="item.ClassId"
 		                                       v-bind:label="item.ClassName"
@@ -121,22 +123,18 @@ v-bind:data="GroupBuyData.slice((GroupBuycurrentPage-1)*GroupBuypagesize,GroupBu
 		                        </el-select>
 		                    </el-form-item>
 		                </el-col>
-		                <el-col span="12">
+		                <!--<el-col span="12">
 		                    <el-form-item label="备  注">
 		                        <el-input v-model="GroupBuyform.Remark" style="width:220px;" clearable></el-input>
 		                    </el-form-item>
-		                </el-col>
+		                </el-col>-->
 		            </el-row>
 		        </el-form>
 		        <div slot="footer" class="dialog-footer" style="margin-top:-30px;">
 		            <el-button size="small" v-on:click="dialogGroupBuyFormVisible = false">取 消</el-button>
 		            <el-button type="primary" size="small" v-on:click="SaveGroupBuy(GroupBuyform)">确 定</el-button>
 		        </div>
-		    </el-dialog>   
-
-        </el-tab-pane>
-    
-    </el-tabs>
+		    </el-dialog> 
 </div>
 
 <script>
@@ -145,8 +143,6 @@ v-bind:data="GroupBuyData.slice((GroupBuycurrentPage-1)*GroupBuypagesize,GroupBu
 		data: {
 				activeName:'GroupBuyConfig',
 				ClassData: [],
-				
-              
         		
         		GroupBuyData: [],                
                 GroupBuyName: "",
@@ -249,7 +245,7 @@ v-bind:data="GroupBuyData.slice((GroupBuycurrentPage-1)*GroupBuypagesize,GroupBu
                                 _self.QueryGroupBuyData();
                                 _self.$message({
                                     type: 'success',
-                                    message: '保存成功!'
+                                    message: result
                                 });
                             } else {
                                 _self.$message.error('保存团购配置息失败');
@@ -305,4 +301,9 @@ v-bind:data="GroupBuyData.slice((GroupBuycurrentPage-1)*GroupBuypagesize,GroupBu
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+    
+    $(function () {
+        NProgress.done();
+})
+
 </script>

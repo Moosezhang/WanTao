@@ -36,14 +36,16 @@
                                  label="章节标题">
                 </el-table-column>
                 <el-table-column prop="VideoTitle"
-                                 label="音视频标题">
+                                 label="音频标题"
+                                 width="100" >
                 </el-table-column>
                 <el-table-column fixed="right"
                                  label="操作"
                                  width="200" header-align="center" align="center">
-                    <template slot-scope="scope">
-
+                    <template slot-scope="scope" >
+								
                         <el-button size="mini"
+                        		   type="primary"
                                    v-on:click="handleEdit(scope.row.ChapterId)">编辑</el-button>
                         <el-button v-if="scope.row.Status==1" size="mini"
                                    type="danger"
@@ -69,28 +71,28 @@
             <el-row>
                 <el-col span="12" style="display: none;">
                     <el-form-item label="Id">
-                        <el-input v-model="form.ChapterId" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.ChapterId"  clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
                     <el-form-item label="章节标题">
-                        <el-input v-model="form.ChapterTitle" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.ChapterTitle"  clearable></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col span="12">
-                    <el-form-item label="视频标题">
-                        <el-input v-model="form.VideoTitle" style="width:220px;" clearable></el-input>
+                    <el-form-item label="音频标题">
+                        <el-input v-model="form.VideoTitle"  clearable></el-input>
                     </el-form-item>
                 </el-col>                
                 
                 <el-col span="12">
                     <el-form-item label="排  序">
-                        <el-input v-model="form.ChapterNum" style="width:220px;" clearable></el-input>
+                        <el-input v-model="form.ChapterNum"  clearable></el-input>
                     </el-form-item>
                 </el-col>                             
                 <el-col span="12">
                     <el-form-item label="所属课程">
-                        <el-select v-model="form.ClassId" placeholder="请选择课程" style="width:220px;">
+                        <el-select v-model="form.ClassId" filterable placeholder="请选择课程">
                             <el-option v-for="item in ClassData"
                                        v-bind:key="item.ClassId"
                                        v-bind:label="item.ClassName"
@@ -99,16 +101,16 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col span="12">
+                <!--<el-col span="12">
                     <el-form-item label="备  注">
                         <el-input v-model="form.Remark" style="width:540px;" clearable></el-input>
                     </el-form-item>
-                </el-col>
+                </el-col>-->
             </el-row>
             <el-row>
-            	<el-col span="12">
-                    <el-form-item label="视频地址">
-                        <el-input v-model="form.VideoUrl" style="width:540px;" clearable></el-input>
+            	<el-col span="24">
+                    <el-form-item label="音频地址">
+                        <el-input v-model="form.VideoUrl"  clearable></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>

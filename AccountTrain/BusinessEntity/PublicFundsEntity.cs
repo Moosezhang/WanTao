@@ -61,7 +61,11 @@ namespace BusinessEntitys
         [EnitityMappingAttribute(ColumnName = "UpdateUser")]
         public string UpdateUser { get; set; }
 
-
+        /// <summary>
+        /// 公益事业
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "FundsText")]
+        public string FundsText { get; set; }
       
 
     }

@@ -47,7 +47,7 @@ namespace BusinessEntity.Model
         /// </summary>
        
         public decimal ClassPrice { get; set; }
-
+        public decimal VirPrice { get; set; }
       
 
         /// <summary>

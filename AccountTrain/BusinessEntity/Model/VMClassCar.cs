@@ -44,7 +44,7 @@ namespace BusinessEntity.Model
         /// </summary>
 
         public decimal ClassPrice { get; set; }
-
+        public decimal VirPrice { get; set; }
         /// <summary>
         /// 课程讲师
         /// </summary>
@@ -100,6 +100,10 @@ namespace BusinessEntity.Model
         /// </summary>
 
         public DateTime CreateTime { get; set; }
+
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
 
         /// <summary>
         /// 创建人

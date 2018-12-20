@@ -91,7 +91,7 @@ ul,li{ list-style:none}
                		</div>               		
                	</div> 
 	            <div >
-	              	<h4 style="color: white;">已砍 <span style="color: yellow;font-size: 30px;">{{(data.PrePrice*100-data.NowPrice*100)*0.01}}</span> 元，还差 <span style="color: yellow;font-size: 30px;">{{(data.NowPrice*100-data.FloorPrice*100)*0.01}}</span> 元</h4>
+	              	<h4 style="color: white;">已砍 <span style="color: yellow;font-size: 30px;">{{cutPrice}}</span> 元，还差 <span style="color: yellow;font-size: 30px;">{{diffPrice}}</span> 元</h4>
 	            </div>
 	            <div >
 	              	<h5 style="color: white;">还剩
@@ -140,6 +140,8 @@ ul,li{ list-style:none}
 			isBargain:false,
 			classId:"",
 			classPrice:"",
+			cutPrice:0,
+			diffPrice:0
 		},
 		created: function () {
             this.Query();
@@ -168,6 +170,10 @@ ul,li{ list-style:none}
 	                        _self.endTime=_self.ChangeDateFormat(result.EndTime);
 	                        _self.classId=result.ClassId;
 	                        _self.classPrice=result.ClassPrice;
+	                        _self.cutPrice=toDecimal2((result.PrePrice*100-result.NowPrice*100)*0.01);
+	                        _self.diffPrice=toDecimal2((result.NowPrice*100-result.FloorPrice*100)*0.01);
+//	                        alert(_self.cutPrice);
+//	                        alert(_self.diffPrice);
 	                        if(result.ownerOpenid==openid)
 	                        {
 	                        	_self.isOwner=true;
@@ -303,8 +309,9 @@ ul,li{ list-style:none}
                         price:_self.classPrice
                     },
                     success: function (result) { 
-                        _self.bargainId = result; 
-                        window.location.href = "../WxOrder/Bargain?bargainid="+_self.bargainId;
+                        //_self.bargainId = result; 
+                        //window.location.href = "../WxOrder/Bargain?bargainid="+_self.bargainId;
+                        window.location.href=result;
                     },
                     error: function (json) {
                         _self.$message.error('查询失败');
@@ -340,6 +347,24 @@ ul,li{ list-style:none}
         }
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
+	 
+	 function toDecimal2(x) { 
+	   var f = parseFloat(x); 
+	   if (isNaN(f)) { 
+	    return false; 
+	   } 
+	   var f = Math.round(x*100)/100; 
+	   var s = f.toString(); 
+	   var rs = s.indexOf('.'); 
+	   if (rs < 0) { 
+	    rs = s.length; 
+	    s += '.'; 
+	   } 
+	   while (s.length <= rs + 2) { 
+	    s += '0'; 
+	   } 
+	   return s; 
+	  } 
 	 
 	 function countTime() {  
               //获取当前时间  

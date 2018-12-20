@@ -1,0 +1,90 @@
+----------------2018-12-06 09:25:35-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:25:54-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:26:56-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:27:25-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:29:05-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:29:39-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:32:25-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:33:32-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:35:00-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:38:34-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:39:19-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:40:13-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:41:17-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:41:51-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:44:03-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:44:53-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:45:09-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:46:36-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:46:56-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:47:23-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:51:10-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:52:52-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:54:37-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:57:23-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:58:06-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 09:58:22-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 11:18:45-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 11:19:31-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 11:20:19-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 11:21:39-------------------
+WxHome%2fIndex::::https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0da73d797ca1bfc3&redirect_uri=http%3a%2f%2fpost.jinsifu.baiyusoft.com%2fWxHome%2fIndex&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect
+----------------2018-12-06 14:33:23-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:36:53-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:37:12-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:37:42-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:38:48-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:39:01-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:42:06-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:42:29-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:43:01-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:44:58-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:45:30-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:45:40-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:46:21-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:46:43-------------------
+ClassPrice:::12.000
+----------------2018-12-06 14:46:58-------------------
+ClassPrice:::12.000

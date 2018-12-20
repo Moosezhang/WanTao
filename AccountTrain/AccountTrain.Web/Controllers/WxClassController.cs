@@ -365,7 +365,7 @@ namespace AccountTrain.Web.Controllers
             List<DictionaryInfo> DicList = new List<DictionaryInfo>();
             List<DictionaryItemEntity> result = new BaseSetBC().GetAllDicKey();
 
-            List<DictionaryItemEntity> Level1 = result.Where(p => p.DictionaryLevel == 0).ToList();
+            List<DictionaryItemEntity> Level1 = result.Where(p => p.ItemId == key).ToList();
 
             List<Cascader> cascader = new List<Cascader>();
 
@@ -384,11 +384,12 @@ namespace AccountTrain.Web.Controllers
                     value = item.ItemKey,
                     label = item.ItemValue,
                 };
-                List<DictionaryInfo> nodes1 = new List<DictionaryInfo>();
-                List<Cascader> cascader1 = new List<Cascader>();
+               
                 var result1 = result.Where(p => p.DictionaryKey == item.ItemId).ToList();
                 if (result1 != null && result1.Count > 0)
-                {                    
+                {
+                    List<DictionaryInfo> nodes1 = new List<DictionaryInfo>();
+                    List<Cascader> cascader1 = new List<Cascader>();
                     foreach (var i in result1)
                     {
                         DictionaryInfo model1 = new DictionaryInfo()
@@ -405,11 +406,12 @@ namespace AccountTrain.Web.Controllers
                             value = i.ItemKey,
                             label = i.ItemValue,
                         };
-                        List<DictionaryInfo> nodes2 = new List<DictionaryInfo>();
-                        List<Cascader> cascader2 = new List<Cascader>();
+                        
                         var result2 = result.Where(p => p.DictionaryKey == i.ItemId).ToList();
                         if (result2 != null && result2.Count > 0)
                         {
+                            List<DictionaryInfo> nodes2 = new List<DictionaryInfo>();
+                            List<Cascader> cascader2 = new List<Cascader>();
                             foreach (var j in result2)
                             {
                                 DictionaryInfo model2 = new DictionaryInfo()
@@ -430,16 +432,18 @@ namespace AccountTrain.Web.Controllers
                                 nodes2.Add(model2);
                                 cascader2.Add(ca2);
                             }
+                            model1.SubDic = nodes2;
+                            ca1.children = cascader2;
                         }
-                        model1.SubDic = nodes2;
-                        ca1.children = cascader2;
+                       
                         nodes1.Add(model1);
                         cascader1.Add(ca1);
                     }
+                    model.SubDic = nodes1;
+                    ca.children = cascader1;
                 }
 
-                model.SubDic = nodes1;
-                ca.children = cascader1;
+               
                 DicList.Add(model);
                 cascader.Add(ca);
             }

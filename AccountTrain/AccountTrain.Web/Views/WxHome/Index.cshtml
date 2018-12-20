@@ -69,18 +69,18 @@
 		    </el-carousel>
 		</div>
 		<div style="height: 100px;margin-top: 15px;">
-			<table>
+			<table style="width: 100%;">
 				<tr>
-					<th style="width: 30%;padding-left: 10px;"  v-on:click="GoClassList()" >
+					<th style="width: 25%;padding-left: 10px;text-align: center;"  v-on:click="GoClassList()" >
 						<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_class.png" alt=""/><div style="padding-top: 6px;">精品课程</div>
 					</th>
-					<th style="width: 30%;" v-on:click="GoLives()">
-						<img style="height: 60px;padding-left: 10px;" class="am-header-icon-custom" src="~/Images/icon/home_gif.png" alt=""/><div style="width: 80px;padding-top: 6px;text-align: center;">直播</div>
+					<th style="width: 25%;text-align: center;" v-on:click="GoLives()">
+						<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_gif.png" alt=""/><div style="padding-top: 6px;text-align: center;">直播</div>
 					</th>
-					<th style="width: 30%;" v-on:click="GoLaws()">
+					<th style="width: 25%;text-align: center;" v-on:click="GoLaws()">
 						<img style="height: 60px;padding-right: 10px;" class="am-header-icon-custom" src="~/Images/icon/home_traffic.png" alt=""/><div style="padding-top: 6px;">法规资讯</div>
 					</th>
-					<th style="width: 30%;padding-right: 10px;" v-on:click="GoMy()">
+					<th style="width: 25%;padding-right: 10px;text-align: center;" v-on:click="GoMy()">
 						<img style="height: 60px;" class="am-header-icon-custom" src="~/Images/icon/home_my.png" alt=""/><div style="padding-top: 6px;">财经论道</div>
 					</th>
 				</tr>
@@ -107,7 +107,8 @@
 				        	{{item.ClassName}}
 				        </div>
 				        <div>
-				        	<div style="color: red;width: 50%;float: left;">¥{{item.ClassPrice}}</div>
+				        	<div v-if="item.GroupPrice!=0" style="color: red;width: 60%;float: left;">团购价:¥{{item.GroupPrice}}</div>
+				        	<div v-if="item.GroupPrice==0" style="color: red;width: 60%;float: left;">¥{{item.ClassPrice}}</div>
 				        	<div style="font-size: 12px;color:#999999;float: right;">{{item.likeCount}} 人点赞</div>
 				        </div>
 				      </li>  
@@ -121,14 +122,14 @@
     		style="margin-top:0px;">		
 		  	<div class="am-list-news-hd am-cf">
 		          <h2>精品课程</h2>
-		          <span v-on:click="GoClassList()" class="am-list-news-more am-fr">查看全部 &raquo;</span>  
+		          <span v-on:click="GoClassList()" class="am-list-news-more am-fr">查看全部 </span>  
           	</div>
 			  
 		  	<div class="am-list-news-bd">
 				  <ul class="am-list" v-for="item in myClassList">
 				     <!--缩略图在标题左边-->
 				      <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" 
-				      	style="padding-top: 5px;padding-bottom: 5px;height: 110px;">
+				      	style="padding-top: 0px;padding-bottom: 5px;height: 110px;">
 				        <div class="am-u-sm-4 am-list-thumb" style="width: 49%;height: 100%;padding-right: 0px;max-height: 100px;">
 				        	<div class="zoomImage" style="height: 100px;" v-bind:style="{backgroundImage:'url(' + item.ClassImages + ')'}"></div>
 				        </div>
@@ -147,8 +148,11 @@
 							</tr>
 							<tr>
 								
-								<td>
+								<td style="width: 50%;">
 									<div style="font-size: 11px;color:#FFD306">{{item.ClassTeacher}}</div>
+								</td>
+								<td>
+									<div v-if="item.GroupPrice!=0" style="font-size: 11px;color:red">团购价:¥{{item.GroupPrice}}</div>
 								</td>
 								
 							</tr>
@@ -164,14 +168,14 @@
     		style="margin-top:0px;">		
 		  	<div class="am-list-news-hd am-cf">
 		        <h2>财经论道</h2>
-		        <span v-on:click="GoExperViews()" class="am-list-news-more am-fr">查看全部 &raquo;</span>  
+		        <span v-on:click="GoExperViews()" class="am-list-news-more am-fr">查看全部 </span>  
           	</div>
 			  
 		  	<div class="am-list-news-bd">
 				  <ul class="am-list" v-for="item in experViewList">
 				     <!--缩略图在标题左边-->
 				      <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" 
-				      	style="padding-top: 5px;padding-bottom: 5px;height: 110px;">
+				      	style="padding-top: 0px;padding-bottom: 5px;height: 110px;">
 				        <div class="am-u-sm-4 am-list-thumb" style="width: 49%;height: 100%;padding-right: 0px;max-height: 100px;">
 				        	<div class="zoomImage" style="height: 100px;" v-bind:style="{backgroundImage:'url(' + item.ClassImages + ')'}"></div>
 				        </div>
@@ -209,7 +213,7 @@
   			style="margin-top:0px;">		
 		  	<div class="am-list-news-hd am-cf">
 		        <h2>直播</h2>	
-		        <span v-on:click="GoLives()" class="am-list-news-more am-fr">查看全部 &raquo;</span>  
+		        <span v-on:click="GoLives()" class="am-list-news-more am-fr">查看全部 </span>  
           	</div>
 			
 			<div class="am-list-news-bd">
@@ -229,7 +233,7 @@
 						</tr>
 						<tr>
 							<td>
-								<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.likeCount}}</div>
+								<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;height: 18px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
 								<div style="color: #999999;float: right;padding-top: 5px;margin-right: 10px;"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>
 							</td>
 							
@@ -247,7 +251,7 @@
   			style="margin-top:0px;">		
 		  	<div class="am-list-news-hd am-cf">
 		        <h2>线下活动</h2>	
-		        <span v-on:click="GoActivitys()" class="am-list-news-more am-fr">查看全部 &raquo;</span>  
+		        <span v-on:click="GoActivitys()" class="am-list-news-more am-fr">查看全部 </span>  
           	</div>
 			
 			<div class="am-list-news-bd">
@@ -267,7 +271,7 @@
 						</tr>
 						<tr>
 							<td>
-								<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
+								<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;height: 18px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
 								<div style="color: #999999;float: right;padding-top: 5px;margin-right: 10px;"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>
 							</td>
 							
@@ -285,7 +289,7 @@
   			style="margin-top:0px;">		
 		  	<div class="am-list-news-hd am-cf">
 		        <h2>法规资讯</h2>	
-		        <span v-on:click="GoLaws()" class="am-list-news-more am-fr">查看全部 &raquo;</span>  
+		        <span v-on:click="GoLaws()" class="am-list-news-more am-fr">查看全部 </span>  
           	</div>
 			
 			<div class="am-list-news-bd">
@@ -305,7 +309,7 @@
 						</tr>
 						<tr>
 							<td>
-								<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
+								<div style="color: #999999;float: right;padding-top: 5px"><img style="margin-right: 3px;height: 18px;" class="am-header-icon-custom" src="~/Images/icon/眼睛.png" alt=""/>{{item.ClickCount}}</div>
 								<div style="color: #999999;float: right;padding-top: 5px;margin-right: 10px;"><img style="margin-right: 3px;" class="am-header-icon-custom" src="~/Images/icon/日历.png" alt=""/>{{item.CreateTime}}</div>
 							</td>
 							

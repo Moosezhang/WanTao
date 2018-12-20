@@ -13,10 +13,6 @@
     @Scripts.Render("~/bundles/vue")
     @Scripts.Render("~/bundles/elementui")
     <script>
-        $(function () {
-            NProgress.configure({ ease: 'ease', speed: 500, showSpinner: false, });
-            NProgress.start();
-        });
     </script>
     <style>
         .el-submenu__title {
@@ -66,7 +62,7 @@
     <script>
         var imainHeight = $(document).height() - 68;
         $(function () {
-            NProgress.done();
+            
             var menuVue = new Vue({
                 el: "#home",
                 data: {

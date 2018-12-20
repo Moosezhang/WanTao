@@ -10,10 +10,10 @@
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/Admin/Views/Account/ChangePassword.cshtml">
-      <publishTime>10/26/2018 22:15:53</publishTime>
+      <publishTime>12/14/2018 15:41:36</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/Index.cshtml">
-      <publishTime>10/20/2018 17:43:28</publishTime>
+      <publishTime>12/12/2018 10:16:12</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/Login.cshtml">
       <publishTime>11/13/2018 13:34:34</publishTime>
@@ -25,88 +25,88 @@
       <publishTime>10/19/2018 16:06:56</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Auth/Role.cshtml">
-      <publishTime>10/26/2018 22:15:16</publishTime>
+      <publishTime>12/14/2018 15:39:56</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Auth/User.cshtml">
       <publishTime>11/07/2018 11:46:09</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/ArticleInfo.cshtml">
-      <publishTime>11/10/2018 17:00:13</publishTime>
+      <publishTime>12/19/2018 20:27:53</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/BargainConfig.cshtml">
-      <publishTime>11/07/2018 16:03:34</publishTime>
+      <publishTime>12/17/2018 22:05:40</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/CompanyInfo.cshtml">
-      <publishTime>10/26/2018 22:16:18</publishTime>
+      <publishTime>12/17/2018 21:07:44</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/DictionaryInfo.cshtml">
-      <publishTime>11/07/2018 21:40:22</publishTime>
+      <publishTime>12/19/2018 20:45:41</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/GroupBuyConfig.cshtml">
-      <publishTime>11/07/2018 16:03:16</publishTime>
+      <publishTime>12/17/2018 22:06:03</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/HelpConfig.cshtml">
-      <publishTime>11/08/2018 16:51:28</publishTime>
+      <publishTime>12/17/2018 22:06:12</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/Index.cshtml">
-      <publishTime>11/10/2018 15:08:38</publishTime>
+      <publishTime>12/11/2018 13:13:20</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/JobInfo.cshtml">
-      <publishTime>11/07/2018 11:46:35</publishTime>
+      <publishTime>12/11/2018 13:23:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/PublicFundsConfig.cshtml">
-      <publishTime>11/05/2018 20:25:44</publishTime>
+      <publishTime>12/18/2018 20:05:56</publishTime>
     </File>
     <File Include="Areas/Admin/Views/BaseSet/UpLoadCenter.cshtml">
-      <publishTime>11/13/2018 14:52:00</publishTime>
+      <publishTime>12/12/2018 10:51:07</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Class/Chapter.cshtml">
-      <publishTime>11/10/2018 16:54:37</publishTime>
+      <publishTime>12/18/2018 21:02:59</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Class/Detail.cshtml">
-      <publishTime>11/11/2018 14:28:12</publishTime>
+      <publishTime>12/17/2018 22:23:02</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Class/Index.cshtml">
-      <publishTime>11/10/2018 16:33:31</publishTime>
+      <publishTime>12/18/2018 14:45:33</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Order/Index.cshtml">
       <publishTime>11/07/2018 11:46:47</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/_Layout.cshtml">
-      <publishTime>11/05/2018 20:34:29</publishTime>
+      <publishTime>12/11/2018 09:11:02</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/_LayoutPerson.cshtml">
-      <publishTime>10/20/2018 17:06:36</publishTime>
+      <publishTime>12/11/2018 11:24:26</publishTime>
     </File>
     <File Include="Areas/Admin/Views/web.config">
       <publishTime>10/20/2018 17:06:36</publishTime>
     </File>
     <File Include="Areas/Admin/Views/WxUser/Index.cshtml">
-      <publishTime>11/07/2018 11:46:53</publishTime>
+      <publishTime>12/17/2018 20:25:46</publishTime>
     </File>
     <File Include="Areas/Admin/Views/_ViewStart.cshtml">
       <publishTime>10/19/2018 16:06:56</publishTime>
     </File>
     <File Include="bin/AccountTrain.Web.dll">
-      <publishTime>11/27/2018 15:15:12</publishTime>
+      <publishTime>12/19/2018 20:45:57</publishTime>
     </File>
     <File Include="bin/Antlr3.Runtime.dll">
       <publishTime>10/09/2018 08:19:20</publishTime>
     </File>
     <File Include="bin/BusinessComponent.dll">
-      <publishTime>11/27/2018 15:14:29</publishTime>
+      <publishTime>12/19/2018 20:45:52</publishTime>
     </File>
     <File Include="bin/BusinessEntity.dll">
-      <publishTime>11/27/2018 15:14:27</publishTime>
+      <publishTime>12/19/2018 20:45:50</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>11/27/2018 15:14:27</publishTime>
+      <publishTime>12/19/2018 20:45:51</publishTime>
     </File>
     <File Include="bin/Dapper.dll">
       <publishTime>07/27/2016 10:44:30</publishTime>
     </File>
     <File Include="bin/DataAccess.dll">
-      <publishTime>11/27/2018 15:14:28</publishTime>
+      <publishTime>12/19/2018 20:45:52</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>10/09/2018 09:17:28</publishTime>
@@ -115,7 +115,7 @@
       <publishTime>10/09/2018 09:17:28</publishTime>
     </File>
     <File Include="bin/Gma.QrCodeNet.Encoding.dll">
-      <publishTime>11/05/2018 21:26:02</publishTime>
+      <publishTime>12/18/2018 15:05:48</publishTime>
     </File>
     <File Include="bin/LitJson.dll">
       <publishTime>12/08/2015 20:54:06</publishTime>
@@ -202,7 +202,7 @@
       <publishTime>10/09/2018 08:19:20</publishTime>
     </File>
     <File Include="bin/WxPayAPI.dll">
-      <publishTime>11/12/2018 13:30:31</publishTime>
+      <publishTime>12/17/2018 21:46:50</publishTime>
     </File>
     <File Include="bin/zh-Hans/EntityFramework.resources.dll">
       <publishTime>10/09/2018 09:17:31</publishTime>
@@ -271,7 +271,7 @@
       <publishTime>10/19/2018 14:46:02</publishTime>
     </File>
     <File Include="Content/element-ui.min.css">
-      <publishTime>11/13/2018 16:25:07</publishTime>
+      <publishTime>12/11/2018 18:29:00</publishTime>
     </File>
     <File Include="Content/fonts/element-icons.ttf">
       <publishTime>10/19/2018 14:59:21</publishTime>
@@ -363,6 +363,9 @@
     <File Include="Images/icon/bargainImage.jpg">
       <publishTime>11/05/2018 11:10:24</publishTime>
     </File>
+    <File Include="Images/icon/funds.png">
+      <publishTime>12/18/2018 20:22:40</publishTime>
+    </File>
     <File Include="Images/icon/home_class.png">
       <publishTime>11/03/2018 16:33:26</publishTime>
     </File>
@@ -386,6 +389,9 @@
     </File>
     <File Include="Images/icon/myClass.png">
       <publishTime>10/31/2018 20:09:26</publishTime>
+    </File>
+    <File Include="Images/icon/myHistory.png">
+      <publishTime>11/27/2018 21:03:51</publishTime>
     </File>
     <File Include="Images/icon/myPoint.png">
       <publishTime>10/31/2018 20:09:32</publishTime>
@@ -427,7 +433,7 @@
       <publishTime>10/31/2018 20:40:53</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>11/05/2018 21:26:03</publishTime>
+      <publishTime>12/18/2018 15:05:49</publishTime>
     </File>
     <File Include="Scripts/amazeui.js">
       <publishTime>10/29/2018 09:54:32</publishTime>
@@ -451,7 +457,7 @@
       <publishTime>10/19/2018 14:59:54</publishTime>
     </File>
     <File Include="Scripts/element-ui.min.js">
-      <publishTime>10/19/2018 14:59:58</publishTime>
+      <publishTime>12/10/2018 14:43:21</publishTime>
     </File>
     <File Include="Scripts/fileupload/app.js">
       <publishTime>11/13/2018 11:18:55</publishTime>
@@ -1420,55 +1426,55 @@
       <publishTime>10/19/2018 14:46:00</publishTime>
     </File>
     <File Include="Views/WxArticle/Activists.cshtml">
-      <publishTime>11/23/2018 11:01:28</publishTime>
+      <publishTime>12/11/2018 17:44:59</publishTime>
     </File>
     <File Include="Views/WxArticle/Index.cshtml">
       <publishTime>10/31/2018 14:09:59</publishTime>
     </File>
     <File Include="Views/WxArticle/Laws.cshtml">
-      <publishTime>11/23/2018 10:14:56</publishTime>
+      <publishTime>12/19/2018 20:38:16</publishTime>
     </File>
     <File Include="Views/WxArticle/Lives.cshtml">
-      <publishTime>11/23/2018 11:07:34</publishTime>
+      <publishTime>12/11/2018 17:43:59</publishTime>
     </File>
     <File Include="Views/WxClass/ClassDetail.cshtml">
-      <publishTime>11/27/2018 13:39:28</publishTime>
+      <publishTime>12/18/2018 21:38:51</publishTime>
     </File>
     <File Include="Views/WxClass/ClassList.cshtml">
-      <publishTime>11/14/2018 18:39:02</publishTime>
+      <publishTime>12/19/2018 19:47:09</publishTime>
     </File>
     <File Include="Views/WxClass/ExpertViewDetail.cshtml">
-      <publishTime>11/27/2018 13:41:31</publishTime>
+      <publishTime>12/18/2018 14:16:34</publishTime>
     </File>
     <File Include="Views/WxClass/ExpertViewList.cshtml">
-      <publishTime>11/23/2018 09:42:41</publishTime>
+      <publishTime>12/11/2018 16:36:21</publishTime>
     </File>
     <File Include="Views/WxClass/Index.cshtml">
       <publishTime>10/29/2018 19:48:22</publishTime>
     </File>
     <File Include="Views/WxHome/CompanyInfo.cshtml">
-      <publishTime>11/15/2018 20:02:43</publishTime>
+      <publishTime>12/17/2018 21:21:58</publishTime>
     </File>
     <File Include="Views/WxHome/Index.cshtml">
-      <publishTime>11/27/2018 14:57:42</publishTime>
+      <publishTime>12/18/2018 19:15:38</publishTime>
     </File>
     <File Include="Views/WxHome/IndexSearch.cshtml">
       <publishTime>11/13/2018 20:48:27</publishTime>
     </File>
     <File Include="Views/WxHome/JobInfo.cshtml">
-      <publishTime>11/20/2018 10:52:00</publishTime>
+      <publishTime>12/11/2018 16:40:20</publishTime>
     </File>
     <File Include="Views/WxHome/JobInfoDetail.cshtml">
       <publishTime>11/13/2018 20:48:36</publishTime>
     </File>
     <File Include="Views/WxMy/Index.cshtml">
-      <publishTime>11/26/2018 18:20:54</publishTime>
+      <publishTime>12/06/2018 18:49:54</publishTime>
     </File>
     <File Include="Views/WxMy/MyCar.cshtml">
-      <publishTime>11/13/2018 20:48:49</publishTime>
+      <publishTime>12/17/2018 21:13:16</publishTime>
     </File>
     <File Include="Views/WxMy/MyClass.cshtml">
-      <publishTime>11/15/2018 20:02:34</publishTime>
+      <publishTime>12/11/2018 16:39:51</publishTime>
     </File>
     <File Include="Views/WxMy/MyHistory.cshtml">
       <publishTime>11/26/2018 18:41:09</publishTime>
@@ -1477,10 +1483,16 @@
       <publishTime>11/13/2018 20:48:59</publishTime>
     </File>
     <File Include="Views/WxOrder/Bargain.cshtml">
-      <publishTime>11/16/2018 14:54:43</publishTime>
+      <publishTime>12/13/2018 11:43:01</publishTime>
+    </File>
+    <File Include="Views/WxOrder/CheckOut.cshtml">
+      <publishTime>12/05/2018 10:15:34</publishTime>
     </File>
     <File Include="Views/WxOrder/GroupBuy.cshtml">
-      <publishTime>11/13/2018 20:49:20</publishTime>
+      <publishTime>12/17/2018 22:53:02</publishTime>
+    </File>
+    <File Include="Views/WxOrder/HelpClass.cshtml">
+      <publishTime>12/08/2018 20:25:24</publishTime>
     </File>
     <File Include="Views/WxOrder/Index.cshtml">
       <publishTime>11/13/2018 20:49:24</publishTime>
@@ -1492,7 +1504,7 @@
       <publishTime>10/19/2018 14:46:00</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/13/2018 15:20:25</publishTime>
+      <publishTime>12/18/2018 15:32:22</publishTime>
     </File>
   </ItemGroup>
 </Project>

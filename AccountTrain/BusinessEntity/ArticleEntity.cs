@@ -25,6 +25,11 @@ namespace BusinessEntitys
         [EnitityMappingAttribute(ColumnName = "ArticleType")]
         public string ArticleType { get; set; }
 
+
+        [EnitityMappingAttribute(ColumnName = "ArticleGroup")]
+        public string ArticleGroup { get; set; }
+        
+
         /// <summary>
         /// 文章标题
         /// </summary>
@@ -81,7 +86,17 @@ namespace BusinessEntitys
         [EnitityMappingAttribute(ColumnName = "UpdateUser")]
         public string UpdateUser { get; set; }
 
+        /// <summary>
+        /// 开始时间
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "StartTime")]
+        public DateTime StartTime { get; set; }
 
+        /// <summary>
+        /// 结束时间
+        /// </summary>
+        [EnitityMappingAttribute(ColumnName = "EndTime")]
+        public DateTime EndTime { get; set; }
       
 
     }
