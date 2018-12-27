@@ -100,4 +100,3 @@ E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\bin\QuickMark.dl
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\bin\ThoughtWorks.QRCode.dll
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\obj\Debug\WxPayAPI.dll
 E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\obj\Debug\WxPayAPI.pdb
-E:\MyPlace\MyProject\培训公众号\Code\AccountTrain\WxPayAPI\obj\Debug\WxPayAPI.csprojResolveAssemblyReference.cache

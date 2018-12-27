@@ -88,15 +88,15 @@ namespace AccountTrain.Web.Controllers
 
                 if (string.IsNullOrWhiteSpace(openid) && code == null)
                 {
-                    Response.Redirect(CommonHelper.GetRedirect("WxClass%ClassDetail"));
+                    Response.Redirect(CommonHelper.GetRedirect("WxClass%2fClassDetail?classId=" + classId));
                 }
                 try
                 {
                     if (string.IsNullOrWhiteSpace(openid))
                     {
-
+                        LogHelp.WriteLog("code:::" + code);
                         openid = GetOpenId(code).openid;
-
+                        LogHelp.WriteLog("openid:::"+openid);
 
                         // 合法用户，允许访问
                         Response.Cookies[SystemConfig.WXOpenIDCookieKey].Value = openid;

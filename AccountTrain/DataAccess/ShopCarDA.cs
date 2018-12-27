@@ -30,6 +30,20 @@ namespace DataAccess
 
         }
 
+        public ShopCarEntity GetMyShopByopenIdAndclassId(string openid,string classId)
+        {
+
+            using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Read))
+            {
+                string query = string.Format(@" select t.*
+                                                from Train_ShopCar t
+                                                where t.Openid='{0}' and t.ClassId='{1}' and t.status=1", openid, classId);
+
+                return conn.Query<ShopCarEntity>(query).FirstOrDefault();
+            }
+
+        }
+
         public int AddShopCar(ShopCarEntity car, string loginName)
         {
             using (IDbConnection conn = DBContext.GetConnection(DataBaseName.AccountTrianDB, ReadOrWriteDB.Write))

@@ -449,6 +449,13 @@ namespace AccountTrain.Web.Controllers
                 Openid=openid,
                 ClassId=classId
             };
+
+            var model = new ShopCarBC().GetMyShopByopenIdAndclassId(openid, classId);
+            if (model!=null)
+            {
+                return Json("已加入购物车", JsonRequestBehavior.AllowGet);
+            }
+
             var result = new ShopCarBC().AddShopCar(entity,openid);
             if (result > 0)
             {

@@ -48,38 +48,45 @@ namespace AccountTrain.Web.Controllers
         //通过code换取网页授权access_token
         public OpenId GetOpenId(string code)
         {
-            var client = new RestClient("https://api.weixin.qq.com/sns/oauth2");
-
-            var request = new RestRequest("access_token?appid={appid}&secret={appsecret}&code={code}&grant_type=authorization_code", Method.GET);
-            request.AddUrlSegment("appid", _setting.WeiXinAppId);
-            request.AddUrlSegment("appsecret", _setting.WeiXinAppSecret);
-            request.AddUrlSegment("code", code);
-
-            var response = client.Execute(request);
-            var data = JsonConvert.DeserializeObject<OpenId>(response.Content);
-
-            
-
-            if (data != null)
+            try
             {
-                var userInfo = GetUserInfo(data.openid,data.access_token);
-                
-                if (userInfo != null)
-                {
-                    WxUserEntity Entry = new WxUserEntity();
-                    Entry.Openid = userInfo.openid;
-                    Entry.Nickname = userInfo.nickname;
-                    Entry.Sex = userInfo.sex;
-                    Entry.City = userInfo.city;
-                    Entry.Country = userInfo.country;
-                    Entry.Province = userInfo.province;
-                    Entry.UserLanguage = userInfo.language;
-                    Entry.Headimgurl = userInfo.headimgurl;
-                    new WxUserBC().SaveWxUser(Entry, userInfo.openid);
-                }
-            }
+                var client = new RestClient("https://api.weixin.qq.com/sns/oauth2");
 
-            return data??new OpenId();
+                var request = new RestRequest("access_token?appid={appid}&secret={appsecret}&code={code}&grant_type=authorization_code", Method.GET);
+                request.AddUrlSegment("appid", _setting.WeiXinAppId);
+                request.AddUrlSegment("appsecret", _setting.WeiXinAppSecret);
+                request.AddUrlSegment("code", code);
+                var response = client.Execute(request);
+                var data = JsonConvert.DeserializeObject<OpenId>(response.Content);
+
+                LogHelp.WriteLog("GetOpenId:::" + data);
+
+                if (data != null)
+                {
+                    var userInfo = GetUserInfo(data.openid, data.access_token);
+
+                    if (userInfo != null)
+                    {
+                        WxUserEntity Entry = new WxUserEntity();
+                        Entry.Openid = userInfo.openid;
+                        Entry.Nickname = userInfo.nickname;
+                        Entry.Sex = userInfo.sex;
+                        Entry.City = userInfo.city;
+                        Entry.Country = userInfo.country;
+                        Entry.Province = userInfo.province;
+                        Entry.UserLanguage = userInfo.language;
+                        Entry.Headimgurl = userInfo.headimgurl;
+                        new WxUserBC().SaveWxUser(Entry, userInfo.openid);
+                    }
+                }
+                return data ?? new OpenId();
+            }
+            catch (Exception ex)
+            {
+                LogHelp.WriteLog(ex.Message);
+                return new OpenId();
+            }
+            
         }
 
 

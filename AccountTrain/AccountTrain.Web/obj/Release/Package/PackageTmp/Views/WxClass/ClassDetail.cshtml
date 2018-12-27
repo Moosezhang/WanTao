@@ -69,10 +69,10 @@ list-style-type:none;
   		<form class="am-form">
 	        <fieldset>
 	        	<div id="myVideo">
-	        		<div  class="zoomImage" style="height:160px" v-bind:style="{backgroundImage:'url(' + imgUrl + ')'}"></div>
-	            	<!--<video v-if="status==2"  v-bind:src="currVideoUrl"  width="100%" height="160" controls>				  	
-					</video>-->
-					<audio v-if="status==2" v-bind:src="currVideoUrl" style="width: 100%;" controls="controls">
+	        		<div v-if="!isVideo" class="zoomImage" style="height:160px" v-bind:style="{backgroundImage:'url(' + imgUrl + ')'}"></div>
+	            	<video v-if="status==2 && isVideo"  v-bind:src="currVideoUrl"  width="100%" height="160" controls>				  	
+					</video>
+					<audio v-if="status==2 && !isVideo" v-bind:src="currVideoUrl" style="width: 100%;" controls>
 					</audio>					
                 </div>
 	            <div id="detail" model="form">
@@ -86,7 +86,7 @@ list-style-type:none;
 								
 								<th v-if="isVir" style="width: 55%;"  >
 									<span style="color: red;font-size: 15px;">¥  {{form.ClassPrice}} 抢购</span>
-									<span style="text-decoration:line-through;">原价:¥{{form.VirPrice}}</span>
+									<span style="text-decoration:line-through;color: #666666;font-size: 13px;">原价:¥{{form.VirPrice}}</span>
 								</th>
 								
 								<th v-if="isVir" style="width: 23%; padding-bottom: 5px;">
@@ -106,8 +106,8 @@ list-style-type:none;
 	            	<div v-if="isFunds" style="width: 100%;height: 15px;background: #E0E0E0;"></div>
 	            	
 	            	<div v-if="isFunds" style="height: 65px;width: 100%;">
-	            		<div style="padding-left: 5px;width: 20%;float: left;">
-	            			<img class="am-header-icon-custom" src="~/Images/icon/funds.png" alt=""/>
+	            		<div style="line-height:65px;width: 20%;float: left;text-align: center;">
+	            			<img style="width: 40px;" class="am-header-icon-custom" src="~/Images/icon/funds.png" alt=""/>
 	            		</div>
 	            		<div style="width: 80%;float: right;padding-top: 10px;padding-left: 5px;padding-right: 5px;">
 	            			<b>公益宝贝</b>
@@ -139,13 +139,31 @@ list-style-type:none;
 		               	<hr style="margin-top: 0px;margin-bottom: 5px;width: 100%;"/>
 		               	<div style="font-size: 15px;margin-left: 10px;margin-bottom: 5px;width: 100%;">
 						  <span style="color: #4395ff;">{{NowCount}}</span>人正在拼图，还差<span style="color: #4395ff;">{{NeedCount-NowCount}}</span>人满团，立即团购
-						  <img style="height: 15px;" class="am-header-icon-custom" src="~/Images/icon/喇叭.png" alt=""/>
+						  <img style="height: 15px;" class="am-header-icon-custom" src="~/Images/icon/喇叭.png" />
 	            		</div>
 	            	</div>
 	            	
 	            	<div style="width: 100%;height: 15px;background: #E0E0E0;"></div>
 	            	
-	            	<div data-am-widget="tabs" class="am-tabs am-tabs-d2" style="margin: 0px;">
+	            	
+				  <el-tabs v-model="activeName"  style="width: 100%;" stretch="true">
+				    <el-tab-pane label="课程信息" name="first">
+				    	<div style="overflow-y: auto;">
+				        	<div id="contentData">
+                			</div>
+					    </div>
+				    </el-tab-pane>
+				    <el-tab-pane label="课程大纲" name="second">
+				    	<div style="overflow-y: auto;">
+					        <ul v-for="item in capData" style="margin-bottom: -1px;padding-left: 0px;">
+							    <li><img class="am-header-icon-custom" style="height: 50px;" src="~/Images/icon/line_b.png" alt=""/><span style="margin-left: 10px;" v-on:click="changeVideo(item)">{{item.ChapterTitle}}</span></li>
+							</ul>
+					    </div>
+				    </el-tab-pane>
+				  </el-tabs>
+					
+	            	
+	            	<!--<div data-am-widget="tabs" class="am-tabs am-tabs-d2" style="margin: 0px;">
 						  <ul class="am-tabs-nav am-cf" >
 						      <li class="am-active" ><a style=" text-decoration: none;" href="[data-tab-panel-0]">课程信息</a></li>
 						      <li ><a style=" text-decoration: none;" href="[data-tab-panel-1]">课程大纲</a></li>
@@ -161,7 +179,7 @@ list-style-type:none;
 								</ul>
 						      </div>
 						  </div>
-					</div>
+					</div>-->
 					<header class="am-topbar  am-topbar-fixed-bottom" style="height: 40px;">
 						<div class="div-inline" v-if="form.IsGroupBuy=='1' && status!=2" v-on:click="GoGroupBuy()" style="margin-left: 10px;margin-top: 7px;width: 45%;border-radius:55px;color: white;font-size: 15px;height: 35px;background-color: #ff8a00;"  >
 							团购价:¥ {{GroupPrice}}
@@ -214,11 +232,13 @@ list-style-type:none;
 		data:{
 			currVideoUrl:"",			
 			imgUrl:'',
+			isVideo:false
 		}
 	});
 	var detailVue=new Vue({
 		el:"#detail",
 		data:{
+			activeName:'first',
 			capData:[],	
 			form:{},
 			bargainId:"",
@@ -238,7 +258,6 @@ list-style-type:none;
 			fundsForm:{}
 		},
 		created: function () {
-				var _self = this;
                 this.Query();
          },
          methods:{
@@ -279,7 +298,13 @@ list-style-type:none;
                        _self.capData = result;
                        if(result.length!=0)
                        {
+                       		
                        		videoVue.currVideoUrl=result[0].VideoUrl;
+                       		var fix=videoVue.currVideoUrl.substring(videoVue.currVideoUrl.length-3);
+                       		if(fix=="mp4")
+                       		{
+                       			videoVue.isVideo=true;
+                       		}
                        }
                         
                         
@@ -394,7 +419,7 @@ list-style-type:none;
                     		if(nowDate>_self.ChangeDateFormat(result.StartTime) && nowDate<_self.ChangeDateFormat(result.EndTime))
 	                    	{
 	                    		detailVue.form.IsGroupBuy="1";
-	                    		//_self.isGroupBuy="1";
+	                    		_self.isGroupBuy="1";
 	                    		$.ajax({
 				                    type: "get",
 				                    dataType: "json",
@@ -518,6 +543,12 @@ list-style-type:none;
 				if(status==2)
 				{
 					videoVue.currVideoUrl=item.VideoUrl;
+               		var fix=videoVue.currVideoUrl.substring(videoVue.currVideoUrl.length-3);
+               		if(fix=="mp4")
+               		{
+               			videoVue.isVideo=true;
+               			
+               		}
 				}
 				
 			},

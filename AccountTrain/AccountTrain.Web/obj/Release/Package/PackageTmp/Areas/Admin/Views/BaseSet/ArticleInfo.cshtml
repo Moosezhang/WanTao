@@ -227,6 +227,9 @@
                         	result.StartTime = _self.ChangeDateFormat(result.StartTime);
                         	result.EndTime = _self.ChangeDateFormat(result.EndTime);
                             _self.form = result;
+                            if(result.ArticleGroup!=null){
+	                    	 	_self.selectedOptions=result.ArticleGroup.split('-'); 
+	                    	}
                         }
                     });
                    
@@ -244,7 +247,7 @@
                             KeyName: title
                         },
                         success: function (result) {
-                            ArticleVue.tableData = result;
+                            ArticleVue.tableData = result;                            
                         },
                         error: function (json) {
                             _self.$message.error('加载图片信息失败');
@@ -328,7 +331,7 @@
 	                    dataType: "json",
 	                    url: "/WxClass/GetDicInfoList?pGuid=" + guid(),
 	                    data:{
-	                    	key:"6072f941-cc6f-48c6-9aea-c4eed1de04ae"
+	                    	key:"f964fe9e-d74e-4b51-a988-bfdcce0d9c01"
 	                    },
 	                    success: function (result) {
 	                    	_self.nodeList=result

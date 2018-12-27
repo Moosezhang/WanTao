@@ -17,6 +17,12 @@ namespace BusinessComponent
             return da.GetMyShopByopenId(openid);
         }
 
+        public ShopCarEntity GetMyShopByopenIdAndclassId(string openId, string classId)
+        {
+            var da = new ShopCarDA();
+            return da.GetMyShopByopenIdAndclassId(openId,classId);
+        }
+
         public int AddShopCar(ShopCarEntity car, string loginName)
         {
             var da = new ShopCarDA();
