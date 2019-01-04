@@ -868,9 +868,10 @@ namespace AccountTrain.Web.Controllers
         {
             string msg = string.Empty;
             string link = string.Empty;
+            string fileName = string.Empty;
+            string openid = "";
             try
             {
-                string openid = "";
                 if (new AppSetting().IsDebug != null
                     && new AppSetting().IsDebug.ToLower() == "true")
                 {
@@ -882,7 +883,7 @@ namespace AccountTrain.Web.Controllers
                         openid = Request.Cookies[SystemConfig.WXOpenIDCookieKey].Value;
                     if (string.IsNullOrEmpty(openid) && string.IsNullOrEmpty(code))
                     {
-                        Response.Redirect(CommonHelper.GetRedirect("WxClass%2fClassDeatil?classId" + classid));
+                        Response.Redirect(CommonHelper.GetRedirect("WxOrder%2fHelpClass?helpId=" + helpId));
                     }
                     try
                     {
@@ -943,12 +944,13 @@ namespace AccountTrain.Web.Controllers
                     string path = HttpContext.Server.MapPath("/Images/upload/");
 
                     string[] sArray = Regex.Split(config.ImageUrl, "Images/upload/", RegexOptions.IgnoreCase);
-                   
+
                     string filename = sArray[1].ToString();
                     SaveIamge WordsPic = new WaterImageManager().DrawWordsForSaveIamge(filename, path, WxName, 1, FontFamilys.宋体, FontStyle.Bold, ImagePosition.TopMiddle);
                     //添加二维码水印
                     string QrPic = new WaterImageManager().DrawImage(WordsPic.filename, WordsPic.showImg, QR.filename, QR.showImg, 1, ImagePosition.BottomMiddle);
-
+                    LogHelp.WriteLog("QrPic:::" + QrPic);
+                    fileName = QrPic;
                     link = CommonHelper.LinkImageUrl("/Images/upload/" + QrPic);
 
                     HelpInfoEntity help = new HelpInfoEntity()
@@ -1037,7 +1039,7 @@ namespace AccountTrain.Web.Controllers
                         SaveIamge WordsPic = new WaterImageManager().DrawWordsForSaveIamge(filename, path, WxName, 1, FontFamilys.宋体, FontStyle.Bold, ImagePosition.TopMiddle);
                         //添加二维码水印
                         string QrPic = new WaterImageManager().DrawImage(WordsPic.filename, WordsPic.showImg, QR.filename, QR.showImg, 1, ImagePosition.BottomMiddle);
-
+                        fileName = QrPic;
                         link = CommonHelper.LinkImageUrl("/Images/upload/" + QrPic);
 
                         HelpInfoEntity help = new HelpInfoEntity()
@@ -1054,6 +1056,9 @@ namespace AccountTrain.Web.Controllers
                     }
 
                 }
+
+                string media_id = Util.uploadMedia(HttpContext.Server.MapPath("/Images/upload/") + fileName, fileName);
+                Util.SendCustomMessage(openid, media_id);
             }
             catch (Exception ex)
             {
@@ -1064,7 +1069,7 @@ namespace AccountTrain.Web.Controllers
 
             ViewBag.Message = msg;
             ViewBag.Link = link;
-
+            
             return View();
             
         }

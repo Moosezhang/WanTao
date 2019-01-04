@@ -88,25 +88,25 @@
       <publishTime>10/19/2018 16:06:56</publishTime>
     </File>
     <File Include="bin/AccountTrain.Web.dll">
-      <publishTime>12/22/2018 16:27:53</publishTime>
+      <publishTime>12/30/2018 17:36:44</publishTime>
     </File>
     <File Include="bin/Antlr3.Runtime.dll">
       <publishTime>10/09/2018 08:19:20</publishTime>
     </File>
     <File Include="bin/BusinessComponent.dll">
-      <publishTime>12/22/2018 16:27:51</publishTime>
+      <publishTime>12/30/2018 17:36:41</publishTime>
     </File>
     <File Include="bin/BusinessEntity.dll">
-      <publishTime>12/19/2018 20:45:50</publishTime>
+      <publishTime>12/30/2018 15:19:26</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>12/22/2018 16:27:48</publishTime>
+      <publishTime>12/30/2018 17:36:40</publishTime>
     </File>
     <File Include="bin/Dapper.dll">
       <publishTime>07/27/2016 10:44:30</publishTime>
     </File>
     <File Include="bin/DataAccess.dll">
-      <publishTime>12/22/2018 16:27:50</publishTime>
+      <publishTime>12/30/2018 17:36:41</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>10/09/2018 09:17:28</publishTime>
@@ -202,7 +202,7 @@
       <publishTime>10/09/2018 08:19:20</publishTime>
     </File>
     <File Include="bin/WxPayAPI.dll">
-      <publishTime>12/22/2018 16:23:59</publishTime>
+      <publishTime>12/22/2018 16:40:50</publishTime>
     </File>
     <File Include="bin/zh-Hans/EntityFramework.resources.dll">
       <publishTime>10/09/2018 09:17:31</publishTime>
@@ -1426,7 +1426,7 @@
       <publishTime>10/19/2018 14:46:00</publishTime>
     </File>
     <File Include="Views/WxArticle/Activists.cshtml">
-      <publishTime>12/11/2018 17:44:59</publishTime>
+      <publishTime>12/28/2018 11:13:59</publishTime>
     </File>
     <File Include="Views/WxArticle/Index.cshtml">
       <publishTime>10/31/2018 14:09:59</publishTime>
@@ -1438,7 +1438,7 @@
       <publishTime>12/11/2018 17:43:59</publishTime>
     </File>
     <File Include="Views/WxClass/ClassDetail.cshtml">
-      <publishTime>12/22/2018 12:34:57</publishTime>
+      <publishTime>12/22/2018 17:10:25</publishTime>
     </File>
     <File Include="Views/WxClass/ClassList.cshtml">
       <publishTime>12/20/2018 20:50:30</publishTime>
@@ -1456,7 +1456,7 @@
       <publishTime>12/17/2018 21:21:58</publishTime>
     </File>
     <File Include="Views/WxHome/Index.cshtml">
-      <publishTime>12/22/2018 12:02:33</publishTime>
+      <publishTime>12/27/2018 09:36:11</publishTime>
     </File>
     <File Include="Views/WxHome/IndexSearch.cshtml">
       <publishTime>11/13/2018 20:48:27</publishTime>
@@ -1468,7 +1468,7 @@
       <publishTime>11/13/2018 20:48:36</publishTime>
     </File>
     <File Include="Views/WxMy/Index.cshtml">
-      <publishTime>12/06/2018 18:49:54</publishTime>
+      <publishTime>12/28/2018 11:22:00</publishTime>
     </File>
     <File Include="Views/WxMy/MyCar.cshtml">
       <publishTime>12/17/2018 21:13:16</publishTime>
@@ -1483,7 +1483,7 @@
       <publishTime>11/13/2018 20:48:59</publishTime>
     </File>
     <File Include="Views/WxOrder/Bargain.cshtml">
-      <publishTime>12/13/2018 11:43:01</publishTime>
+      <publishTime>12/28/2018 11:18:41</publishTime>
     </File>
     <File Include="Views/WxOrder/CheckOut.cshtml">
       <publishTime>12/05/2018 10:15:34</publishTime>
@@ -1492,7 +1492,7 @@
       <publishTime>12/17/2018 22:53:02</publishTime>
     </File>
     <File Include="Views/WxOrder/HelpClass.cshtml">
-      <publishTime>12/20/2018 18:02:56</publishTime>
+      <publishTime>12/29/2018 19:57:38</publishTime>
     </File>
     <File Include="Views/WxOrder/Index.cshtml">
       <publishTime>11/13/2018 20:49:24</publishTime>

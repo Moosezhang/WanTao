@@ -17,6 +17,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.IO;
 using BusinessEntity.Model;
+using System.Net.Http;
 
 
 namespace Common
@@ -796,11 +797,97 @@ namespace Common
                 if (response != null)
                     response.Close();
             }
-
-
-            return true;
         }
 
+
+        //上传临时素材
+        public static string uploadMedia(string imgPath,string fileName)
+        {
+            AppSetting _setting = new AppSetting();
+            string media_id=string.Empty;
+            string sAccessToken = GetAccessToken(_setting.WeiXinAppId, _setting.WeiXinAppSecret);
+            LogHelp.WriteLog("uploadMedia:::token:"+sAccessToken);
+            LogHelp.WriteLog("uploadMedia:::imgPath:" + imgPath);
+            LogHelp.WriteLog("uploadMedia:::fileName:" + fileName);
+            string url2 = string.Format("https://api.weixin.qq.com/cgi-bin/media/upload?access_token={0}&type=image",sAccessToken);
+
+            //图片转为流
+            Image img = new Bitmap(imgPath);
+            MemoryStream stream = new MemoryStream();
+            img.Save(stream, ImageFormat.Png);
+            BinaryReader br = new BinaryReader(stream);
+            byte[] data = stream.ToArray();
+            stream.Close();
+
+            try
+            {
+                var boundary = "fbce142e-4e8e-4bf3-826d-cc3cf506cccc";
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("User-Agent", "KnowledgeCenter");
+                client.DefaultRequestHeaders.Remove("Expect");
+                client.DefaultRequestHeaders.Remove("Connection");
+                client.DefaultRequestHeaders.ExpectContinue = false;
+                client.DefaultRequestHeaders.ConnectionClose = true;
+                var content = new MultipartFormDataContent(boundary);
+                content.Headers.Remove("Content-Type");
+                content.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary);
+                var contentByte = new ByteArrayContent(data);
+                content.Add(contentByte);
+                contentByte.Headers.Remove("Content-Disposition");
+                contentByte.Headers.TryAddWithoutValidation("Content-Disposition", string.Format("form-data; name=\"media\";filename=\"{0}\"" + "", fileName));
+                contentByte.Headers.Remove("Content-Type");
+                contentByte.Headers.TryAddWithoutValidation("Content-Type", "image/png");
+                LogHelp.WriteLog("uploadMedia::::content" + content);
+                var result2 = client.PostAsync(url2, content);
+                LogHelp.WriteLog("uploadMedia::::result2" + result2);
+                if (result2.Result.StatusCode != HttpStatusCode.OK)
+                    throw new Exception(result2.Result.Content.ReadAsStringAsync().Result);
+                string jsonstr = result2.Result.Content.ReadAsStringAsync().Result;
+                JObject jd2 = JObject.Parse(jsonstr);
+                media_id = (string)jd2["media_id"];
+            }
+            catch (Exception ex)
+            {
+                LogHelp.WriteLog("uploadMedia:::ex:" + ex.Message);
+                throw new Exception(ex.Message + ex.InnerException.Message);
+            }
+
+            
+            
+            return media_id;
+        }
+
+        /// <summary>
+        /// 发送客服消息
+        /// </summary>
+        /// <returns></returns>
+        public static bool SendCustomMessage(string openid, string media_id)
+        {
+            try
+            {
+                AppSetting _setting = new AppSetting();
+                string sAccessToken = GetAccessToken(_setting.WeiXinAppId, _setting.WeiXinAppSecret);
+                string url = string.Format("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={0}", sAccessToken);
+
+                JObject data = new JObject();
+                data.Add("touser", openid);
+                data.Add("msgtype", "image");
+                data.Add("image", JObject.FromObject(new
+                {
+                    media_id = media_id
+                }));
+                HttpSend hs = new HttpSend();
+                string result = hs.HttpPost(url, data.ToString());
+                LogHelp.WriteLog("SendCustomMessage:::result:" + result);
+                return true;
+            }
+            catch (System.Exception ex) 
+            {
+                LogHelp.WriteLog("SendCustomMessage:::ex:" + ex.Message);
+                return false;
+            }
+            
+        }
         #endregion 调用微信接口
 
 
@@ -1174,7 +1261,7 @@ namespace Common
             //    _sourcePictureName.Replace(System.IO.Path.GetExtension(_sourcePictureName), "") + TargetPicName + "." + PicFormat.ToString().ToLower() :
             //    TargetPicPath + TargetPicName + "." + PicFormat.ToString().ToLower();
             TargetPicPath = sourcePicturePath;
-            string targetImage = TargetPicPath + TargetPicName + "." + PicFormat.ToString().ToLower();
+            string targetImage = TargetPicPath + TargetPicName;
 
             //
             // 将需要加上水印的图片装载到Image对象中
@@ -1358,7 +1445,7 @@ namespace Common
 
             imgPhoto.Dispose();
             imgWatermark.Dispose();
-            return TargetPicName + "." + PicFormat.ToString().ToLower();
+            return TargetPicName;
         }
 
         /// <summary>
@@ -1617,12 +1704,13 @@ namespace Common
             //
             // 目标图片名称及全路径
             //
+            sourcePictureName = sourcePictureName.Split('.')[0].ToString();
             TargetPicName = "HelpName_" + DateTime.Now.ToString("fff") + sourcePictureName;
             //string targetImage = TargetPicPath == string.Empty ?
             //    _sourcePictureName.Replace(System.IO.Path.GetExtension(_sourcePictureName), "") + TargetPicName + "." + PicFormat.ToString().ToLower() :
             //    TargetPicPath + TargetPicName + "." + PicFormat.ToString().ToLower();
             TargetPicPath = sourcePicturePath;
-            string targetImage=TargetPicPath+TargetPicName+"." + PicFormat.ToString().ToLower();
+            string targetImage=TargetPicPath+TargetPicName;
             //创建一个图片对象用来装载要被添加水印的图片
             Image imgPhoto = Image.FromFile(_sourcePictureName);
 
@@ -1776,6 +1864,7 @@ namespace Common
                 System.IO.Directory.CreateDirectory(TargetPicPath);
             try
             {
+                targetImage = targetImage + "." + PicFormat.ToString().ToLower();
                 imgPhoto.Save(targetImage, PicFormat);
             }
             catch (Exception e)
@@ -1787,7 +1876,7 @@ namespace Common
 
             SaveIamge model = new SaveIamge()
             {
-                filename = TargetPicName + "." + PicFormat.ToString().ToLower(),
+                filename = TargetPicName+ "." + PicFormat.ToString().ToLower(),
                 showImg = TargetPicPath
             };
 

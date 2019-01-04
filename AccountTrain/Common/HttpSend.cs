@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace Common
 {
-    class HttpSend
+    public class HttpSend
     {
         public static string sendURL = "http://www1.jc-chn.cn/smsSend.do";
         public static string sendDataURL = "http://www1.jc-chn.cn/sendData.do";
@@ -61,6 +61,10 @@ namespace Common
             this.userName = userName;
             this.password = password;
             this.pwd = GetMD5(userName + GetMD5(password));
+        }
+
+        public HttpSend()
+        {
         }
 
         /*

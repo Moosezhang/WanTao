@@ -69,7 +69,7 @@ list-style-type:none;
   		<form class="am-form">
 	        <fieldset>
 	        	<div id="myVideo">
-	        		<div v-if="!isVideo" class="zoomImage" style="height:160px" v-bind:style="{backgroundImage:'url(' + imgUrl + ')'}"></div>
+	        		<div v-if="status==1 || !isVideo" class="zoomImage" style="height:160px" v-bind:style="{backgroundImage:'url(' + imgUrl + ')'}"></div>
 	            	<video v-if="status==2 && isVideo"  v-bind:src="currVideoUrl"  width="100%" height="160" controls>				  	
 					</video>
 					<audio v-if="status==2 && !isVideo" v-bind:src="currVideoUrl" style="width: 100%;" controls>
@@ -298,12 +298,15 @@ list-style-type:none;
                        _self.capData = result;
                        if(result.length!=0)
                        {
-                       		
                        		videoVue.currVideoUrl=result[0].VideoUrl;
                        		var fix=videoVue.currVideoUrl.substring(videoVue.currVideoUrl.length-3);
                        		if(fix=="mp4")
                        		{
                        			videoVue.isVideo=true;
+                       		}
+                       		else
+                       		{
+                       			videoVue.isVideo=false;
                        		}
                        }
                         
@@ -373,7 +376,6 @@ list-style-type:none;
                 _self.GetHelpConfig();
                 _self.GetBargain();  
                 _self.GetFundsConfig();
-                
 			},
 			GoLike:function(){
 				var _self = this;
@@ -548,6 +550,10 @@ list-style-type:none;
                		{
                			videoVue.isVideo=true;
                			
+               		}
+               		else
+               		{
+               			videoVue.isVideo=false;
                		}
 				}
 				
