@@ -1057,8 +1057,8 @@ namespace AccountTrain.Web.Controllers
 
                 }
 
-                string media_id = Util.uploadMedia(HttpContext.Server.MapPath("/Images/upload/") + fileName, fileName);
-                Util.SendCustomMessage(openid, media_id);
+                //string media_id = Util.uploadMedia(HttpContext.Server.MapPath("/Images/upload/") + fileName, fileName);
+                //Util.SendCustomMessage(openid, media_id);
             }
             catch (Exception ex)
             {
