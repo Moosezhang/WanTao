@@ -1151,7 +1151,7 @@ namespace Common
     /// </summary>
     public class WaterImageManager
     {
-        private int padding = 0;//内容间隔
+        private int padding = 5;//内容间隔
         private string targetPicName = "_mixture_pic";//默认生成图片的文件名字
         private string targetPicPath = "";//默认生成图片的目录
         private ImageFormat picFormat = ImageFormat.Png;//默认生成图片的格式
@@ -1378,7 +1378,7 @@ namespace Common
             {
                 case ImagePosition.BottomMiddle:
                     xPosOfWm = (phWidth - wmWidth) / 2;
-                    yPosOfWm = phHeight - wmHeight - Padding;
+                    yPosOfWm = phHeight - wmHeight - 15;
                     break;
                 case ImagePosition.Center:
                     xPosOfWm = (phWidth - wmWidth) / 2;
