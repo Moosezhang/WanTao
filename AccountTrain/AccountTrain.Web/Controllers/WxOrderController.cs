@@ -1085,7 +1085,7 @@ namespace AccountTrain.Web.Controllers
                   
             qrEncoder.TryEncode(url, out qrCode);
 
-            GraphicsRenderer renderer = new GraphicsRenderer(new FixedModuleSize(2, QuietZoneModules.Two), Brushes.Black, Brushes.White);
+            GraphicsRenderer renderer = new GraphicsRenderer(new FixedModuleSize(3, QuietZoneModules.Two), Brushes.Black, Brushes.White);
 
 
             string filename = string.Format("{0}.png", helpId);
